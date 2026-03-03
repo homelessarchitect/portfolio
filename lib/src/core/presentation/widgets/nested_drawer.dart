@@ -11,57 +11,62 @@ class NestedDrawer extends ConsumerWidget {
     final drawerState = ref.watch(drawerStateProvider);
     final theme = Theme.of(context);
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-      width: drawerState.level == DrawerLevel.closed
-          ? 0
-          : MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      color: theme.colorScheme.surface.withOpacity(0.98),
-      child: Stack(
-        children: [
-          // Main Menu Level
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            left: drawerState.level == DrawerLevel.main ? 0 : -300,
-            top: 100,
-            bottom: 0,
-            width: 300,
+    final width = MediaQuery.of(context).size.width;
+    final menuWidth = width * 0.25;
+
+    return Stack(
+      children: [
+        // Dark Overlay background
+        if (drawerState.level != DrawerLevel.closed)
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: () => ref.read(drawerStateProvider.notifier).close(),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                color: Colors.black.withValues(alpha: 0.4),
+              ),
+            ),
+          ),
+
+        // Main Menu Level
+        AnimatedPositioned(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          left: drawerState.level == DrawerLevel.closed ? -menuWidth : 0,
+          top: 0,
+          bottom: 0,
+          width: menuWidth,
+          child: Container(
+            color: theme.colorScheme.surface,
+            padding: const EdgeInsets.only(top: 80),
             child: _MainMenu(
               onSelect: (category) => ref
                   .read(drawerStateProvider.notifier)
                   .openSubDrawer(category),
             ),
           ),
+        ),
 
-          // Sub Menu Level
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            left: drawerState.level == DrawerLevel.sub ? 300 : 800,
-            top: 0,
-            bottom: 0,
-            right: 0,
+        // Sub Menu Level
+        AnimatedPositioned(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          left: drawerState.level == DrawerLevel.sub ? menuWidth : -menuWidth,
+          top: 0,
+          bottom: 0,
+          width: menuWidth,
+          child: Container(
+            color: theme.colorScheme.surfaceContainerHighest.withValues(
+              alpha: 0.95,
+            ),
             child: _SubMenu(
               category: drawerState.selectedCategory ?? "",
               onBack: () => ref.read(drawerStateProvider.notifier).backToMain(),
               onClose: () => ref.read(drawerStateProvider.notifier).close(),
             ),
           ),
-
-          // Overlay to close when clicking outside (on desktop)
-          if (drawerState.level != DrawerLevel.closed)
-            Positioned.fill(
-              child: GestureDetector(
-                onTap: () => ref.read(drawerStateProvider.notifier).close(),
-                behavior: HitTestBehavior.translucent,
-                child: const SizedBox.shrink(),
-              ),
-            ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -147,9 +152,8 @@ class _SubMenu extends ConsumerWidget {
       items = [];
     }
 
-    return Container(
-      color: theme.colorScheme.surfaceVariant.withOpacity(0.5),
-      padding: const EdgeInsets.all(40),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
