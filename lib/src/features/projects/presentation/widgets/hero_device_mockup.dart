@@ -301,7 +301,12 @@ class _HeroPhoneMockup extends StatelessWidget {
                           child: SizedBox(
                             width: 400,
                             height: 860,
-                            child: mobileView,
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 44),
+                                Expanded(child: mobileView),
+                              ],
+                            ),
                           ),
                         ),
                       )

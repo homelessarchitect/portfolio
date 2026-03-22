@@ -43,6 +43,7 @@ dependencies:
   flutter_staggered_grid_view: ^0.7.0
   glassmorphism: ^3.0.0
   intl: ^0.20.2
+  video_player: ^2.11.1
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +69,8 @@ flutter:
 
   assets:
     - lib/src/features/projects/catalog/sand_manager/sand_manager_logo.png
+    - lib/src/features/projects/catalog/sand_manager/sand_manager_bg.png
+    - lib/src/features/projects/catalog/sand_manager/assets/sand_manager_bg.mp4
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

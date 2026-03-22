@@ -160,4 +160,31 @@ final sandManagerProject = Project(
   ],
   imageUrl: 'assets/images/placeholder_portfolio.png',
   tags: ['Sand Management', 'Retail', 'Logistics'],
+  
+  // New Fields
+  category: 'RETAIL & LOGISTICS',
+  backgroundUrl: 'lib/src/features/projects/catalog/sand_manager/assets/sand_manager_bg.mp4',
+  isBackgroundVideo: true,
+  problem: 'La falta de visibilidad en tiempo real de los flujos de caja y ventas en las areneras genera pérdidas operativas y errores en el despacho de materiales.',
+  solution: 'Una plataforma centralizada que permite el registro instantáneo de ventas y gastos, con dashboards dinámicos y herramientas de cubicación precisas.',
+  storytelling: 'Imagina una arenera donde cada metro cúbico cuenta. Sand Manager nació de la necesidad de transformar procesos manuales y lentos en una experiencia digital fluida y confiable, optimizando cada transacción desde el terreno hasta la administración.',
+  styleDescription: 'Diseño industrial minimalista con énfasis en legibilidad y contraste. Utilizamos superficies de vidrio (glassmorphism) sobre fondos oscuros para resaltar la información crítica, con una paleta de colores técnica y herramientas visuales intuitivas.',
+  designScreens: [
+    SimulationScreen(
+      label: 'Home Mobile',
+      builder: () => const SandManagerMobileHomeView(),
+    ),
+    SimulationScreen(
+      label: 'Sales Form',
+      builder: () => const SaleFormScreen(),
+    ),
+    SimulationScreen(
+      label: 'Cashbox Form',
+      builder: () => const CashboxFormScreen(),
+    ),
+    SimulationScreen(
+      label: 'Dashboard',
+      builder: () => const CashboxDashboardScreen(),
+    ),
+  ],
 );

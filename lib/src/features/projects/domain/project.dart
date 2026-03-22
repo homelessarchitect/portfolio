@@ -69,6 +69,16 @@ class Project {
   final List<String> tags;
   final String? demoUrl;
 
+  // New fields for restructured detail view
+  final String problem;
+  final String solution;
+  final String storytelling;
+  final String styleDescription;
+  final String category;
+  final String? backgroundUrl;
+  final bool isBackgroundVideo;
+  final List<SimulationScreen> designScreens;
+
   const Project({
     required this.id,
     required this.title,
@@ -85,5 +95,15 @@ class Project {
     this.logoUrl,
     this.tags = const [],
     this.demoUrl,
+
+    // New fields initializers
+    this.problem = '',
+    this.solution = '',
+    this.storytelling = '',
+    this.styleDescription = '',
+    this.category = '',
+    this.backgroundUrl,
+    this.isBackgroundVideo = false,
+    this.designScreens = const [],
   });
 }

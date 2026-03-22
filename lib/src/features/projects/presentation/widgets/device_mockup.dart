@@ -40,44 +40,56 @@ class _PhoneFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    // Exact sizing to fit a 390x844 mobile screen perfectly
+    return SizedBox(
       width: width,
       height: height,
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
-        borderRadius: BorderRadius.circular(width * 0.12),
-        border: Border.all(color: const Color(0xFF2C2C2C), width: 8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.5),
-            blurRadius: 30,
-            offset: const Offset(0, 15),
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(4),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(width * 0.1),
-              child: child,
-            ),
-          ),
-          // Dynamic Island / Notch
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              margin: const EdgeInsets.only(top: 12),
-              width: width * 0.25,
-              height: 20,
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(10),
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: Container(
+          width: 390 + 24, // 12px horizontal bezel
+          height: 844 + 24, // 12px vertical bezel
+          decoration: BoxDecoration(
+            color: const Color(0xFF1C1C1E),
+            borderRadius: BorderRadius.circular(55),
+            border: Border.all(color: const Color(0xFF2C2C2C), width: 4),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.5),
+                blurRadius: 30,
+                offset: const Offset(0, 15),
               ),
-            ),
+            ],
           ),
-        ],
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(44), // Inner screen corners
+                  child: SizedBox(
+                    width: 390,
+                    height: 844,
+                    child: child,
+                  ),
+                ),
+              ),
+              // Dynamic Island / Notch
+              Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  margin: const EdgeInsets.only(top: 24),
+                  width: 120, // Island width
+                  height: 35, // Island height
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -92,26 +104,38 @@ class _TabletFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    // Exact sizing to fit a 810x1080 tablet screen perfectly
+    return SizedBox(
       width: width,
       height: height,
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFF2C2C2C), width: 12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.5),
-            blurRadius: 40,
-            offset: const Offset(0, 20),
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: Container(
+          width: 810 + 48, // 24px horizontal bezels
+          height: 1080 + 48, // 24px vertical bezels
+          decoration: BoxDecoration(
+            color: const Color(0xFF1A1A1A),
+            borderRadius: BorderRadius.circular(36),
+            border: Border.all(color: const Color(0xFF2C2C2C), width: 6),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.5),
+                blurRadius: 40,
+                offset: const Offset(0, 20),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(4),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: child,
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: SizedBox(
+                width: 810,
+                height: 1080,
+                child: child,
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -127,34 +151,47 @@ class _LaptopFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: width,
-          height: height * 0.9,
-          decoration: BoxDecoration(
-            color: const Color(0xFF1A1A1A),
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            border: Border.all(color: const Color(0xFF2C2C2C), width: 10),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(4),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: child,
+    // Exact sizing to fit a 1440x900 laptop screen perfectly
+    return SizedBox(
+      width: width,
+      height: height,
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 1440 + 32, // 16px lateral bezels
+              height: 900 + 44, // 28px top bezel, 16px bottom bezel
+              decoration: BoxDecoration(
+                color: const Color(0xFF1C1E1C),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                border: Border.all(color: const Color(0xFF333333), width: 3),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 28, bottom: 16),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: SizedBox(
+                    width: 1440,
+                    height: 900,
+                    child: child,
+                  ),
+                ),
+              ),
             ),
-          ),
+            // Laptop base
+            Container(
+              width: 1440 + 32 + 80, // Slightly wider base
+              height: 16,
+              decoration: const BoxDecoration(
+                color: Color(0xFF333333),
+                borderRadius: BorderRadius.vertical(bottom: Radius.circular(8)),
+              ),
+            ),
+          ],
         ),
-        Container(
-          width: width * 1.05,
-          height: 12,
-          decoration: const BoxDecoration(
-            color: Color(0xFF333333),
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(8)),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
@@ -168,40 +205,60 @@ class _MonitorFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            color: const Color(0xFF1A1A1A),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFF2C2C2C), width: 14),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.5),
-                blurRadius: 50,
-                offset: const Offset(0, 25),
+    // Exact sizing to fit a 1920x1080 monitor screen perfectly
+    return SizedBox(
+      width: width,
+      height: height,
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 1920 + 48, // 24px lateral bezels
+              height: 1080 + 48 + 32, // 24px top bezel, 56px bottom bezel
+              decoration: BoxDecoration(
+                color: const Color(0xFF1A1A1A),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFF333333), width: 4),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.5),
+                    blurRadius: 50,
+                    offset: const Offset(0, 25),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: child,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 56),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: SizedBox(
+                    width: 1920,
+                    height: 1080,
+                    child: child,
+                  ),
+                ),
+              ),
+            ),
+            // Monitor stand neck
+            Container(
+              width: 120,
+              height: 80,
+              color: const Color(0xFF2C2C2C),
+            ),
+            // Monitor stand base
+            Container(
+              width: 400,
+              height: 12,
+              decoration: BoxDecoration(
+                color: const Color(0xFF2C2C2C),
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+          ],
         ),
-        Container(
-          width: 120,
-          height: 60,
-          color: const Color(0xFF2C2C2C),
-        ),
-        Container(
-          width: 240,
-          height: 10,
-          decoration: BoxDecoration(
-            color: const Color(0xFF2C2C2C),
-            borderRadius: BorderRadius.circular(5),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
