@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../domain/project.dart'; // Verify this import
+import '../domain/project.dart';
+import 'feature_simulation_view.dart';
+import 'widgets/hero_device_mockup.dart';
 
 class ProjectDetailView extends StatelessWidget {
   final Project project;
@@ -14,32 +16,61 @@ class ProjectDetailView extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Immersive Hero
+            // Immersive Hero — animated device mockups
             Container(
               height: 600,
               width: double.infinity,
               decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(project.imageUrl),
-                  fit: BoxFit.cover,
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    const Color(0xFF0D0D0D),
+                    theme.colorScheme.surface.withValues(alpha: 0.95),
+                    const Color(0xFF1A1A2E),
+                  ],
                 ),
               ),
-              child: Center(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 20,
-                  ),
-                  color: Colors.black.withOpacity(0.5),
-                  child: Text(
-                    project.title.toUpperCase(),
-                    style: theme.textTheme.displayMedium?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 8,
+              child: Stack(
+                children: [
+                  // Device mockups
+                  Positioned.fill(
+                    child: HeroDeviceMockup(
+                      project: project,
+                      height: 600,
                     ),
                   ),
-                ),
+                  // Title overlay at bottom
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 48,
+                        vertical: 32,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.transparent,
+                            Colors.black.withValues(alpha: 0.85),
+                          ],
+                        ),
+                      ),
+                      child: Text(
+                        project.title.toUpperCase(),
+                        style: theme.textTheme.displayMedium?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 8,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -51,7 +82,9 @@ class ProjectDetailView extends StatelessWidget {
                 children: [
                   _SpecItem(
                     label: "TECNOLOGÍA",
-                    value: project.tags.first.toUpperCase(),
+                    value: project.tags.isNotEmpty
+                        ? project.tags.first.toUpperCase()
+                        : "FLUTTER",
                   ),
                   const _VerticalDivider(),
                   _SpecItem(label: "ESTADO", value: "COMPLETE"),
@@ -83,21 +116,234 @@ class ProjectDetailView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 60),
+
+                  // Tech Stack
+                  Text(
+                    "TECNOLOGÍAS",
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: project.services.map((service) => Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(
+                          color: theme.colorScheme.outline.withValues(alpha: 0.1),
+                        ),
+                      ),
+                      child: Text(
+                        service.toUpperCase(),
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                    )).toList(),
+                  ),
+                  const SizedBox(height: 80),
                 ],
               ),
             ),
 
-            // Large Image Sections
-            Container(
-              height: 400,
-              margin: const EdgeInsets.symmetric(vertical: 40),
-              color: theme.colorScheme.surfaceVariant,
-              child: const Center(
-                child: Text("Gallery / Technical Diagram Placeholder"),
-              ),
-            ),
+            // Features Carousel Section
+            if (project.features.isNotEmpty) ...[
+              const SizedBox(height: 60),
+              _FeaturesCarousel(project: project),
+            ],
 
             const SizedBox(height: 100),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FeaturesCarousel extends StatefulWidget {
+  final Project project;
+
+  const _FeaturesCarousel({required this.project});
+
+  @override
+  State<_FeaturesCarousel> createState() => _FeaturesCarouselState();
+}
+
+class _FeaturesCarouselState extends State<_FeaturesCarousel> {
+  late final PageController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = PageController(viewportFraction: 0.9);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 60),
+          child: Text(
+            "KEY FEATURES",
+            style: theme.textTheme.labelLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2,
+            ),
+          ),
+        ),
+        const SizedBox(height: 48),
+        SizedBox(
+          height: 600,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isWide = constraints.maxWidth > 900;
+              
+              return ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 60),
+                scrollDirection: Axis.horizontal,
+                itemCount: widget.project.features.length,
+                separatorBuilder: (context, index) => const SizedBox(width: 32),
+                itemBuilder: (context, index) {
+                  final feature = widget.project.features[index];
+                  final cardWidth = isWide 
+                      ? (constraints.maxWidth - 120 - 32) / 2 
+                      : constraints.maxWidth - 120;
+                  
+                  return _FeatureCard(
+                    feature: feature,
+                    project: widget.project,
+                    width: cardWidth,
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _FeatureCard extends StatelessWidget {
+  final ProjectFeature feature;
+  final Project project;
+  final double width;
+
+  const _FeatureCard({
+    required this.feature,
+    required this.project,
+    required this.width,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FeatureSimulationView(
+              project: project,
+              feature: feature,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        width: width,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.black,
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          children: [
+            // Background Animation / Simulation Preview
+            Positioned.fill(
+              child: Opacity(
+                opacity: 0.6,
+                child: IgnorePointer(
+                  child: feature.simulationScreens.isNotEmpty 
+                    ? feature.simulationScreens.first.builder()
+                    : const Center(child: Icon(Icons.apps, color: Colors.white24, size: 80)),
+                ),
+              ),
+            ),
+            
+            // Bottom Info Gradient
+            Positioned.fill(
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.transparent,
+                      Colors.black87,
+                      Colors.black,
+                    ],
+                    stops: [0, 0.4, 0.8, 1],
+                  ),
+                ),
+              ),
+            ),
+            
+            // Content
+            Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    feature.title.toUpperCase(),
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    feature.description,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: Colors.white.withValues(alpha: 0.7),
+                      height: 1.5,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 24),
+                  const Align(
+                    alignment: Alignment.bottomRight,
+                    child: Icon(
+                      Icons.arrow_forward_rounded,
+                      color: Colors.white,
+                      size: 28,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -129,7 +375,7 @@ class _SpecItem extends StatelessWidget {
           label,
           style: theme.textTheme.labelMedium?.copyWith(
             letterSpacing: 1.5,
-            color: theme.colorScheme.onSurface.withOpacity(0.5),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
           ),
         ),
       ],
@@ -145,7 +391,7 @@ class _VerticalDivider extends StatelessWidget {
     return Container(
       width: 1,
       height: 60,
-      color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+      color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
     );
   }
 }

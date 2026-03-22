@@ -31,7 +31,7 @@ class UiLabGalleryScreen extends ConsumerWidget {
                   Text(
                     "Experimentación con UX avanzada, animaciones y patrones de ingeniería.",
                     style: theme.textTheme.titleLarge?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.6),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
                 ],
@@ -100,7 +100,7 @@ class _LabFeatureCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: theme.colorScheme.outline.withOpacity(0.2)),
+        border: Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.2)),
         color: theme.colorScheme.surface,
       ),
       child: InkWell(
@@ -122,7 +122,7 @@ class _LabFeatureCard extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               ),
               const Spacer(),

@@ -41,7 +41,7 @@ class PackagesScreen extends StatelessWidget {
                   Text(
                     "Paquetes curados y probados en producción para escalabilidad.",
                     style: theme.textTheme.titleLarge?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.6),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
                 ],
@@ -58,7 +58,7 @@ class PackagesScreen extends StatelessWidget {
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: theme.colorScheme.outline.withOpacity(0.1),
+                      color: theme.colorScheme.outline.withValues(alpha: 0.1),
                     ),
                   ),
                   child: Row(
@@ -76,8 +76,8 @@ class PackagesScreen extends StatelessWidget {
                           Text(
                             pkg['desc']!,
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurface.withOpacity(
-                                0.5,
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.5,
                               ),
                             ),
                           ),

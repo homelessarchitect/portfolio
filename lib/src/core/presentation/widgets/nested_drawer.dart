@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../state/drawer_state.dart';
+import '../../../features/projects/data/mock_projects.dart';
+import '../../../features/projects/presentation/widgets/project_drawer_thumbnail.dart';
 
 class NestedDrawer extends ConsumerWidget {
   const NestedDrawer({super.key});
@@ -16,7 +18,7 @@ class NestedDrawer extends ConsumerWidget {
 
     return Stack(
       children: [
-        // Dark Overlay background
+        // Dark overlay
         if (drawerState.level != DrawerLevel.closed)
           Positioned.fill(
             child: GestureDetector(
@@ -40,25 +42,24 @@ class NestedDrawer extends ConsumerWidget {
             color: theme.colorScheme.surface,
             padding: const EdgeInsets.only(top: 80),
             child: _MainMenu(
-              onSelect: (category) => ref
-                  .read(drawerStateProvider.notifier)
-                  .openSubDrawer(category),
+              onSelect: (category) =>
+                  ref.read(drawerStateProvider.notifier).openSubDrawer(category),
             ),
           ),
         ),
 
-        // Sub Menu Level
+        // Sub Menu Level — wider for Proyectos
         AnimatedPositioned(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          left: drawerState.level == DrawerLevel.sub ? menuWidth : -menuWidth,
+          left: drawerState.level == DrawerLevel.sub ? menuWidth : -menuWidth * 2,
           top: 0,
           bottom: 0,
-          width: menuWidth,
+          width: drawerState.selectedCategory == 'Proyectos'
+              ? menuWidth * 1.4
+              : menuWidth,
           child: Container(
-            color: theme.colorScheme.surfaceContainerHighest.withValues(
-              alpha: 0.95,
-            ),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.97),
             child: _SubMenu(
               category: drawerState.selectedCategory ?? "",
               onBack: () => ref.read(drawerStateProvider.notifier).backToMain(),
@@ -71,9 +72,9 @@ class NestedDrawer extends ConsumerWidget {
   }
 }
 
+// ---- Main first-level menu ----
 class _MainMenu extends StatelessWidget {
   final Function(String) onSelect;
-
   const _MainMenu({required this.onSelect});
 
   @override
@@ -113,6 +114,7 @@ class _MainMenu extends StatelessWidget {
   }
 }
 
+// ---- Second-level sub-menu dispatcher ----
 class _SubMenu extends ConsumerWidget {
   final String category;
   final VoidCallback onBack;
@@ -126,17 +128,113 @@ class _SubMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Header row (back + close)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Row(
+            children: [
+              IconButton(onPressed: onBack, icon: const Icon(Icons.arrow_back)),
+              const Spacer(),
+              IconButton(onPressed: onClose, icon: const Icon(Icons.close)),
+            ],
+          ),
+        ),
+
+        // Content
+        if (category == 'Proyectos')
+          Expanded(child: _ProjectsThumbnailScroll(onClose: onClose))
+        else
+          Expanded(child: _GenericSubMenu(category: category, onClose: onClose)),
+      ],
+    );
+  }
+}
+
+// ------------------------------------------------------------------ //
+//  Proyectos: scrollable device thumbnail list (Porsche style)        //
+// ------------------------------------------------------------------ //
+class _ProjectsThumbnailScroll extends StatelessWidget {
+  final VoidCallback onClose;
+  const _ProjectsThumbnailScroll({required this.onClose});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final projects = featuredProjects;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+          child: Text(
+            'PROYECTOS',
+            style: theme.textTheme.labelLarge?.copyWith(
+              fontWeight: FontWeight.w900,
+              letterSpacing: 3.0,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            itemCount: projects.length,
+            itemBuilder: (context, index) {
+              final project = projects[index];
+              return ProjectDrawerThumbnail(
+                project: project,
+                onTap: () {
+                  context.go('/projects/${project.id}');
+                  onClose();
+                },
+              );
+            },
+          ),
+        ),
+        // Footer link
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+          child: GestureDetector(
+            onTap: () {
+              context.go('/projects');
+              onClose();
+            },
+            child: Row(
+              children: [
+                Text(
+                  'Ver todos los proyectos',
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Icon(Icons.arrow_forward, size: 16),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ---- Fallback for Laboratorio / Tested Packages ----
+class _GenericSubMenu extends StatelessWidget {
+  final String category;
+  final VoidCallback onClose;
+  const _GenericSubMenu({required this.category, required this.onClose});
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    // Navigation map
     final List<Map<String, String>> items;
-    if (category == 'Proyectos') {
-      items = [
-        {'title': 'Todos los Proyectos', 'path': '/projects'},
-        {'title': 'Arquitectura de Software', 'path': '/projects'},
-        {'title': 'Diseño de Sistemas', 'path': '/projects'},
-      ];
-    } else if (category == 'Laboratorio') {
+    if (category == 'Laboratorio') {
       items = [
         {'title': 'Ver Galería Lab', 'path': '/lab'},
         {'title': 'Animaciones', 'path': '/lab'},
@@ -157,14 +255,7 @@ class _SubMenu extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              IconButton(onPressed: onBack, icon: const Icon(Icons.arrow_back)),
-              const Spacer(),
-              IconButton(onPressed: onClose, icon: const Icon(Icons.close)),
-            ],
-          ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 8),
           Text(
             category.toUpperCase(),
             style: theme.textTheme.displaySmall?.copyWith(
