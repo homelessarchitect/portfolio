@@ -3,6 +3,7 @@ import '../domain/project.dart';
 import 'widgets/project_presentation_section.dart';
 import 'widgets/project_narrative_section.dart';
 import 'widgets/project_design_explorer.dart';
+import 'widgets/project_features_section.dart';
 import 'widgets/related_projects_section.dart';
 
 class ProjectDetailView extends StatelessWidget {
@@ -22,8 +23,13 @@ class ProjectDetailView extends StatelessWidget {
 
             // 2. Problem + Solution (Storytelling)
             ProjectNarrativeSection(project: project),
+            const SizedBox(height: 80),
 
-            // 3. Design Explorer
+            // 3. Features
+            ProjectFeaturesSection(project: project),
+            const SizedBox(height: 80),
+
+            // 4. Design Explorer
             ProjectDesignExplorer(project: project),
 
             // 4. Other Projects
