@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import '../../domain/project.dart';
 import 'views/sand_manager_mobile_home_view.dart';
 import 'views/sand_manager_web_home_view.dart';
@@ -5,6 +6,12 @@ import 'views/sand_manager_web_home_view.dart';
 import 'simulations/sand_manager_cashbox_simulation.dart';
 import 'simulations/sand_manager_sale_simulation.dart';
 import 'simulations/sand_manager_cubicate_simulation.dart';
+import 'simulations/sand_manager_auth_simulation.dart';
+import 'simulations/sand_manager_clients_simulation.dart';
+import 'simulations/sand_manager_inventory_simulation.dart';
+import 'simulations/sand_manager_invoices_simulation.dart';
+import 'simulations/sand_manager_products_simulation.dart';
+import 'simulations/sand_manager_transporters_simulation.dart';
 
 final sandManagerProject = Project(
   id: 'sand_manager',
@@ -173,18 +180,67 @@ final sandManagerProject = Project(
     SimulationScreen(
       label: 'Home Mobile',
       builder: () => const SandManagerMobileHomeView(),
+      platform: ProjectPlatform.mobile,
     ),
     SimulationScreen(
       label: 'Sales Form',
       builder: () => const SaleFormScreen(),
+      platform: ProjectPlatform.mobile,
     ),
     SimulationScreen(
       label: 'Cashbox Form',
       builder: () => const CashboxFormScreen(),
+      platform: ProjectPlatform.mobile,
     ),
     SimulationScreen(
       label: 'Dashboard',
       builder: () => const CashboxDashboardScreen(),
+      platform: ProjectPlatform.web,
     ),
+    SimulationScreen(
+      label: 'Auth Demo',
+      builder: () => const SandManagerAuthSimulation(),
+      platform: ProjectPlatform.web,
+    ),
+    SimulationScreen(
+      label: 'Clients Demo',
+      builder: () => const SandManagerClientsSimulation(),
+      platform: ProjectPlatform.web,
+    ),
+    SimulationScreen(
+      label: 'Inventory Demo',
+      builder: () => const SandManagerInventorySimulation(),
+      platform: ProjectPlatform.web,
+    ),
+    SimulationScreen(
+      label: 'Invoices Demo',
+      builder: () => const SandManagerInvoicesSimulation(),
+      platform: ProjectPlatform.web,
+    ),
+    SimulationScreen(
+      label: 'Products Demo',
+      builder: () => const SandManagerProductsSimulation(),
+      platform: ProjectPlatform.web,
+    ),
+    SimulationScreen(
+      label: 'Transporters Demo',
+      builder: () => const SandManagerTransportersSimulation(),
+      platform: ProjectPlatform.web,
+    ),
+  ],
+  primaryColor: const Color(0xFFF39C12), // Deep yellow/amber
+  onPrimaryColor: const Color(0xFF1E1E1E), // Dark contrasting color for text on primary
+  technicalModules: const [
+    TechnicalModule(name: 'Auth & Multi-role', isImplementedInMock: true, description: 'Login y gestión de roles.'),
+    TechnicalModule(name: 'Clients Management', isImplementedInMock: true, description: 'Directorio y deudas de clientes.'),
+    TechnicalModule(name: 'Inventory & Transfers', isImplementedInMock: true, description: 'Control de stock y bodegas.'),
+    TechnicalModule(name: 'Invoices', isImplementedInMock: true, description: 'Facturación electrónica.'),
+    TechnicalModule(name: 'Menu (Public Web)', isImplementedInMock: false, description: 'Catálogo público de materiales.'),
+    TechnicalModule(name: 'Products Management', isImplementedInMock: true, description: 'Creación y edición de materiales.'),
+    TechnicalModule(name: 'Transporters', isImplementedInMock: true, description: 'Gestión de conductores y vehículos.'),
+    TechnicalModule(name: 'Purchase History', isImplementedInMock: false, description: 'Historial de pagos a proveedores.'),
+    TechnicalModule(name: 'Sales (POS)', isImplementedInMock: true, description: 'Ventas en terreno e impresión de tickets.'),
+    TechnicalModule(name: 'Cashbox & Finances', isImplementedInMock: true, description: 'Flujo de caja y conciliación diaria.'),
+    TechnicalModule(name: 'Admin Dashboard', isImplementedInMock: true, description: 'Panel y gráficas administrativas.'),
   ],
 );

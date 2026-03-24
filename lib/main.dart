@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'src/app.dart';
 import 'src/core/state/preview_state.dart';
 
+import 'src/core/presentation/widgets/mock_status_bar.dart';
+
 void main() {
   runApp(
     ProviderScope(
@@ -14,8 +16,13 @@ void main() {
           return DevicePreview(
             enabled: isEnabled,
             isToolbarVisible: true,
-            defaultDevice: Devices.ios.iPhone13ProMax,
-            builder: (context) => const UiLabApp(),
+            defaultDevice: Devices.ios.iPhoneSE,
+            builder: (context) => Column(
+              children: [
+                if (isEnabled) const MockStatusBar(),
+                const Expanded(child: UiLabApp()),
+              ],
+            ),
           );
         },
       ),

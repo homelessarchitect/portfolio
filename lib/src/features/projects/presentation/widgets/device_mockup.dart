@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/presentation/widgets/mock_status_bar.dart';
 
 enum DeviceType { phone, tablet, laptop, monitor }
 
@@ -20,13 +21,29 @@ class DeviceMockup extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (type) {
       case DeviceType.phone:
-        return _PhoneFrame(width: width ?? 375, height: height ?? 750, child: child);
+        return _PhoneFrame(
+          width: width ?? 375,
+          height: height ?? 750,
+          child: child,
+        );
       case DeviceType.tablet:
-        return _TabletFrame(width: width ?? 768, height: height ?? 1024, child: child);
+        return _TabletFrame(
+          width: width ?? 768,
+          height: height ?? 1024,
+          child: child,
+        );
       case DeviceType.laptop:
-        return _LaptopFrame(width: width ?? 1000, height: height ?? 650, child: child);
+        return _LaptopFrame(
+          width: width ?? 1000,
+          height: height ?? 650,
+          child: child,
+        );
       case DeviceType.monitor:
-        return _MonitorFrame(width: width ?? 1200, height: height ?? 800, child: child);
+        return _MonitorFrame(
+          width: width ?? 1200,
+          height: height ?? 800,
+          child: child,
+        );
     }
   }
 }
@@ -36,7 +53,11 @@ class _PhoneFrame extends StatelessWidget {
   final double height;
   final Widget child;
 
-  const _PhoneFrame({required this.width, required this.height, required this.child});
+  const _PhoneFrame({
+    required this.width,
+    required this.height,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -61,33 +82,23 @@ class _PhoneFrame extends StatelessWidget {
               ),
             ],
           ),
-          child: Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(44), // Inner screen corners
-                  child: SizedBox(
-                    width: 390,
-                    height: 844,
-                    child: child,
-                  ),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(
+                44,
+              ), // Inner screen corners
+              child: SizedBox(
+                width: 390,
+                height: 844,
+                child: Column(
+                  children: [
+                    const MockStatusBar(),
+                    Expanded(child: child),
+                  ],
                 ),
               ),
-              // Dynamic Island / Notch
-              Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  margin: const EdgeInsets.only(top: 24),
-                  width: 120, // Island width
-                  height: 35, // Island height
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -100,7 +111,11 @@ class _TabletFrame extends StatelessWidget {
   final double height;
   final Widget child;
 
-  const _TabletFrame({required this.width, required this.height, required this.child});
+  const _TabletFrame({
+    required this.width,
+    required this.height,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -129,11 +144,7 @@ class _TabletFrame extends StatelessWidget {
             padding: const EdgeInsets.all(24),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: SizedBox(
-                width: 810,
-                height: 1080,
-                child: child,
-              ),
+              child: SizedBox(width: 810, height: 1080, child: child),
             ),
           ),
         ),
@@ -147,7 +158,11 @@ class _LaptopFrame extends StatelessWidget {
   final double height;
   final Widget child;
 
-  const _LaptopFrame({required this.width, required this.height, required this.child});
+  const _LaptopFrame({
+    required this.width,
+    required this.height,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -165,18 +180,21 @@ class _LaptopFrame extends StatelessWidget {
               height: 900 + 44, // 28px top bezel, 16px bottom bezel
               decoration: BoxDecoration(
                 color: const Color(0xFF1C1E1C),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
                 border: Border.all(color: const Color(0xFF333333), width: 3),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16, top: 28, bottom: 16),
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  top: 28,
+                  bottom: 16,
+                ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(4),
-                  child: SizedBox(
-                    width: 1440,
-                    height: 900,
-                    child: child,
-                  ),
+                  child: SizedBox(width: 1440, height: 900, child: child),
                 ),
               ),
             ),
@@ -201,7 +219,11 @@ class _MonitorFrame extends StatelessWidget {
   final double height;
   final Widget child;
 
-  const _MonitorFrame({required this.width, required this.height, required this.child});
+  const _MonitorFrame({
+    required this.width,
+    required this.height,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -230,23 +252,20 @@ class _MonitorFrame extends StatelessWidget {
                 ],
               ),
               child: Padding(
-                padding: const EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 56),
+                padding: const EdgeInsets.only(
+                  left: 24,
+                  right: 24,
+                  top: 24,
+                  bottom: 56,
+                ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(4),
-                  child: SizedBox(
-                    width: 1920,
-                    height: 1080,
-                    child: child,
-                  ),
+                  child: SizedBox(width: 1920, height: 1080, child: child),
                 ),
               ),
             ),
             // Monitor stand neck
-            Container(
-              width: 120,
-              height: 80,
-              color: const Color(0xFF2C2C2C),
-            ),
+            Container(width: 120, height: 80, color: const Color(0xFF2C2C2C)),
             // Monitor stand base
             Container(
               width: 400,

@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../../../core/presentation/widgets/mock_status_bar.dart';
 import '../../domain/project.dart';
 
 // ------------------------------------------------------------------ //
@@ -303,7 +304,7 @@ class _HeroPhoneMockup extends StatelessWidget {
                             height: 860,
                             child: Column(
                               children: [
-                                const SizedBox(height: 44),
+                                const MockStatusBar(),
                                 Expanded(child: mobileView),
                               ],
                             ),
@@ -311,22 +312,6 @@ class _HeroPhoneMockup extends StatelessWidget {
                         ),
                       )
                     : Container(color: Colors.grey.shade800),
-              ),
-            ),
-          ),
-          // Notch
-          Positioned(
-            top: phoneHeight * 0.025,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Container(
-                width: phoneWidth * 0.28,
-                height: phoneHeight * 0.018,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(phoneHeight * 0.01),
-                ),
               ),
             ),
           ),

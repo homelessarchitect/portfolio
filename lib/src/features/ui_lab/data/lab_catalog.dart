@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../domain/lab_feature.dart';
+import '../presentation/styles_gallery_feature.dart';
 
 List<LabGroup> get labFeatures => [
   LabGroup(
@@ -190,6 +191,19 @@ List<LabGroup> get labFeatures => [
         description: 'Sectioned settings with toggles.',
         builder: (context) =>
             const Center(child: Text('Account Settings Demo')),
+      ),
+    ],
+  ),
+  LabGroup(
+    id: 'trends',
+    title: 'UI Trends & Aesthetics',
+    icon: Icons.style,
+    features: [
+      LabFeature(
+        id: 'styles_gallery',
+        title: 'Styles Gallery',
+        description: 'Glassmorphism, Tokyo Night, and Neo Brutalism explorations.',
+        builder: (context) => const StylesGalleryFeature(),
       ),
     ],
   ),

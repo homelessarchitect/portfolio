@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class PorscheHeader extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onMenuPressed;
@@ -36,13 +37,16 @@ class PorscheHeader extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
       ),
-      title: Text(
-        "HOMELESS ARCHITECT",
-        style: theme.textTheme.titleMedium?.copyWith(
-          fontWeight: FontWeight.w900,
-          letterSpacing: 4.0,
-          fontSize: 14,
-          color: Colors.white,
+      title: GestureDetector(
+        onTap: () => context.go('/'),
+        child: Text(
+          "HOMELESS ARCHITECT",
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w900,
+            letterSpacing: 4.0,
+            fontSize: 14,
+            color: Colors.white,
+          ),
         ),
       ),
       actions: [

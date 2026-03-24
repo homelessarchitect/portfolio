@@ -183,42 +183,66 @@ class AddOrderSimulation extends ConsumerWidget {
 
 ---
 
-### 6 — Registrar el Proyecto
+### 6 — Registrar el Proyecto (Estructura Inmersiva)
 
-En `<project_id>_project.dart` defines el objeto `Project` completo:
+En `<project_id>_project.dart` defines el objeto `Project` completo. El Detail View utiliza una estructura **inmersiva (estilo Porsche)** que requiere branding y storytelling específicos:
 
 ```dart
 final noPreguntesProject = Project(
   id: 'no_preguntes',
   title: 'No Preguntes',
   tagline: 'Pedidos del fin de semana, del negocio a la pantalla.',
+  
+  // Plataformas y Tecnologías
   platforms: [ProjectPlatform.web, ProjectPlatform.mobile],
-  services: ['Firebase Firestore', 'Firebase Hosting', 'Firebase Auth'],
+  services: ['Firebase Firestore', 'Firebase Hosting', 'Riverpod'],
   year: '2024',
   status: ProjectStatus.live,
-  homeViews: {
-    ProjectPlatform.web:    const NoPreguntesWebHomeView(),
-    ProjectPlatform.mobile: const NoPreguntesMobileHomeView(),
+  category: 'FOOD & BEVERAGE LOGISTICS',
+  
+  // Elementos de Branding
+  primaryColor: const Color(0xFFE53935), // Color de marca principal que teñirá los acentos y highlights
+  onPrimaryColor: Colors.white,
+  backgroundUrl: 'lib/src/features/projects/catalog/no_preguntes/assets/bg.mp4',
+  isBackgroundVideo: true,
+  logoUrl: 'lib/src/features/projects/catalog/no_preguntes/assets/logo.png',
+  imageUrl: 'assets/images/placeholder.png',
+  
+  // Narrative (Storytelling & Design)
+  problem: 'El desorden en la recepción manual de pedidos causaba retrasos y clientes insatisfechos.',
+  solution: 'Digitalización end-to-end: un sistema de toma de pedidos rápido con un "kitchen display" en tiempo real.',
+  storytelling: 'Imagina tener decenas de pedidos entrando a la vez por WhatsApp... No Preguntes ordena el caos mediante una interfaz simple y directa para quien despacha y quien prepara.',
+  styleDescription: 'Interfaz de alto contraste enfocada en velocidad y operaciones críticas, inspirada en sistemas POS industriales modernos.',
+  
+  // Views
+  homeViews: const {
+    ProjectPlatform.web: NoPreguntesWebHomeView(),
+    ProjectPlatform.mobile: NoPreguntesMobileHomeView(),
   },
+  
+  // Explorador de Diseño (Pantallas del producto)
+  designScreens: [
+    SimulationScreen(
+      label: 'Home Mobile',
+      builder: () => const NoPreguntesMobileHomeView(),
+    ),
+    SimulationScreen(
+      label: 'Board de Pedidos',
+      builder: () => const WebOrdersBoardView(),
+    ),
+    // ... agrega más pantallas para el grid/carrusel de diseño
+  ],
+  
+  // Simulaciones de Features Interactivas
   features: [
     ProjectFeature(
       id: 'orders_board',
       title: 'Board de Pedidos en Tiempo Real',
       description: 'Pedidos ingresados desde la app mobile aparecen en segundos en la web pública.',
-      simulation: () => const RealtimeBoardSimulation(),
+      targetPlatform: FeatureTargetPlatform.web,
+      // ... simulaciones
     ),
-    ProjectFeature(
-      id: 'add_order',
-      title: 'Ingreso de Pedidos',
-      description: 'El admin registra nombre, ítem y teléfono del cliente en segundos.',
-      simulation: () => const AddOrderSimulation(),
-    ),
-    ProjectFeature(
-      id: 'menu',
-      title: 'Menú Digital',
-      description: 'La web muestra el menú de la semana, actualizable por el admin.',
-      simulation: null, // sin simulación interactiva — solo vista
-    ),
+    // ... más features
   ],
 );
 ```

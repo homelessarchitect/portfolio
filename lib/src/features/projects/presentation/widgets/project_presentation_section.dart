@@ -1,90 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 import '../../domain/project.dart';
+import '../../providers/video_controller_provider.dart';
 import 'project_miniature.dart';
 
-class ProjectPresentationSection extends StatefulWidget {
+class ProjectPresentationSection extends ConsumerWidget {
   final Project project;
 
   const ProjectPresentationSection({super.key, required this.project});
 
   @override
-  State<ProjectPresentationSection> createState() =>
-      _ProjectPresentationSectionState();
-}
-
-class _ProjectPresentationSectionState
-    extends State<ProjectPresentationSection> {
-  VideoPlayerController? _controller;
-  bool _isInitialized = false;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.project.isBackgroundVideo &&
-        widget.project.backgroundUrl != null) {
-      _controller = VideoPlayerController.asset(widget.project.backgroundUrl!)
-        ..initialize().then((_) {
-          if (mounted) {
-            setState(() {
-              _isInitialized = true;
-            });
-            _controller?.setLooping(true);
-            _controller?.setVolume(0); // Muted per requirements
-            _controller?.play();
-          }
-        });
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller?.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final screenSize = MediaQuery.sizeOf(context);
     final viewportHeight = screenSize.height;
-    final double videoHeight = viewportHeight * 0.45; // Stick to 45% for cinematic feel
-    final double miniatureHeight = viewportHeight * 0.75; // Proportional to screen
+    final double videoHeight = viewportHeight * 0.45;
+    final double miniatureHeight = viewportHeight * 0.75;
+
+    // Watch the shared provider — no local lifecycle management needed.
+    final videoAsync = (project.isBackgroundVideo && project.backgroundUrl != null)
+        ? ref.watch(videoControllerProvider(project.backgroundUrl!))
+        : const AsyncValue<VideoPlayerController>.loading();
 
     return Container(
       width: double.infinity,
-      height: viewportHeight, // Full Screen
+      height: viewportHeight,
       color: theme.colorScheme.surface,
       child: Stack(
         children: [
-          // 1. Top Section (Video/Title)
+          // 1. Top Section (Video / Image / Gradient)
           Positioned(
             top: 0,
             left: 0,
             right: 0,
-            child: Container(
+            child: SizedBox(
               height: videoHeight,
               child: Stack(
                 children: [
+                  // Background layer: animates from fallback → video
                   Positioned.fill(
-                    child: widget.project.isBackgroundVideo && _controller != null
-                        ? _buildVideoBackground()
-                        : _buildImageBackground(theme),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 500),
+                      child: videoAsync.when(
+                        data: (controller) => _VideoBackground(
+                          key: const ValueKey('video'),
+                          controller: controller,
+                        ),
+                        loading: () => _buildImageOrGradient(theme),
+                        error: (_, _) => _buildImageOrGradient(theme),
+                      ),
+                    ),
                   ),
+                  // Dark overlay (always present)
                   Positioned.fill(
-                    child: Container(color: Colors.black.withValues(alpha: 0.7)),
+                    child: Container(
+                      color: Colors.black.withValues(alpha: 0.70),
+                    ),
                   ),
-                  // Title centered in video area
+                  // Title centred in video area
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 60),
                       child: Text(
-                        widget.project.title.split(' ').join('\n').toUpperCase(),
+                        project.title.split(' ').join('\n').toUpperCase(),
                         textAlign: TextAlign.center,
                         style: theme.textTheme.displayLarge?.copyWith(
                           color: Colors.white.withValues(alpha: 0.95),
                           fontWeight: FontWeight.w900,
-                          fontSize: 100, // Balanced for full screen
+                          fontSize: 100,
                           letterSpacing: 20,
                           height: 0.75,
                         ),
@@ -96,21 +80,21 @@ class _ProjectPresentationSectionState
             ),
           ),
 
-          // 2. Focused Miniature (Centered on overlap)
+          // 2. Focused Miniature (Centred on overlap)
           Positioned(
             top: videoHeight - (miniatureHeight * 0.45),
             left: 0,
             right: 0,
             child: Center(
               child: Hero(
-                tag: 'project_miniature_${widget.project.id}',
+                tag: 'project_miniature_${project.id}',
                 child: Container(
                   constraints: BoxConstraints(
                     maxHeight: miniatureHeight,
                     maxWidth: screenSize.width * 0.9,
                   ),
                   child: ProjectMiniature(
-                    project: widget.project,
+                    project: project,
                     height: miniatureHeight,
                   ),
                 ),
@@ -128,7 +112,7 @@ class _ProjectPresentationSectionState
               child: Column(
                 children: [
                   Text(
-                    widget.project.category.toUpperCase(),
+                    project.category.toUpperCase(),
                     style: theme.textTheme.labelLarge?.copyWith(
                       color: theme.colorScheme.primary,
                       fontWeight: FontWeight.bold,
@@ -139,7 +123,7 @@ class _ProjectPresentationSectionState
                   Container(
                     constraints: const BoxConstraints(maxWidth: 800),
                     child: Text(
-                      widget.project.tagline,
+                      project.tagline,
                       textAlign: TextAlign.center,
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.w300,
@@ -151,46 +135,69 @@ class _ProjectPresentationSectionState
               ),
             ),
           ),
+
+          // 4. Tech Details CTA (Top Right)
+          if (project.technicalModules.isNotEmpty)
+            Positioned(
+              top: MediaQuery.paddingOf(context).top + 24,
+              right: 24,
+              child: Builder(
+                builder: (context) => Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () => Scaffold.of(context).openEndDrawer(),
+                    borderRadius: BorderRadius.circular(24),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surface
+                            .withValues(alpha: 0.15),
+                        border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.2)),
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.terminal_rounded,
+                              size: 16, color: Colors.white),
+                          const SizedBox(width: 8),
+                          Text(
+                            'TECH DETAILS',
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: Colors.white,
+                              letterSpacing: 2,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
   }
 
-  Widget _buildVideoBackground() {
-    if (!_isInitialized || _controller == null) {
-      return Container(color: Colors.black);
-    }
-    return SizedBox.expand(
-      child: Container(
-        color: Colors.black,
-        child: FittedBox(
-          fit: BoxFit.cover,
-          alignment: Alignment.center,
-          clipBehavior: Clip.hardEdge,
-          child: SizedBox(
-            width: _controller!.value.size.width,
-            height: _controller!.value.size.height,
-            child: VideoPlayer(_controller!),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildImageBackground(ThemeData theme) {
-    if (widget.project.backgroundUrl != null) {
+  Widget _buildImageOrGradient(ThemeData theme) {
+    if (project.backgroundUrl != null && !project.isBackgroundVideo) {
       return Image.asset(
-        widget.project.backgroundUrl!,
+        project.backgroundUrl!,
+        key: const ValueKey('image'),
         fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) =>
-            _buildFallbackGradient(theme),
+        errorBuilder: (_, _, _) => _buildGradient(theme),
       );
     }
-    return _buildFallbackGradient(theme);
+    return _buildGradient(theme);
   }
 
-  Widget _buildFallbackGradient(ThemeData theme) {
+  Widget _buildGradient(ThemeData theme) {
     return Container(
+      key: const ValueKey('gradient'),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -199,6 +206,33 @@ class _ProjectPresentationSectionState
             theme.colorScheme.surface,
             theme.colorScheme.surfaceContainerHighest,
           ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── Private Video Widget ──────────────────────────────────────────────────
+
+class _VideoBackground extends StatelessWidget {
+  final VideoPlayerController controller;
+
+  const _VideoBackground({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.expand(
+      child: Container(
+        color: Colors.black,
+        child: FittedBox(
+          fit: BoxFit.cover,
+          alignment: Alignment.center,
+          clipBehavior: Clip.hardEdge,
+          child: SizedBox(
+            width: controller.value.size.width,
+            height: controller.value.size.height,
+            child: VideoPlayer(controller),
+          ),
         ),
       ),
     );

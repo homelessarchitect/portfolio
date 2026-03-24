@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../state/drawer_state.dart';
 import '../../../features/projects/data/mock_projects.dart';
 import '../../../features/projects/presentation/widgets/project_drawer_thumbnail.dart';
+import '../../../features/ui_lab/data/ui_trends_catalog.dart';
+import '../../../features/ui_lab/presentation/widgets/ui_trend_drawer_card.dart';
 
 class NestedDrawer extends ConsumerWidget {
   const NestedDrawer({super.key});
@@ -55,7 +57,8 @@ class NestedDrawer extends ConsumerWidget {
           left: drawerState.level == DrawerLevel.sub ? menuWidth : -menuWidth * 2,
           top: 0,
           bottom: 0,
-          width: drawerState.selectedCategory == 'Proyectos'
+          width: (drawerState.selectedCategory == 'Proyectos' ||
+                  drawerState.selectedCategory == 'UI Trends')
               ? menuWidth * 1.4
               : menuWidth,
           child: Container(
@@ -79,36 +82,60 @@ class _MainMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final options = ["Proyectos", "Laboratorio", "Tested Packages"];
+    final activeOptions = ["Proyectos", "UI Trends"];
+    final comingSoonOptions = ["Laboratorio", "Tested Packages"];
     final theme = Theme.of(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: options
-            .map(
-              (opt) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: InkWell(
-                  onTap: () => onSelect(opt),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        opt,
-                        style: theme.textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: -0.5,
-                        ),
+        children: [
+          ...activeOptions.map(
+            (opt) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: InkWell(
+                onTap: () => onSelect(opt),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      opt,
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: -0.5,
                       ),
-                      const Icon(Icons.chevron_right, size: 20),
-                    ],
-                  ),
+                    ),
+                    const Icon(Icons.chevron_right, size: 20),
+                  ],
                 ),
               ),
-            )
-            .toList(),
+            ),
+          ),
+          const SizedBox(height: 32),
+          Text(
+            'PRÓXIMAMENTE',
+            style: theme.textTheme.labelLarge?.copyWith(
+              fontWeight: FontWeight.w900,
+              letterSpacing: 2.0,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+            ),
+          ),
+          const SizedBox(height: 16),
+          ...comingSoonOptions.map(
+            (opt) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                opt,
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: -0.5,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -146,6 +173,8 @@ class _SubMenu extends ConsumerWidget {
         // Content
         if (category == 'Proyectos')
           Expanded(child: _ProjectsThumbnailScroll(onClose: onClose))
+        else if (category == 'UI Trends')
+          Expanded(child: _UITrendsHorizontalScroll(onClose: onClose))
         else
           Expanded(child: _GenericSubMenu(category: category, onClose: onClose)),
       ],
@@ -238,7 +267,6 @@ class _GenericSubMenu extends StatelessWidget {
       items = [
         {'title': 'Ver Galería Lab', 'path': '/lab'},
         {'title': 'Animaciones', 'path': '/lab'},
-        {'title': 'Patrones UI', 'path': '/lab'},
       ];
     } else if (category == 'Tested Packages') {
       items = [
@@ -288,6 +316,74 @@ class _GenericSubMenu extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  UI Trends: horizontal scrollable preview (like Proyectos but for styles)
+// ─────────────────────────────────────────────────────────────────────────────
+class _UITrendsHorizontalScroll extends StatelessWidget {
+  final VoidCallback onClose;
+  const _UITrendsHorizontalScroll({required this.onClose});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+          child: Text(
+            'UI TRENDS',
+            style: theme.textTheme.labelLarge?.copyWith(
+              fontWeight: FontWeight.w900,
+              letterSpacing: 3.0,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.45),
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            itemCount: uiTrendsCatalog.length,
+            itemBuilder: (context, index) {
+              final trend = uiTrendsCatalog[index];
+              return UITrendDrawerCard(
+                trend: trend,
+                onTap: () {
+                  context.go('/ui-trends/${trend.id}');
+                  onClose();
+                },
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+          child: GestureDetector(
+            onTap: () {
+              context.go('/lab');
+              onClose();
+            },
+            child: Row(
+              children: [
+                Text(
+                  'Ver laboratorio completo',
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Icon(Icons.arrow_forward, size: 16),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

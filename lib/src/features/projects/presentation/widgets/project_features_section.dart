@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../domain/project.dart';
 import '../feature_simulation_view.dart';
+import 'device_mockup.dart';
 
 class ProjectFeaturesSection extends StatelessWidget {
   final Project project;
@@ -31,18 +32,18 @@ class ProjectFeaturesSection extends StatelessWidget {
           height: 600,
           child: LayoutBuilder(
             builder: (context, constraints) {
-              final isWide = constraints.maxWidth > 900;
+              final isWide = constraints.maxWidth > 1000;
               
               return ListView.separated(
                 padding: const EdgeInsets.symmetric(horizontal: 60),
                 scrollDirection: Axis.horizontal,
                 itemCount: project.features.length,
-                separatorBuilder: (context, index) => const SizedBox(width: 32),
+                separatorBuilder: (context, index) => const SizedBox(width: 40),
                 itemBuilder: (context, index) {
                   final feature = project.features[index];
                   final cardWidth = isWide 
-                      ? (constraints.maxWidth - 120 - 32) / 2 
-                      : (constraints.maxWidth - 120).clamp(300.0, 500.0);
+                      ? (constraints.maxWidth - 120 - 40) / 2 
+                      : (constraints.maxWidth - 120).clamp(400.0, 800.0);
                   
                   return _FeatureCard(
                     feature: feature,
@@ -73,6 +74,9 @@ class _FeatureCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final deviceType = feature.targetPlatform == FeatureTargetPlatform.web 
+        ? DeviceType.laptop 
+        : DeviceType.phone;
 
     return InkWell(
       onTap: () {
@@ -86,53 +90,61 @@ class _FeatureCard extends StatelessWidget {
           ),
         );
       },
+      borderRadius: BorderRadius.circular(24),
       child: Container(
         width: width,
+        padding: const EdgeInsets.all(40),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.black,
+          borderRadius: BorderRadius.circular(24),
+          color: const Color(0xFF141414),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 0.5),
         ),
-        clipBehavior: Clip.antiAlias,
-        child: Stack(
+        child: Row(
           children: [
-            // Background Animation / Simulation Preview
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.6,
-                child: IgnorePointer(
-                  child: feature.simulationScreens.isNotEmpty 
-                    ? feature.simulationScreens.first.builder()
-                    : const Center(child: Icon(Icons.apps, color: Colors.white24, size: 80)),
-                ),
-              ),
-            ),
-            
-            // Bottom Info Gradient
-            Positioned.fill(
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.transparent,
-                      Colors.black87,
-                      Colors.black,
-                    ],
-                    stops: [0, 0.4, 0.8, 1],
+            // Left: Device Mockup
+            Expanded(
+              flex: 5,
+              child: Hero(
+                tag: 'feature_${feature.id}_mockup',
+                child: Center(
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: DeviceMockup(
+                      type: deviceType,
+                      child: feature.simulationScreens.isNotEmpty 
+                        ? feature.simulationScreens.first.builder()
+                        : Container(color: Colors.black26),
+                    ),
                   ),
                 ),
               ),
             ),
             
-            // Content
-            Padding(
-              padding: const EdgeInsets.all(32),
+            const SizedBox(width: 40),
+            
+            // Right: Content
+            Expanded(
+              flex: 4,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      feature.targetPlatform == FeatureTargetPlatform.web ? "WEB APP" : "MOBILE APP",
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
                   Text(
                     feature.title.toUpperCase(),
                     style: theme.textTheme.headlineSmall?.copyWith(
@@ -141,24 +153,32 @@ class _FeatureCard extends StatelessWidget {
                       letterSpacing: 2,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 20),
                   Text(
                     feature.description,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: Colors.white.withValues(alpha: 0.7),
-                      height: 1.5,
+                      color: Colors.white.withValues(alpha: 0.6),
+                      height: 1.8,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 24),
-                  const Align(
-                    alignment: Alignment.bottomRight,
-                    child: Icon(
-                      Icons.arrow_forward_rounded,
-                      color: Colors.white,
-                      size: 28,
-                    ),
+                  const SizedBox(height: 32),
+                  Row(
+                    children: [
+                      Text(
+                        "EXPLORAR",
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      const Icon(
+                        Icons.arrow_forward_rounded,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -169,3 +189,4 @@ class _FeatureCard extends StatelessWidget {
     );
   }
 }
+

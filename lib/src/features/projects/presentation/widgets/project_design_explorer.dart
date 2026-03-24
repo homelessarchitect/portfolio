@@ -3,6 +3,28 @@ import 'package:glassmorphism/glassmorphism.dart';
 import '../../domain/project.dart';
 import 'device_mockup.dart';
 
+ThemeData _buildMockTheme(BuildContext context, bool isDark, Project project) {
+  if (project.primaryColor == null) {
+    return isDark ? ThemeData.dark() : ThemeData.light();
+  }
+  
+  final seed = project.primaryColor!;
+  final onPrimary = project.onPrimaryColor ?? (isDark ? Colors.black : Colors.white);
+  
+  return ThemeData(
+    brightness: isDark ? Brightness.dark : Brightness.light,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: seed,
+      brightness: isDark ? Brightness.dark : Brightness.light,
+      primary: seed,
+      onPrimary: onPrimary,
+    ),
+    useMaterial3: true,
+    scaffoldBackgroundColor: isDark ? const Color(0xFF0D0D0D) : const Color(0xFFF5F5F7),
+    fontFamily: Theme.of(context).textTheme.bodyMedium?.fontFamily,
+  );
+}
+
 // ─── Layout constants ────────────────────────────────────────────────────────
 const double _kPanelWidth = 300;
 const double _kCarouselThumbWidth = 112;
@@ -21,13 +43,27 @@ class ProjectDesignExplorer extends StatefulWidget {
 class _ProjectDesignExplorerState extends State<ProjectDesignExplorer> {
   int _selectedScreenIndex = 0;
   bool _isDarkMode = true;
+  late bool _viewingMobile;
 
-  List<SimulationScreen> get _screens => widget.project.designScreens;
+  List<SimulationScreen> get _screens => widget.project.designScreens.where((s) {
+    if (s.platform == null) return true; // Show in both if not explicitly tagged
+    if (_viewingMobile) return s.platform == ProjectPlatform.mobile;
+    return s.platform == ProjectPlatform.web || s.platform == ProjectPlatform.desktop;
+  }).toList();
+
+  @override
+  void initState() {
+    super.initState();
+    _viewingMobile = widget.project.platforms.contains(ProjectPlatform.mobile) 
+      || widget.project.platforms.isEmpty;
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isMobile = widget.project.platforms.contains(ProjectPlatform.mobile);
+    final hasMobile = widget.project.platforms.contains(ProjectPlatform.mobile);
+    final hasWeb = widget.project.platforms.contains(ProjectPlatform.web) || widget.project.platforms.contains(ProjectPlatform.desktop);
+    final showPlatformSelector = hasMobile && hasWeb;
 
     final viewportHeight = MediaQuery.sizeOf(context).height;
 
@@ -88,7 +124,7 @@ class _ProjectDesignExplorerState extends State<ProjectDesignExplorer> {
                               screens: _screens,
                               selectedIndex: _selectedScreenIndex,
                               isDarkMode: _isDarkMode,
-                              isMobile: isMobile,
+                              isMobile: _viewingMobile,
                               onDarkModeToggle: (v) => setState(() => _isDarkMode = v),
                               onDotTap: (i) => setState(() => _selectedScreenIndex = i),
                             ),
@@ -104,6 +140,14 @@ class _ProjectDesignExplorerState extends State<ProjectDesignExplorer> {
                             isDarkMode: _isDarkMode,
                             styleDescription: widget.project.styleDescription,
                             onThemeChanged: (v) => setState(() => _isDarkMode = v),
+                            showPlatformSelector: showPlatformSelector,
+                            isMobileApp: _viewingMobile,
+                            onPlatformChanged: (v) {
+                              setState(() {
+                                _viewingMobile = v;
+                                _selectedScreenIndex = 0; // Reset index to avoid bounds error when screens list changes length
+                              });
+                            },
                           ),
                         ),
                       ],
@@ -114,13 +158,14 @@ class _ProjectDesignExplorerState extends State<ProjectDesignExplorer> {
 
                   // ── Bottom thumbnail carousel ──────────────────────────────────
                   if (_screens.isNotEmpty)
-                    _BottomCarousel(
-                      screens: _screens,
-                      selectedIndex: _selectedScreenIndex,
-                      isDarkMode: _isDarkMode,
-                      isMobile: isMobile,
-                      onSelect: (i) => setState(() => _selectedScreenIndex = i),
-                    ),
+                      _BottomCarousel(
+                        project: widget.project,
+                        screens: _screens,
+                        selectedIndex: _selectedScreenIndex,
+                        isDarkMode: _isDarkMode,
+                        isMobile: _viewingMobile,
+                        onSelect: (i) => setState(() => _selectedScreenIndex = i),
+                      ),
                 ],
               ),
             ),
@@ -164,6 +209,7 @@ class _MainPreview extends StatelessWidget {
           screens: screens,
           initialIndex: selectedIndex,
           isDarkMode: isDarkMode,
+          isMobile: isMobile,
         );
       },
     );
@@ -203,15 +249,15 @@ class _MainPreview extends StatelessWidget {
                   ),
                   child: Theme(
                     key: ValueKey('screen_$selectedIndex'),
-                    data: isDarkMode ? ThemeData.dark() : ThemeData.light(),
+                    data: _buildMockTheme(context, isDarkMode, project),
                     child: DeviceMockup(
-                      type: isMobile ? DeviceType.phone : DeviceType.laptop,
-                      width: 280,
+                      type: isMobile ? DeviceType.phone : DeviceType.monitor,
+                      width: isMobile ? 280 : 580,
                       height: 540,
                       child: _ScaledPreviewContent(
-                        child: currentScreen?.builder() ?? const SizedBox(),
                         isMobile: isMobile,
                         allowScroll: true,
+                        child: currentScreen?.builder() ?? const SizedBox(),
                       ),
                     ),
                   ),
@@ -308,6 +354,7 @@ class _ThemeBadge extends StatelessWidget {
 
 // ─── Bottom carousel ─────────────────────────────────────────────────────────
 class _BottomCarousel extends StatelessWidget {
+  final Project project;
   final List<SimulationScreen> screens;
   final int selectedIndex;
   final bool isDarkMode;
@@ -316,6 +363,7 @@ class _BottomCarousel extends StatelessWidget {
   final bool isMobile;
 
   const _BottomCarousel({
+    required this.project,
     required this.screens,
     required this.selectedIndex,
     required this.isDarkMode,
@@ -362,14 +410,12 @@ class _BottomCarousel extends StatelessWidget {
                           child: Opacity(
                             opacity: isSelected ? 1.0 : 0.55,
                             child: IgnorePointer(
-                              child: Theme(
-                                data: isDarkMode
-                                    ? ThemeData.dark()
-                                    : ThemeData.light(),
-                                child: _ScaledPreviewContent(
-                                  child: screens[index].builder(),
+                                child: Theme(
+                                  data: _buildMockTheme(context, isDarkMode, project),
+                                  child: _ScaledPreviewContent(
                                   isMobile: isMobile,
                                   allowScroll: false,
+                                  child: screens[index].builder(),
                                 ),
                               ),
                             ),
@@ -420,11 +466,17 @@ class _ConfiguratorPanel extends StatelessWidget {
   final bool isDarkMode;
   final String styleDescription;
   final ValueChanged<bool> onThemeChanged;
+  final bool showPlatformSelector;
+  final bool isMobileApp;
+  final ValueChanged<bool> onPlatformChanged;
 
   const _ConfiguratorPanel({
     required this.isDarkMode,
     required this.styleDescription,
     required this.onThemeChanged,
+    required this.showPlatformSelector,
+    required this.isMobileApp,
+    required this.onPlatformChanged,
   });
 
   @override
@@ -440,9 +492,18 @@ class _ConfiguratorPanel extends StatelessWidget {
       child: Column(
         children: [
           // Divider line on top right (like Porsche panel scrollbar)
+          if (showPlatformSelector)
+            _ConfiguratorSection(
+              title: 'Plataforma',
+              initiallyExpanded: true,
+              child: _PlatformPalette(
+                isMobileApp: isMobileApp,
+                onChanged: onPlatformChanged,
+              ),
+            ),
           _ConfiguratorSection(
             title: 'Modo de Tema',
-            initiallyExpanded: true,
+            initiallyExpanded: showPlatformSelector ? false : true,
             child: _ThemePalette(
               isDarkMode: isDarkMode,
               onChanged: onThemeChanged,
@@ -617,6 +678,93 @@ class _ThemePalette extends StatelessWidget {
   }
 }
 
+/// Platform swatches: mobile & web pill options
+class _PlatformPalette extends StatelessWidget {
+  final bool isMobileApp;
+  final ValueChanged<bool> onChanged;
+
+  const _PlatformPalette({required this.isMobileApp, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    Widget swatch({
+      required IconData icon,
+      required String label,
+      required bool selected,
+    }) {
+      return Column(
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            width: 52,
+            height: 52,
+            decoration: BoxDecoration(
+              color: selected ? theme.colorScheme.primary.withValues(alpha: 0.1) : theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: selected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.outline.withValues(alpha: 0.2),
+                width: selected ? 2.5 : 1,
+              ),
+            ),
+            child: Icon(
+              icon,
+              color: selected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            label,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: selected
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Formato de visualización',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            GestureDetector(
+              onTap: () => onChanged(true),
+              child: swatch(
+                icon: Icons.smartphone,
+                label: 'Mobile',
+                selected: isMobileApp,
+              ),
+            ),
+            const SizedBox(width: 24),
+            GestureDetector(
+              onTap: () => onChanged(false),
+              child: swatch(
+                icon: Icons.desktop_mac,
+                label: 'Web',
+                selected: !isMobileApp,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// ScreensInfo shows a small list of screen names (like Porsche "Rines")
 class _ScreensInfo extends StatelessWidget {
   final bool isDarkMode;
@@ -719,12 +867,14 @@ class _FullScreenPreview extends StatefulWidget {
   final List<SimulationScreen> screens;
   final int initialIndex;
   final bool isDarkMode;
+  final bool isMobile;
 
   const _FullScreenPreview({
     required this.project,
     required this.screens,
     required this.initialIndex,
     required this.isDarkMode,
+    required this.isMobile,
   });
 
   @override
@@ -744,11 +894,11 @@ class _FullScreenPreviewState extends State<_FullScreenPreview> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = widget.project.platforms.contains(ProjectPlatform.mobile);
+    final isMobile = widget.isMobile;
     final currentScreen = widget.screens.isNotEmpty ? widget.screens[_currentIndex] : null;
 
     return Theme(
-      data: _isDarkMode ? ThemeData.dark() : ThemeData.light(),
+      data: _buildMockTheme(context, _isDarkMode, widget.project),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(
@@ -798,12 +948,12 @@ class _FullScreenPreviewState extends State<_FullScreenPreview> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 60),
                       child: DeviceMockup(
-                        type: isMobile ? DeviceType.phone : DeviceType.laptop,
+                        type: isMobile ? DeviceType.phone : DeviceType.monitor,
                         width: isMobile ? 340 : 1000,
                         height: isMobile ? 680 : 600,
                         child: _ScaledPreviewContent(
-                          child: currentScreen?.builder() ?? const SizedBox(),
                           isMobile: isMobile,
+                          child: currentScreen?.builder() ?? const SizedBox(),
                         ),
                       ),
                     ),

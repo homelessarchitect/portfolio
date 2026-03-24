@@ -7,10 +7,12 @@ enum FeatureTargetPlatform { mobile, web }
 class SimulationScreen {
   final String label;
   final Widget Function() builder;
+  final ProjectPlatform? platform;
 
   const SimulationScreen({
     required this.label,
     required this.builder,
+    this.platform,
   });
 }
 
@@ -52,6 +54,18 @@ class ProjectFeature {
   });
 }
 
+class TechnicalModule {
+  final String name;
+  final bool isImplementedInMock;
+  final String? description;
+
+  const TechnicalModule({
+    required this.name,
+    this.isImplementedInMock = false,
+    this.description,
+  });
+}
+
 class Project {
   final String id;
   final String title;
@@ -62,6 +76,7 @@ class Project {
   final ProjectStatus status;
   final Map<ProjectPlatform, Widget> homeViews;
   final List<ProjectFeature> features;
+  final List<TechnicalModule> technicalModules;
   
   final String description;
   final String imageUrl;
@@ -78,6 +93,10 @@ class Project {
   final String? backgroundUrl;
   final bool isBackgroundVideo;
   final List<SimulationScreen> designScreens;
+  
+  // Brand Colors
+  final Color? primaryColor;
+  final Color? onPrimaryColor;
 
   const Project({
     required this.id,
@@ -105,5 +124,8 @@ class Project {
     this.backgroundUrl,
     this.isBackgroundVideo = false,
     this.designScreens = const [],
+    this.technicalModules = const [],
+    this.primaryColor,
+    this.onPrimaryColor,
   });
 }
