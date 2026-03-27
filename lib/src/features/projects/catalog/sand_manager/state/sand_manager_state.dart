@@ -51,7 +51,9 @@ final _mockMethods = <PaymentMethod>[
   const PaymentMethod(id: 2, name: 'Efectivo'),
 ];
 
-final paymentMethodsStreamProvider = StreamProvider<List<PaymentMethod>>((ref) async* {
+final paymentMethodsStreamProvider = StreamProvider<List<PaymentMethod>>((
+  ref,
+) async* {
   yield _mockMethods;
 });
 
@@ -61,7 +63,7 @@ class CashFlowParams {
   final int? methodId;
 
   const CashFlowParams({this.since, this.until, this.methodId});
-  
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -109,36 +111,45 @@ class MockTransactionsNotifier extends Notifier<List<CashTransaction>> {
   }
 }
 
-final mockTransactionsNotifierProvider = NotifierProvider<MockTransactionsNotifier, List<CashTransaction>>(() {
-  return MockTransactionsNotifier();
-});
+final mockTransactionsNotifierProvider =
+    NotifierProvider<MockTransactionsNotifier, List<CashTransaction>>(() {
+      return MockTransactionsNotifier();
+    });
 
-final watchCashTransactionsProvider = StreamProvider.family<List<CashTransaction>, CashFlowParams>((ref, params) async* {
-  yield ref.watch(mockTransactionsNotifierProvider);
-});
+final watchCashTransactionsProvider =
+    StreamProvider.family<List<CashTransaction>, CashFlowParams>((
+      ref,
+      params,
+    ) async* {
+      yield ref.watch(mockTransactionsNotifierProvider);
+    });
 
-final watchCashFlowSummaryProvider = StreamProvider.family<CashFlowSummary, CashFlowParams>((ref, params) async* {
-  final transactions = ref.watch(mockTransactionsNotifierProvider);
-  
-  double totalPaidIncome = 0;
-  double totalPaidExpense = 0;
-  
-  for (final t in transactions) {
-    if (t.type == CashTransactionType.income) {
-      totalPaidIncome += t.amount;
-    } else {
-      totalPaidExpense += t.amount;
-    }
-  }
-  
-  yield CashFlowSummary(
-    netFlow: totalPaidIncome - totalPaidExpense,
-    totalPaidIncome: totalPaidIncome,
-    totalPendingIncome: 0,
-    totalPaidExpense: totalPaidExpense,
-    totalPendingExpense: 0,
-  );
-});
+final watchCashFlowSummaryProvider =
+    StreamProvider.family<CashFlowSummary, CashFlowParams>((
+      ref,
+      params,
+    ) async* {
+      final transactions = ref.watch(mockTransactionsNotifierProvider);
+
+      double totalPaidIncome = 0;
+      double totalPaidExpense = 0;
+
+      for (final t in transactions) {
+        if (t.type == CashTransactionType.income) {
+          totalPaidIncome += t.amount;
+        } else {
+          totalPaidExpense += t.amount;
+        }
+      }
+
+      yield CashFlowSummary(
+        netFlow: totalPaidIncome - totalPaidExpense,
+        totalPaidIncome: totalPaidIncome,
+        totalPendingIncome: 0,
+        totalPaidExpense: totalPaidExpense,
+        totalPendingExpense: 0,
+      );
+    });
 
 // --- MOCK SALES MODELS & STATE ---
 
@@ -193,6 +204,7 @@ class MockSalesNotifier extends Notifier<List<MockSale>> {
   }
 }
 
-final mockSalesNotifierProvider = NotifierProvider<MockSalesNotifier, List<MockSale>>(() {
-  return MockSalesNotifier();
-});
+final mockSalesNotifierProvider =
+    NotifierProvider<MockSalesNotifier, List<MockSale>>(() {
+      return MockSalesNotifier();
+    });

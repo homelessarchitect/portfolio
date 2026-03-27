@@ -2,21 +2,27 @@ import 'package:flutter/material.dart';
 import '../views/shared/sand_manager_theme.dart';
 
 class SandManagerProductsSimulation extends StatelessWidget {
-  const SandManagerProductsSimulation({super.key});
+  final bool showAppBar;
+  const SandManagerProductsSimulation({super.key, this.showAppBar = true});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppDesignSystem.backgroundVariant,
-      appBar: AppBar(
-        title: const Text('MATERIALES', style: TextStyle(fontWeight: FontWeight.w900)),
-        backgroundColor: AppDesignSystem.pureWhite,
-        foregroundColor: AppDesignSystem.deepBlack,
-        elevation: 0,
-        actions: [
-          IconButton(icon: const Icon(Icons.add), onPressed: () {}),
-        ],
-      ),
+      appBar: showAppBar
+          ? AppBar(
+              title: const Text(
+                'MATERIALES',
+                style: TextStyle(fontWeight: FontWeight.w900),
+              ),
+              backgroundColor: AppDesignSystem.pureWhite,
+              foregroundColor: AppDesignSystem.deepBlack,
+              elevation: 0,
+              actions: [
+                IconButton(icon: const Icon(Icons.add), onPressed: () {}),
+              ],
+            )
+          : null,
       body: GridView.builder(
         padding: const EdgeInsets.all(16),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -40,21 +46,32 @@ class SandManagerProductsSimulation extends StatelessWidget {
                       width: double.infinity,
                       color: AppDesignSystem.backgroundVariant,
                       child: const Center(
-                        child: Icon(Icons.landscape, size: 48, color: AppDesignSystem.deepBlack),
+                        child: Icon(
+                          Icons.landscape,
+                          size: 48,
+                          color: AppDesignSystem.deepBlack,
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 12),
                   Text(
                     product.name,
-                    style: const TextStyle(fontWeight: FontWeight.w900, color: AppDesignSystem.deepBlack, fontSize: 14),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w900,
+                      color: AppDesignSystem.deepBlack,
+                      fontSize: 14,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     '\$${product.price} / ${product.unit}',
-                    style: const TextStyle(fontWeight: FontWeight.bold, color: AppDesignSystem.impactOrange),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppDesignSystem.impactOrange,
+                    ),
                   ),
                 ],
               ),

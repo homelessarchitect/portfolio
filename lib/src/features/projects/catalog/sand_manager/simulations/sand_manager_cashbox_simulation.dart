@@ -17,7 +17,10 @@ class CashboxFormScreen extends StatelessWidget {
         elevation: 0,
         title: const Text(
           'NUEVO GASTO',
-          style: TextStyle(fontWeight: FontWeight.w900, color: AppDesignSystem.deepBlack),
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            color: AppDesignSystem.deepBlack,
+          ),
         ),
       ),
       body: const SingleChildScrollView(
@@ -34,10 +37,18 @@ class CashboxDashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final summaryAsync = ref.watch(watchCashFlowSummaryProvider(const CashFlowParams()));
-    final transactionsAsync = ref.watch(watchCashTransactionsProvider(const CashFlowParams()));
-    
-    final currencyFormat = NumberFormat.currency(locale: 'es_CO', symbol: '\$', decimalDigits: 0);
+    final summaryAsync = ref.watch(
+      watchCashFlowSummaryProvider(const CashFlowParams()),
+    );
+    final transactionsAsync = ref.watch(
+      watchCashTransactionsProvider(const CashFlowParams()),
+    );
+
+    final currencyFormat = NumberFormat.currency(
+      locale: 'es_CO',
+      symbol: '\$',
+      decimalDigits: 0,
+    );
     final dateFormat = DateFormat('dd/MM/yyyy HH:mm');
 
     return Scaffold(
@@ -76,7 +87,7 @@ class CashboxDashboardScreen extends ConsumerWidget {
               ],
             ),
           ),
-          
+
           // Main Content
           Expanded(
             child: Column(
@@ -99,11 +110,20 @@ class CashboxDashboardScreen extends ConsumerWidget {
                       Spacer(),
                       Icon(Icons.search, color: AppDesignSystem.deepBlack),
                       SizedBox(width: 16),
-                      Icon(Icons.notifications_none, color: AppDesignSystem.deepBlack),
+                      Icon(
+                        Icons.notifications_none,
+                        color: AppDesignSystem.deepBlack,
+                      ),
                       SizedBox(width: 24),
                       CircleAvatar(
                         backgroundColor: AppDesignSystem.impactOrange,
-                        child: Text('AD', style: TextStyle(fontWeight: FontWeight.bold, color: AppDesignSystem.deepBlack)),
+                        child: Text(
+                          'AD',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppDesignSystem.deepBlack,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -117,26 +137,66 @@ class CashboxDashboardScreen extends ConsumerWidget {
                       children: [
                         // KPIs
                         summaryAsync.when(
-                          data: (summary) => Row(
-                            children: [
-                              Expanded(child: _buildKpiCard('BALANCE NETO', summary.netFlow, AppDesignSystem.impactOrange, currencyFormat)),
-                              const SizedBox(width: 16),
-                              Expanded(child: _buildKpiCard('INGRESOS', summary.totalPaidIncome, AppDesignSystem.statusSuccess, currencyFormat)),
-                              const SizedBox(width: 16),
-                              Expanded(child: _buildKpiCard('EGRESOS', summary.totalPaidExpense, AppDesignSystem.statusError, currencyFormat)),
-                            ],
+                          data: (summary) => LayoutBuilder(
+                            builder: (context, constraints) {
+                              final useVertical = constraints.maxWidth < 600;
+                              return Wrap(
+                                spacing: 16,
+                                runSpacing: 16,
+                                children: [
+                                  SizedBox(
+                                    width: useVertical
+                                        ? double.infinity
+                                        : (constraints.maxWidth - 32) / 3,
+                                    child: _buildKpiCard(
+                                      'BALANCE NETO',
+                                      summary.netFlow,
+                                      AppDesignSystem.impactOrange,
+                                      currencyFormat,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: useVertical
+                                        ? double.infinity
+                                        : (constraints.maxWidth - 32) / 3,
+                                    child: _buildKpiCard(
+                                      'INGRESOS',
+                                      summary.totalPaidIncome,
+                                      AppDesignSystem.statusSuccess,
+                                      currencyFormat,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: useVertical
+                                        ? double.infinity
+                                        : (constraints.maxWidth - 32) / 3,
+                                    child: _buildKpiCard(
+                                      'EGRESOS',
+                                      summary.totalPaidExpense,
+                                      AppDesignSystem.statusError,
+                                      currencyFormat,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
                           ),
-                          loading: () => const Center(child: CircularProgressIndicator()),
+                          loading: () =>
+                              const Center(child: CircularProgressIndicator()),
                           error: (_, _) => const SizedBox(),
                         ),
-                        
+
                         const SizedBox(height: 32),
                         const Text(
                           'ÚLTIMAS TRANSACCIONES',
-                          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: AppDesignSystem.deepBlack),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 16,
+                            color: AppDesignSystem.deepBlack,
+                          ),
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // Transactions Table
                         transactionsAsync.when(
                           data: (transactions) => ImpactCard(
@@ -145,10 +205,14 @@ class CashboxDashboardScreen extends ConsumerWidget {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: transactions.length,
-                              separatorBuilder: (_, _) => const Divider(height: 1, color: AppDesignSystem.backgroundVariant),
+                              separatorBuilder: (_, _) => const Divider(
+                                height: 1,
+                                color: AppDesignSystem.backgroundVariant,
+                              ),
                               itemBuilder: (context, index) {
                                 final t = transactions[index];
-                                final isIncome = t.type == CashTransactionType.income;
+                                final isIncome =
+                                    t.type == CashTransactionType.income;
                                 return Padding(
                                   padding: const EdgeInsets.all(16.0),
                                   child: Row(
@@ -156,12 +220,20 @@ class CashboxDashboardScreen extends ConsumerWidget {
                                       Container(
                                         padding: const EdgeInsets.all(8),
                                         decoration: BoxDecoration(
-                                          color: isIncome ? AppDesignSystem.statusSuccess.withValues(alpha: 0.1) : AppDesignSystem.statusError.withValues(alpha: 0.1),
+                                          color: isIncome
+                                              ? AppDesignSystem.statusSuccess
+                                                    .withValues(alpha: 0.1)
+                                              : AppDesignSystem.statusError
+                                                    .withValues(alpha: 0.1),
                                           shape: BoxShape.circle,
                                         ),
                                         child: Icon(
-                                          isIncome ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
-                                          color: isIncome ? AppDesignSystem.statusSuccess : AppDesignSystem.statusError,
+                                          isIncome
+                                              ? Icons.keyboard_arrow_down
+                                              : Icons.keyboard_arrow_up,
+                                          color: isIncome
+                                              ? AppDesignSystem.statusSuccess
+                                              : AppDesignSystem.statusError,
                                         ),
                                       ),
                                       const SizedBox(width: 16),
@@ -169,19 +241,27 @@ class CashboxDashboardScreen extends ConsumerWidget {
                                         flex: 2,
                                         child: Text(
                                           t.description.toUpperCase(),
-                                          style: const TextStyle(fontWeight: FontWeight.w900, color: AppDesignSystem.deepBlack),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w900,
+                                            color: AppDesignSystem.deepBlack,
+                                          ),
                                         ),
                                       ),
                                       Expanded(
                                         child: Text(
                                           dateFormat.format(t.date),
-                                          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey,
+                                          ),
                                         ),
                                       ),
                                       Expanded(
                                         child: Text(
                                           t.methodName ?? 'N/A',
-                                          style: const TextStyle(fontWeight: FontWeight.bold),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                       Text(
@@ -189,7 +269,9 @@ class CashboxDashboardScreen extends ConsumerWidget {
                                         style: TextStyle(
                                           fontWeight: FontWeight.w900,
                                           fontSize: 16,
-                                          color: isIncome ? AppDesignSystem.statusSuccess : AppDesignSystem.statusError,
+                                          color: isIncome
+                                              ? AppDesignSystem.statusSuccess
+                                              : AppDesignSystem.statusError,
                                         ),
                                       ),
                                     ],
@@ -198,7 +280,8 @@ class CashboxDashboardScreen extends ConsumerWidget {
                               },
                             ),
                           ),
-                          loading: () => const Center(child: CircularProgressIndicator()),
+                          loading: () =>
+                              const Center(child: CircularProgressIndicator()),
                           error: (_, _) => const SizedBox(),
                         ),
                       ],
@@ -219,12 +302,20 @@ class CashboxDashboardScreen extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Row(
         children: [
-          Icon(icon, color: isSelected ? AppDesignSystem.deepBlack : AppDesignSystem.pureWhite, size: 20),
+          Icon(
+            icon,
+            color: isSelected
+                ? AppDesignSystem.deepBlack
+                : AppDesignSystem.pureWhite,
+            size: 20,
+          ),
           const SizedBox(width: 16),
           Text(
             label,
             style: TextStyle(
-              color: isSelected ? AppDesignSystem.deepBlack : AppDesignSystem.pureWhite,
+              color: isSelected
+                  ? AppDesignSystem.deepBlack
+                  : AppDesignSystem.pureWhite,
               fontWeight: FontWeight.w900,
               fontSize: 12,
               letterSpacing: 1.0,
@@ -235,7 +326,12 @@ class CashboxDashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildKpiCard(String title, double amount, Color brandColor, NumberFormat currencyFormat) {
+  Widget _buildKpiCard(
+    String title,
+    double amount,
+    Color brandColor,
+    NumberFormat currencyFormat,
+  ) {
     return ImpactCard(
       backgroundColor: AppDesignSystem.pureWhite,
       child: Padding(
@@ -259,7 +355,9 @@ class CashboxDashboardScreen extends ConsumerWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 32,
-                  color: brandColor == AppDesignSystem.impactOrange ? AppDesignSystem.deepBlack : brandColor,
+                  color: brandColor == AppDesignSystem.impactOrange
+                      ? AppDesignSystem.deepBlack
+                      : brandColor,
                 ),
               ),
             ),
@@ -382,7 +480,10 @@ class _MockExpenseFormState extends ConsumerState<_MockExpenseForm> {
                     elevation: 0,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.zero,
-                      side: BorderSide(color: AppDesignSystem.deepBlack, width: 4),
+                      side: BorderSide(
+                        color: AppDesignSystem.deepBlack,
+                        width: 4,
+                      ),
                     ),
                   ),
                   child: const Text(
@@ -428,11 +529,17 @@ class _MockExpenseFormState extends ConsumerState<_MockExpenseForm> {
           decoration: InputDecoration(
             prefixIcon: Icon(icon, color: AppDesignSystem.deepBlack),
             enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppDesignSystem.deepBlack, width: 2),
+              borderSide: BorderSide(
+                color: AppDesignSystem.deepBlack,
+                width: 2,
+              ),
               borderRadius: BorderRadius.zero,
             ),
             focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppDesignSystem.impactOrange, width: 3),
+              borderSide: BorderSide(
+                color: AppDesignSystem.impactOrange,
+                width: 3,
+              ),
               borderRadius: BorderRadius.zero,
             ),
             filled: true,
@@ -465,17 +572,36 @@ class _MockExpenseFormState extends ConsumerState<_MockExpenseForm> {
         DropdownButtonFormField<PaymentMethod>(
           isExpanded: true,
           initialValue: value,
-          icon: const Icon(Icons.arrow_drop_down_circle_outlined, color: AppDesignSystem.deepBlack),
-          items: items.map((m) => DropdownMenuItem(value: m, child: Text(m.name.toUpperCase()))).toList(),
+          icon: const Icon(
+            Icons.arrow_drop_down_circle_outlined,
+            color: AppDesignSystem.deepBlack,
+          ),
+          items: items
+              .map(
+                (m) => DropdownMenuItem(
+                  value: m,
+                  child: Text(m.name.toUpperCase()),
+                ),
+              )
+              .toList(),
           onChanged: onChanged,
-          style: const TextStyle(fontWeight: FontWeight.bold, color: AppDesignSystem.deepBlack),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: AppDesignSystem.deepBlack,
+          ),
           decoration: const InputDecoration(
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppDesignSystem.deepBlack, width: 2),
+              borderSide: BorderSide(
+                color: AppDesignSystem.deepBlack,
+                width: 2,
+              ),
               borderRadius: BorderRadius.zero,
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppDesignSystem.impactOrange, width: 3),
+              borderSide: BorderSide(
+                color: AppDesignSystem.impactOrange,
+                width: 3,
+              ),
               borderRadius: BorderRadius.zero,
             ),
             filled: true,

@@ -18,6 +18,14 @@ const List<Project> _oldProjects = [
         'A Flutter Web ecosystem featuring a granular UI Lab and dynamic Device Preview integration.',
     imageUrl: 'assets/images/placeholder_portfolio.png',
     tags: ['Flutter Web', 'Riverpod', 'Device Preview'],
+    concept:
+        'Un portafolio vivo que actúa como un laboratorio de diseño y desarrollo, demostrando capacidades técnicas a través de simulaciones interactivas.',
+    problem:
+        'Los portafolios estáticos no logran transmitir la complejidad y el feeling de las aplicaciones reales.',
+    solution:
+        'Una plataforma que combina narrativa visual con exploradores de diseño y simuladores funcionales.',
+    storytelling:
+        'Este proyecto nace de la necesidad de mostrar no solo el resultado final, sino el proceso y la arquitectura detrás de cada decisión de diseño.',
   ),
   Project(
     id: 'eco_tracker',
@@ -34,6 +42,14 @@ const List<Project> _oldProjects = [
         'Carbon footprint tracking app with complex data visualization and gamification.',
     imageUrl: 'assets/images/placeholder_eco.png',
     tags: ['Flutter Mobile', 'Charts', 'Gamification'],
+    concept:
+        'Una herramienta educativa y operativa para medir y reducir la huella de carbono individual a través de retos y visualización de datos.',
+    problem:
+        'La dificultad de cuantificar el impacto ambiental de las acciones cotidianas de manera sencilla.',
+    solution:
+        'Algoritmos de cálculo precisos integrados con una experiencia de usuario gamificada y visualmente atractiva.',
+    storytelling:
+        'EcoTracker fue desarrollado como un puente entre la conciencia ambiental y la acción directa, utilizando tecnología para motivar el cambio.',
   ),
   Project(
     id: 'crypto_dash',
@@ -50,10 +66,15 @@ const List<Project> _oldProjects = [
         'Real-time cryptocurrency dashboard with WebSocket integration and grim dark mode UI.',
     imageUrl: 'assets/images/placeholder_crypto.png',
     tags: ['WebSockets', 'Real-time', 'Dark Mode'],
+    concept:
+        'Monitorización de mercados cripto en tiempo real con un enfoque en el análisis técnico y la estética de alto contraste.',
+    problem:
+        'La sobrecarga de información y el lag en las plataformas de trading convencionales.',
+    solution:
+        'Optimización de WebSockets y renderizado eficiente para una experiencia de usuario sin fricciones.',
+    storytelling:
+        'CryptoDash fue un experimento de rendimiento y diseño "grim dark", buscando la máxima eficiencia en entornos de alta volatilidad.',
   ),
 ];
 
-final List<Project> featuredProjects = [
-  sandManagerProject,
-  ..._oldProjects,
-];
+final List<Project> featuredProjects = [sandManagerProject, ..._oldProjects];

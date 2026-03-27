@@ -100,7 +100,9 @@ class _LabFeatureCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.2)),
+        border: Border.all(
+          color: theme.colorScheme.outline.withValues(alpha: 0.2),
+        ),
         color: theme.colorScheme.surface,
       ),
       child: InkWell(

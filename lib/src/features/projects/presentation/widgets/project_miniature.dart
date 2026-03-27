@@ -96,7 +96,10 @@ class _PhoneMockup extends StatelessWidget {
                                   child: MediaQuery(
                                     data: MediaQuery.of(context).copyWith(
                                       size: const Size(390, 844),
-                                      padding: const EdgeInsets.only(top: 47, bottom: 34),
+                                      padding: const EdgeInsets.only(
+                                        top: 47,
+                                        bottom: 34,
+                                      ),
                                     ),
                                     child: mobileView,
                                   ),

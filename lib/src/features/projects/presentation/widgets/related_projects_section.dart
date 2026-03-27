@@ -15,8 +15,9 @@ class RelatedProjectsSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final viewportHeight = MediaQuery.sizeOf(context).height;
-    final related =
-        featuredProjects.where((p) => p.id != currentProjectId).toList();
+    final related = featuredProjects
+        .where((p) => p.id != currentProjectId)
+        .toList();
 
     if (related.isEmpty) return const SizedBox();
 
@@ -51,8 +52,7 @@ class RelatedProjectsSection extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 80),
                       scrollDirection: Axis.horizontal,
                       itemCount: related.length,
-                      separatorBuilder: (_, _) =>
-                          const SizedBox(width: 48),
+                      separatorBuilder: (_, _) => const SizedBox(width: 48),
                       itemBuilder: (context, index) {
                         return _ProjectCard(
                           project: related[index],
@@ -62,9 +62,11 @@ class RelatedProjectsSection extends ConsumerWidget {
                             final p = related[index];
                             if (p.isBackgroundVideo &&
                                 p.backgroundUrl != null) {
-                              ref.read(videoControllerProvider(
-                                      p.backgroundUrl!)
-                                  .future);
+                              ref.read(
+                                videoControllerProvider(
+                                  p.backgroundUrl!,
+                                ).future,
+                              );
                             }
                           },
                         );
@@ -85,10 +87,7 @@ class _ProjectCard extends StatelessWidget {
   final Project project;
   final VoidCallback onPreWarm;
 
-  const _ProjectCard({
-    required this.project,
-    required this.onPreWarm,
-  });
+  const _ProjectCard({required this.project, required this.onPreWarm});
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +107,9 @@ class _ProjectCard extends StatelessWidget {
       child: Container(
         width: 450,
         decoration: BoxDecoration(
-          color: theme.colorScheme.surfaceContainerHighest
-              .withValues(alpha: 0.3),
+          color: theme.colorScheme.surfaceContainerHighest.withValues(
+            alpha: 0.3,
+          ),
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: theme.colorScheme.outline.withValues(alpha: 0.1),
@@ -165,8 +165,7 @@ class _ProjectCard extends StatelessWidget {
                   Text(
                     project.tagline,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface
-                          .withValues(alpha: 0.6),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       height: 1.4,
                     ),
                     maxLines: 2,

@@ -7,10 +7,11 @@ ThemeData _buildMockTheme(BuildContext context, bool isDark, Project project) {
   if (project.primaryColor == null) {
     return isDark ? ThemeData.dark() : ThemeData.light();
   }
-  
+
   final seed = project.primaryColor!;
-  final onPrimary = project.onPrimaryColor ?? (isDark ? Colors.black : Colors.white);
-  
+  final onPrimary =
+      project.onPrimaryColor ?? (isDark ? Colors.black : Colors.white);
+
   return ThemeData(
     brightness: isDark ? Brightness.dark : Brightness.light,
     colorScheme: ColorScheme.fromSeed(
@@ -20,7 +21,9 @@ ThemeData _buildMockTheme(BuildContext context, bool isDark, Project project) {
       onPrimary: onPrimary,
     ),
     useMaterial3: true,
-    scaffoldBackgroundColor: isDark ? const Color(0xFF0D0D0D) : const Color(0xFFF5F5F7),
+    scaffoldBackgroundColor: isDark
+        ? const Color(0xFF0D0D0D)
+        : const Color(0xFFF5F5F7),
     fontFamily: Theme.of(context).textTheme.bodyMedium?.fontFamily,
   );
 }
@@ -45,24 +48,30 @@ class _ProjectDesignExplorerState extends State<ProjectDesignExplorer> {
   bool _isDarkMode = true;
   late bool _viewingMobile;
 
-  List<SimulationScreen> get _screens => widget.project.designScreens.where((s) {
-    if (s.platform == null) return true; // Show in both if not explicitly tagged
-    if (_viewingMobile) return s.platform == ProjectPlatform.mobile;
-    return s.platform == ProjectPlatform.web || s.platform == ProjectPlatform.desktop;
-  }).toList();
+  List<SimulationScreen> get _screens =>
+      widget.project.designScreens.where((s) {
+        if (s.platform == null)
+          return true; // Show in both if not explicitly tagged
+        if (_viewingMobile) return s.platform == ProjectPlatform.mobile;
+        return s.platform == ProjectPlatform.web ||
+            s.platform == ProjectPlatform.desktop;
+      }).toList();
 
   @override
   void initState() {
     super.initState();
-    _viewingMobile = widget.project.platforms.contains(ProjectPlatform.mobile) 
-      || widget.project.platforms.isEmpty;
+    _viewingMobile =
+        widget.project.platforms.contains(ProjectPlatform.mobile) ||
+        widget.project.platforms.isEmpty;
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final hasMobile = widget.project.platforms.contains(ProjectPlatform.mobile);
-    final hasWeb = widget.project.platforms.contains(ProjectPlatform.web) || widget.project.platforms.contains(ProjectPlatform.desktop);
+    final hasWeb =
+        widget.project.platforms.contains(ProjectPlatform.web) ||
+        widget.project.platforms.contains(ProjectPlatform.desktop);
     final showPlatformSelector = hasMobile && hasWeb;
 
     final viewportHeight = MediaQuery.sizeOf(context).height;
@@ -125,8 +134,10 @@ class _ProjectDesignExplorerState extends State<ProjectDesignExplorer> {
                               selectedIndex: _selectedScreenIndex,
                               isDarkMode: _isDarkMode,
                               isMobile: _viewingMobile,
-                              onDarkModeToggle: (v) => setState(() => _isDarkMode = v),
-                              onDotTap: (i) => setState(() => _selectedScreenIndex = i),
+                              onDarkModeToggle: (v) =>
+                                  setState(() => _isDarkMode = v),
+                              onDotTap: (i) =>
+                                  setState(() => _selectedScreenIndex = i),
                             ),
                           ),
                         ),
@@ -135,17 +146,21 @@ class _ProjectDesignExplorerState extends State<ProjectDesignExplorer> {
 
                         // ── Right: configurator panel ─────────────────────────
                         SizedBox(
-                          width: _kPanelWidth + 40, // Slightly wider for full screen
+                          width:
+                              _kPanelWidth +
+                              40, // Slightly wider for full screen
                           child: _ConfiguratorPanel(
                             isDarkMode: _isDarkMode,
                             styleDescription: widget.project.styleDescription,
-                            onThemeChanged: (v) => setState(() => _isDarkMode = v),
+                            onThemeChanged: (v) =>
+                                setState(() => _isDarkMode = v),
                             showPlatformSelector: showPlatformSelector,
                             isMobileApp: _viewingMobile,
                             onPlatformChanged: (v) {
                               setState(() {
                                 _viewingMobile = v;
-                                _selectedScreenIndex = 0; // Reset index to avoid bounds error when screens list changes length
+                                _selectedScreenIndex =
+                                    0; // Reset index to avoid bounds error when screens list changes length
                               });
                             },
                           ),
@@ -158,14 +173,14 @@ class _ProjectDesignExplorerState extends State<ProjectDesignExplorer> {
 
                   // ── Bottom thumbnail carousel ──────────────────────────────────
                   if (_screens.isNotEmpty)
-                      _BottomCarousel(
-                        project: widget.project,
-                        screens: _screens,
-                        selectedIndex: _selectedScreenIndex,
-                        isDarkMode: _isDarkMode,
-                        isMobile: _viewingMobile,
-                        onSelect: (i) => setState(() => _selectedScreenIndex = i),
-                      ),
+                    _BottomCarousel(
+                      project: widget.project,
+                      screens: _screens,
+                      selectedIndex: _selectedScreenIndex,
+                      isDarkMode: _isDarkMode,
+                      isMobile: _viewingMobile,
+                      onSelect: (i) => setState(() => _selectedScreenIndex = i),
+                    ),
                 ],
               ),
             ),
@@ -223,7 +238,9 @@ class _MainPreview extends StatelessWidget {
     return Container(
       height: _kMainPreviewHeight,
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.25),
+        color: theme.colorScheme.surfaceContainerHighest.withValues(
+          alpha: 0.25,
+        ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: theme.colorScheme.outline.withValues(alpha: 0.12),
@@ -296,10 +313,9 @@ class _MainPreview extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: isActive
                             ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withValues(alpha: 0.25),
+                            : Theme.of(
+                                context,
+                              ).colorScheme.onSurface.withValues(alpha: 0.25),
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
@@ -410,9 +426,13 @@ class _BottomCarousel extends StatelessWidget {
                           child: Opacity(
                             opacity: isSelected ? 1.0 : 0.55,
                             child: IgnorePointer(
-                                child: Theme(
-                                  data: _buildMockTheme(context, isDarkMode, project),
-                                  child: _ScaledPreviewContent(
+                              child: Theme(
+                                data: _buildMockTheme(
+                                  context,
+                                  isDarkMode,
+                                  project,
+                                ),
+                                child: _ScaledPreviewContent(
                                   isMobile: isMobile,
                                   allowScroll: false,
                                   child: screens[index].builder(),
@@ -701,7 +721,9 @@ class _PlatformPalette extends StatelessWidget {
             width: 52,
             height: 52,
             decoration: BoxDecoration(
-              color: selected ? theme.colorScheme.primary.withValues(alpha: 0.1) : theme.colorScheme.surface,
+              color: selected
+                  ? theme.colorScheme.primary.withValues(alpha: 0.1)
+                  : theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: selected
@@ -712,7 +734,9 @@ class _PlatformPalette extends StatelessWidget {
             ),
             child: Icon(
               icon,
-              color: selected ? theme.colorScheme.primary : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              color: selected
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
           const SizedBox(height: 6),
@@ -838,7 +862,10 @@ class _ScaledPreviewContent extends StatelessWidget {
           ? MediaQuery(
               data: MediaQuery.of(context).copyWith(
                 size: Size(designWidth, designHeight),
-                padding: const EdgeInsets.only(top: 59, bottom: 34), // iPhone safe area
+                padding: const EdgeInsets.only(
+                  top: 59,
+                  bottom: 34,
+                ), // iPhone safe area
               ),
               child: child,
             )
@@ -895,7 +922,9 @@ class _FullScreenPreviewState extends State<_FullScreenPreview> {
   @override
   Widget build(BuildContext context) {
     final isMobile = widget.isMobile;
-    final currentScreen = widget.screens.isNotEmpty ? widget.screens[_currentIndex] : null;
+    final currentScreen = widget.screens.isNotEmpty
+        ? widget.screens[_currentIndex]
+        : null;
 
     return Theme(
       data: _buildMockTheme(context, _isDarkMode, widget.project),
@@ -919,18 +948,12 @@ class _FullScreenPreviewState extends State<_FullScreenPreview> {
                     linearGradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [
-                        Colors.black12,
-                        Colors.black26,
-                      ],
+                      colors: [Colors.black12, Colors.black26],
                     ),
                     borderGradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [
-                        Colors.white10,
-                        Colors.white10,
-                      ],
+                      colors: [Colors.white10, Colors.white10],
                     ),
                     child: SizedBox.expand(),
                   ),
@@ -958,7 +981,7 @@ class _FullScreenPreviewState extends State<_FullScreenPreview> {
                       ),
                     ),
                   ),
-                  
+
                   // Label & Pagination
                   if (widget.screens.length > 1)
                     Padding(
@@ -972,7 +995,7 @@ class _FullScreenPreviewState extends State<_FullScreenPreview> {
                         ),
                       ),
                     ),
-                  
+
                   // Simple navigation
                   if (widget.screens.length > 1)
                     Row(
@@ -980,16 +1003,16 @@ class _FullScreenPreviewState extends State<_FullScreenPreview> {
                       children: [
                         _NavButton(
                           icon: Icons.chevron_left,
-                          onPressed: _currentIndex > 0 
-                            ? () => setState(() => _currentIndex--) 
-                            : null,
+                          onPressed: _currentIndex > 0
+                              ? () => setState(() => _currentIndex--)
+                              : null,
                         ),
                         const SizedBox(width: 40),
                         _NavButton(
                           icon: Icons.chevron_right,
-                          onPressed: _currentIndex < widget.screens.length - 1 
-                            ? () => setState(() => _currentIndex++) 
-                            : null,
+                          onPressed: _currentIndex < widget.screens.length - 1
+                              ? () => setState(() => _currentIndex++)
+                              : null,
                         ),
                       ],
                     ),
@@ -1033,7 +1056,11 @@ class _NavButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: onPressed,
-      icon: Icon(icon, color: onPressed != null ? Colors.white : Colors.white24, size: 36),
+      icon: Icon(
+        icon,
+        color: onPressed != null ? Colors.white : Colors.white24,
+        size: 36,
+      ),
     );
   }
 }

@@ -2,18 +2,24 @@ import 'package:flutter/material.dart';
 import '../views/shared/sand_manager_theme.dart';
 
 class SandManagerInventorySimulation extends StatelessWidget {
-  const SandManagerInventorySimulation({super.key});
+  final bool showAppBar;
+  const SandManagerInventorySimulation({super.key, this.showAppBar = true});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppDesignSystem.backgroundVariant,
-      appBar: AppBar(
-        title: const Text('INVENTARIO', style: TextStyle(fontWeight: FontWeight.w900)),
-        backgroundColor: AppDesignSystem.pureWhite,
-        foregroundColor: AppDesignSystem.deepBlack,
-        elevation: 0,
-      ),
+      appBar: showAppBar
+          ? AppBar(
+              title: const Text(
+                'INVENTARIO',
+                style: TextStyle(fontWeight: FontWeight.w900),
+              ),
+              backgroundColor: AppDesignSystem.pureWhite,
+              foregroundColor: AppDesignSystem.deepBlack,
+              elevation: 0,
+            )
+          : null,
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemCount: _mockInventory.length,
@@ -30,7 +36,10 @@ class SandManagerInventorySimulation extends StatelessWidget {
                     width: 60,
                     height: 60,
                     color: AppDesignSystem.deepBlack,
-                    child: const Icon(Icons.inventory_2, color: AppDesignSystem.pureWhite),
+                    child: const Icon(
+                      Icons.inventory_2,
+                      color: AppDesignSystem.pureWhite,
+                    ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -39,7 +48,11 @@ class SandManagerInventorySimulation extends StatelessWidget {
                       children: [
                         Text(
                           item.product,
-                          style: const TextStyle(fontWeight: FontWeight.w900, color: AppDesignSystem.deepBlack, fontSize: 16),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w900,
+                            color: AppDesignSystem.deepBlack,
+                            fontSize: 16,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text('Bodega: ${item.warehouse}'),
@@ -47,8 +60,8 @@ class SandManagerInventorySimulation extends StatelessWidget {
                         LinearProgressIndicator(
                           value: item.current / item.capacity,
                           backgroundColor: AppDesignSystem.backgroundVariant,
-                          color: item.current < (item.capacity * 0.2) 
-                              ? AppDesignSystem.statusError 
+                          color: item.current < (item.capacity * 0.2)
+                              ? AppDesignSystem.statusError
                               : AppDesignSystem.impactOrange,
                         ),
                       ],
@@ -58,10 +71,20 @@ class SandManagerInventorySimulation extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      const Text('STOCK', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                      const Text(
+                        'STOCK',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       Text(
                         '${item.current} m³',
-                        style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 20, color: AppDesignSystem.deepBlack),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 20,
+                          color: AppDesignSystem.deepBlack,
+                        ),
                       ),
                     ],
                   ),

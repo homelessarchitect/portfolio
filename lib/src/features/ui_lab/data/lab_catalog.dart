@@ -202,7 +202,8 @@ List<LabGroup> get labFeatures => [
       LabFeature(
         id: 'styles_gallery',
         title: 'Styles Gallery',
-        description: 'Glassmorphism, Tokyo Night, and Neo Brutalism explorations.',
+        description:
+            'Glassmorphism, Tokyo Night, and Neo Brutalism explorations.',
         builder: (context) => const StylesGalleryFeature(),
       ),
     ],

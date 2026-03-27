@@ -15,8 +15,8 @@ class HomeScreen extends ConsumerWidget {
 
     // Watch the shared video provider — initialises in parallel with build.
     // keepAlive keeps the controller alive across navigations.
-    final videoAsync = (starProject.isBackgroundVideo &&
-            starProject.backgroundUrl != null)
+    final videoAsync =
+        (starProject.isBackgroundVideo && starProject.backgroundUrl != null)
         ? ref.watch(videoControllerProvider(starProject.backgroundUrl!))
         : const AsyncValue<VideoPlayerController>.loading();
 
@@ -101,8 +101,7 @@ class HomeScreen extends ConsumerWidget {
                               Text(
                                 starProject.description,
                                 maxLines: 2,
-                                style:
-                                    theme.textTheme.headlineSmall?.copyWith(
+                                style: theme.textTheme.headlineSmall?.copyWith(
                                   color: Colors.white.withValues(alpha: 0.8),
                                   fontWeight: FontWeight.w300,
                                 ),
@@ -123,8 +122,7 @@ class HomeScreen extends ConsumerWidget {
                                 ),
                                 child: const Text(
                                   'Descubra más',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ],
@@ -157,11 +155,9 @@ class HomeScreen extends ConsumerWidget {
             child: Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                border:
-                    Border.all(color: Colors.white.withValues(alpha: 0.5)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
               ),
-              child:
-                  const Icon(Icons.pause, color: Colors.white, size: 16),
+              child: const Icon(Icons.pause, color: Colors.white, size: 16),
             ),
           ),
         ],
@@ -207,11 +203,7 @@ class _FallbackGradient extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF0A0A0A),
-            Color(0xFF111128),
-            Color(0xFF0D0D0D),
-          ],
+          colors: [Color(0xFF0A0A0A), Color(0xFF111128), Color(0xFF0D0D0D)],
         ),
       ),
     );

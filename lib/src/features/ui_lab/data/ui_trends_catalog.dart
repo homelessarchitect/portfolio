@@ -55,10 +55,7 @@ final List<UITrend> uiTrendsCatalog = [
     ],
     keywords: ['neon', 'dark', 'cyberpunk', 'glow', 'contrast', 'night'],
     backgroundGradient: LinearGradient(
-      colors: [
-        const Color(0xFF1a1b26),
-        const Color(0xFF16213e),
-      ],
+      colors: [const Color(0xFF1a1b26), const Color(0xFF16213e)],
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
     ),

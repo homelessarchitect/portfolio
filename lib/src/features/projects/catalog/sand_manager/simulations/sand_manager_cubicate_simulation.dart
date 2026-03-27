@@ -6,18 +6,7 @@ class SandManagerCubicateSimulation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppDesignSystem.backgroundVariant,
-      child: Center(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(24),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 500),
-            child: _MockCubicateScreen(),
-          ),
-        ),
-      ),
-    );
+    return const _MockCubicateScreen();
   }
 }
 
@@ -98,7 +87,10 @@ class _MockCubicateScreenState extends State<_MockCubicateScreen> {
     return Scaffold(
       backgroundColor: AppDesignSystem.backgroundVariant,
       appBar: AppBar(
-        title: const Text('CALCULADORA DE MEDIDAS', style: TextStyle(fontWeight: FontWeight.w900)),
+        title: const Text(
+          'CALCULADORA DE MEDIDAS',
+          style: TextStyle(fontWeight: FontWeight.w900),
+        ),
         backgroundColor: AppDesignSystem.backgroundVariant,
         elevation: 0,
       ),
@@ -115,12 +107,18 @@ class _MockCubicateScreenState extends State<_MockCubicateScreen> {
               segments: const [
                 ButtonSegment(
                   value: CalculationMode.capacity,
-                  label: Text('CAPACIDAD', style: TextStyle(fontWeight: FontWeight.bold)),
+                  label: Text(
+                    'CAPACIDAD',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   icon: Icon(Icons.straighten),
                 ),
                 ButtonSegment(
                   value: CalculationMode.height,
-                  label: Text('ALTURA', style: TextStyle(fontWeight: FontWeight.bold)),
+                  label: Text(
+                    'ALTURA',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   icon: Icon(Icons.height),
                 ),
               ],
@@ -212,12 +210,19 @@ class _MockCubicateScreenState extends State<_MockCubicateScreen> {
                   elevation: 0,
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.zero,
-                    side: BorderSide(color: AppDesignSystem.deepBlack, width: 4),
+                    side: BorderSide(
+                      color: AppDesignSystem.deepBlack,
+                      width: 4,
+                    ),
                   ),
                 ),
                 child: const Text(
                   'LIMPIAR DATOS',
-                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16, letterSpacing: 1.5),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 16,
+                    letterSpacing: 1.5,
+                  ),
                 ),
               ),
             ),
@@ -254,16 +259,23 @@ class _MockCubicateScreenState extends State<_MockCubicateScreen> {
           decoration: InputDecoration(
             prefixIcon: Icon(icon, color: AppDesignSystem.deepBlack),
             enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppDesignSystem.deepBlack, width: 2),
+              borderSide: BorderSide(
+                color: AppDesignSystem.deepBlack,
+                width: 2,
+              ),
               borderRadius: BorderRadius.zero,
             ),
             focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppDesignSystem.impactOrange, width: 3),
+              borderSide: BorderSide(
+                color: AppDesignSystem.impactOrange,
+                width: 3,
+              ),
               borderRadius: BorderRadius.zero,
             ),
             filled: true,
             fillColor: AppDesignSystem.backgroundVariant,
-            suffixText: 'm', // Default, might be m³ for capacity, but we clarify in label
+            suffixText:
+                'm', // Default, might be m³ for capacity, but we clarify in label
             suffixStyle: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),

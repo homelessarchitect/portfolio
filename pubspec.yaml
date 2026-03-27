@@ -71,6 +71,9 @@ flutter:
     - lib/src/features/projects/catalog/sand_manager/sand_manager_logo.png
     - lib/src/features/projects/catalog/sand_manager/sand_manager_bg.png
     - lib/src/features/projects/catalog/sand_manager/assets/sand_manager_bg.mp4
+    - lib/src/features/projects/catalog/sand_manager/assets/concept.png
+    - lib/src/features/projects/catalog/sand_manager/assets/history.png
+    - lib/src/features/projects/catalog/sand_manager/assets/problem_solution.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

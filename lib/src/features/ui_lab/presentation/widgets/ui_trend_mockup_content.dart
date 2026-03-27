@@ -32,10 +32,7 @@ class UITrendMockupContent extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         children: [
           _buildAppBar(),
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: _buildBody(),
-          ),
+          Padding(padding: const EdgeInsets.all(24), child: _buildBody()),
         ],
       ),
     );
@@ -95,7 +92,9 @@ class UITrendMockupContent extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.4),
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.7)),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.7),
+                      ),
                     ),
                     child: const Icon(Icons.person, size: 18),
                   ),
@@ -118,7 +117,9 @@ class UITrendMockupContent extends StatelessWidget {
                   color: trend.secondaryAccent,
                   fontSize: 22,
                   fontWeight: FontWeight.w900,
-                  shadows: [Shadow(color: trend.secondaryAccent, blurRadius: 10)],
+                  shadows: [
+                    Shadow(color: trend.secondaryAccent, blurRadius: 10),
+                  ],
                 ),
               ),
               const Spacer(),
@@ -128,7 +129,12 @@ class UITrendMockupContent extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border.all(color: _accent, width: 1.5),
                   shape: BoxShape.circle,
-                  boxShadow: [BoxShadow(color: _accent.withValues(alpha: 0.4), blurRadius: 8)],
+                  boxShadow: [
+                    BoxShadow(
+                      color: _accent.withValues(alpha: 0.4),
+                      blurRadius: 8,
+                    ),
+                  ],
                 ),
                 child: Icon(Icons.person_outline, color: _accent, size: 18),
               ),
@@ -198,10 +204,7 @@ class UITrendMockupContent extends StatelessWidget {
         Center(
           child: Text(
             '¿No tienes cuenta? Regístrate',
-            style: TextStyle(
-              color: trend.subtleTextColor,
-              fontSize: 12,
-            ),
+            style: TextStyle(color: trend.subtleTextColor, fontSize: 12),
           ),
         ),
       ],
@@ -248,11 +251,23 @@ class UITrendMockupContent extends StatelessWidget {
         _buildPageTitle('Dashboard'),
         _styledSubtitle(_viewSubtitle),
         const SizedBox(height: 32),
-        _buildCard(title: 'Transaction', subtitle: 'Frosted glass effect', icon: Icons.bubble_chart),
+        _buildCard(
+          title: 'Transaction',
+          subtitle: 'Frosted glass effect',
+          icon: Icons.bubble_chart,
+        ),
         const SizedBox(height: 16),
-        _buildCard(title: 'Analytics', subtitle: 'Real-time metrics', icon: Icons.bar_chart),
+        _buildCard(
+          title: 'Analytics',
+          subtitle: 'Real-time metrics',
+          icon: Icons.bar_chart,
+        ),
         const SizedBox(height: 16),
-        _buildCard(title: 'Settings', subtitle: 'Configure your profile', icon: Icons.settings_outlined),
+        _buildCard(
+          title: 'Settings',
+          subtitle: 'Configure your profile',
+          icon: Icons.settings_outlined,
+        ),
       ],
     );
   }
@@ -285,9 +300,17 @@ class UITrendMockupContent extends StatelessWidget {
         const SizedBox(height: 32),
         _fieldLabel('Destacados'),
         const SizedBox(height: 12),
-        _buildCard(title: 'Tendencia #1', subtitle: items.first, icon: Icons.star),
+        _buildCard(
+          title: 'Tendencia #1',
+          subtitle: items.first,
+          icon: Icons.star,
+        ),
         const SizedBox(height: 12),
-        _buildCard(title: 'Tendencia #2', subtitle: items.last, icon: Icons.trending_up),
+        _buildCard(
+          title: 'Tendencia #2',
+          subtitle: items.last,
+          icon: Icons.trending_up,
+        ),
       ],
     );
   }
@@ -312,9 +335,7 @@ class UITrendMockupContent extends StatelessWidget {
         fontSize: 32,
         fontWeight: FontWeight.w900,
         color: trend.textColor,
-        shadows: isNight
-            ? [Shadow(color: _accent, blurRadius: 10)]
-            : null,
+        shadows: isNight ? [Shadow(color: _accent, blurRadius: 10)] : null,
       ),
     );
   }
@@ -322,7 +343,10 @@ class UITrendMockupContent extends StatelessWidget {
   Widget _styledSubtitle(String text) {
     return Text(
       text,
-      style: TextStyle(color: trend.subtleTextColor, fontWeight: FontWeight.w500),
+      style: TextStyle(
+        color: trend.subtleTextColor,
+        fontWeight: FontWeight.w500,
+      ),
     );
   }
 
@@ -357,16 +381,27 @@ class UITrendMockupContent extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(isPassword ? Icons.lock_outline : icon,
-                      color: _accent, size: 18),
+                  Icon(
+                    isPassword ? Icons.lock_outline : icon,
+                    color: _accent,
+                    size: 18,
+                  ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: Text(hint,
-                        style: TextStyle(color: trend.subtleTextColor, fontSize: 14)),
+                    child: Text(
+                      hint,
+                      style: TextStyle(
+                        color: trend.subtleTextColor,
+                        fontSize: 14,
+                      ),
+                    ),
                   ),
                   if (isPassword)
-                    Icon(Icons.visibility_outlined,
-                        color: trend.subtleTextColor, size: 16),
+                    Icon(
+                      Icons.visibility_outlined,
+                      color: trend.subtleTextColor,
+                      size: 16,
+                    ),
                 ],
               ),
             ),
@@ -385,11 +420,17 @@ class UITrendMockupContent extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(isPassword ? Icons.lock_outline : icon, color: _accent, size: 18),
+              Icon(
+                isPassword ? Icons.lock_outline : icon,
+                color: _accent,
+                size: 18,
+              ),
               const SizedBox(width: 10),
               Expanded(
-                child: Text(hint,
-                    style: TextStyle(color: trend.subtleTextColor, fontSize: 14)),
+                child: Text(
+                  hint,
+                  style: TextStyle(color: trend.subtleTextColor, fontSize: 14),
+                ),
               ),
               if (isPassword)
                 Icon(Icons.visibility_outlined, color: _accent, size: 16),
@@ -402,17 +443,30 @@ class UITrendMockupContent extends StatelessWidget {
           decoration: BoxDecoration(
             color: trend.surfaceColor,
             border: Border.all(color: Colors.black, width: 2),
-            boxShadow: const [BoxShadow(color: Colors.black, offset: Offset(3, 3))],
+            boxShadow: const [
+              BoxShadow(color: Colors.black, offset: Offset(3, 3)),
+            ],
           ),
           child: Row(
             children: [
-              Icon(isPassword ? Icons.lock_outline : icon, color: Colors.black, size: 18),
+              Icon(
+                isPassword ? Icons.lock_outline : icon,
+                color: Colors.black,
+                size: 18,
+              ),
               const SizedBox(width: 10),
               Expanded(
-                child: Text(hint, style: const TextStyle(color: Colors.black54, fontSize: 14)),
+                child: Text(
+                  hint,
+                  style: const TextStyle(color: Colors.black54, fontSize: 14),
+                ),
               ),
               if (isPassword)
-                const Icon(Icons.visibility_outlined, color: Colors.black38, size: 16),
+                const Icon(
+                  Icons.visibility_outlined,
+                  color: Colors.black38,
+                  size: 16,
+                ),
             ],
           ),
         );
@@ -433,14 +487,26 @@ class UITrendMockupContent extends StatelessWidget {
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
               ),
-              child: Row(children: [
-                Icon(Icons.category_outlined, color: _accent, size: 18),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(hint, style: TextStyle(color: trend.subtleTextColor, fontSize: 14)),
-                ),
-                Icon(Icons.expand_more, color: trend.subtleTextColor, size: 18),
-              ]),
+              child: Row(
+                children: [
+                  Icon(Icons.category_outlined, color: _accent, size: 18),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      hint,
+                      style: TextStyle(
+                        color: trend.subtleTextColor,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    Icons.expand_more,
+                    color: trend.subtleTextColor,
+                    size: 18,
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -452,12 +518,19 @@ class UITrendMockupContent extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: _accent.withValues(alpha: 0.4)),
           ),
-          child: Row(children: [
-            Icon(Icons.category_outlined, color: _accent, size: 18),
-            const SizedBox(width: 10),
-            Expanded(child: Text(hint, style: TextStyle(color: trend.subtleTextColor, fontSize: 14))),
-            Icon(Icons.expand_more, color: _accent, size: 18),
-          ]),
+          child: Row(
+            children: [
+              Icon(Icons.category_outlined, color: _accent, size: 18),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  hint,
+                  style: TextStyle(color: trend.subtleTextColor, fontSize: 14),
+                ),
+              ),
+              Icon(Icons.expand_more, color: _accent, size: 18),
+            ],
+          ),
         );
       default:
         return Container(
@@ -465,14 +538,27 @@ class UITrendMockupContent extends StatelessWidget {
           decoration: BoxDecoration(
             color: trend.surfaceColor,
             border: Border.all(color: Colors.black, width: 2),
-            boxShadow: const [BoxShadow(color: Colors.black, offset: Offset(3, 3))],
+            boxShadow: const [
+              BoxShadow(color: Colors.black, offset: Offset(3, 3)),
+            ],
           ),
-          child: Row(children: [
-            const Icon(Icons.category_outlined, color: Colors.black, size: 18),
-            const SizedBox(width: 10),
-            Expanded(child: Text(hint, style: const TextStyle(color: Colors.black54, fontSize: 14))),
-            const Icon(Icons.expand_more, color: Colors.black, size: 18),
-          ]),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.category_outlined,
+                color: Colors.black,
+                size: 18,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  hint,
+                  style: const TextStyle(color: Colors.black54, fontSize: 14),
+                ),
+              ),
+              const Icon(Icons.expand_more, color: Colors.black, size: 18),
+            ],
+          ),
         );
     }
   }
@@ -492,8 +578,10 @@ class UITrendMockupContent extends StatelessWidget {
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
               ),
-              child: Text('Escribe aquí...',
-                  style: TextStyle(color: trend.subtleTextColor, fontSize: 13)),
+              child: Text(
+                'Escribe aquí...',
+                style: TextStyle(color: trend.subtleTextColor, fontSize: 13),
+              ),
             ),
           ),
         );
@@ -506,8 +594,10 @@ class UITrendMockupContent extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: _accent.withValues(alpha: 0.4)),
           ),
-          child: Text('Escribe aquí...',
-              style: TextStyle(color: trend.subtleTextColor, fontSize: 13)),
+          child: Text(
+            'Escribe aquí...',
+            style: TextStyle(color: trend.subtleTextColor, fontSize: 13),
+          ),
         );
       default:
         return Container(
@@ -516,10 +606,14 @@ class UITrendMockupContent extends StatelessWidget {
           decoration: BoxDecoration(
             color: trend.surfaceColor,
             border: Border.all(color: Colors.black, width: 2),
-            boxShadow: const [BoxShadow(color: Colors.black, offset: Offset(3, 3))],
+            boxShadow: const [
+              BoxShadow(color: Colors.black, offset: Offset(3, 3)),
+            ],
           ),
-          child: const Text('Escribe aquí...',
-              style: TextStyle(color: Colors.black38, fontSize: 13)),
+          child: const Text(
+            'Escribe aquí...',
+            style: TextStyle(color: Colors.black38, fontSize: 13),
+          ),
         );
     }
   }
@@ -542,9 +636,14 @@ class UITrendMockupContent extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(label,
-                      style: TextStyle(
-                          color: trend.textColor, fontWeight: FontWeight.bold, fontSize: 16)),
+                  Text(
+                    label,
+                    style: TextStyle(
+                      color: trend.textColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
                   const SizedBox(width: 8),
                   Icon(icon, color: trend.textColor, size: 18),
                 ],
@@ -561,15 +660,23 @@ class UITrendMockupContent extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                  color: _accent.withValues(alpha: 0.5), blurRadius: 20, spreadRadius: -4),
+                color: _accent.withValues(alpha: 0.5),
+                blurRadius: 20,
+                spreadRadius: -4,
+              ),
             ],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(label,
-                  style: const TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+              Text(
+                label,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
               const SizedBox(width: 8),
               Icon(icon, color: Colors.white, size: 18),
             ],
@@ -589,10 +696,11 @@ class UITrendMockupContent extends StatelessWidget {
               Text(
                 label.toUpperCase(),
                 style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 15,
-                    letterSpacing: 2),
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 15,
+                  letterSpacing: 2,
+                ),
               ),
               const SizedBox(width: 8),
               Icon(icon, color: Colors.white, size: 18),
@@ -618,7 +726,10 @@ class UITrendMockupContent extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.5), width: 1.5),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.5),
+                  width: 1.5,
+                ),
               ),
               child: Row(
                 children: [
@@ -627,13 +738,21 @@ class UITrendMockupContent extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(title,
-                          style: TextStyle(
-                              color: trend.textColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15)),
-                      Text(subtitle,
-                          style: TextStyle(color: trend.subtleTextColor, fontSize: 12)),
+                      Text(
+                        title,
+                        style: TextStyle(
+                          color: trend.textColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          color: trend.subtleTextColor,
+                          fontSize: 12,
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -648,7 +767,9 @@ class UITrendMockupContent extends StatelessWidget {
             color: const Color(0xFF24283b),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: _accent.withValues(alpha: 0.3), width: 1),
-            boxShadow: [BoxShadow(color: _accent.withValues(alpha: 0.08), blurRadius: 15)],
+            boxShadow: [
+              BoxShadow(color: _accent.withValues(alpha: 0.08), blurRadius: 15),
+            ],
           ),
           child: Row(
             children: [
@@ -664,11 +785,21 @@ class UITrendMockupContent extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
-                  Text(subtitle,
-                      style: TextStyle(color: trend.subtleTextColor, fontSize: 12)),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: trend.subtleTextColor,
+                      fontSize: 12,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -679,7 +810,9 @@ class UITrendMockupContent extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           decoration: const BoxDecoration(
             color: Colors.white,
-            border: Border.fromBorderSide(BorderSide(color: Colors.black, width: 2)),
+            border: Border.fromBorderSide(
+              BorderSide(color: Colors.black, width: 2),
+            ),
             boxShadow: [BoxShadow(color: Colors.black, offset: Offset(4, 4))],
           ),
           child: Row(
@@ -689,11 +822,18 @@ class UITrendMockupContent extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w900, fontSize: 15, color: Colors.black)),
-                  Text(subtitle,
-                      style: const TextStyle(color: Colors.black54, fontSize: 12)),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 15,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(color: Colors.black54, fontSize: 12),
+                  ),
                 ],
               ),
             ],
@@ -722,12 +862,17 @@ class UITrendMockupContent extends StatelessWidget {
                 children: [
                   Icon(Icons.auto_awesome, color: _accent, size: 28),
                   const SizedBox(height: 8),
-                  Text(label,
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          color: trend.textColor, fontSize: 10, fontWeight: FontWeight.bold)),
+                  Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: trend.textColor,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -741,19 +886,26 @@ class UITrendMockupContent extends StatelessWidget {
             color: trend.surfaceColor,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: _accent.withValues(alpha: 0.4)),
-            boxShadow: [BoxShadow(color: _accent.withValues(alpha: 0.15), blurRadius: 10)],
+            boxShadow: [
+              BoxShadow(color: _accent.withValues(alpha: 0.15), blurRadius: 10),
+            ],
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.auto_awesome, color: _accent, size: 24),
               const SizedBox(height: 8),
-              Text(label,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      color: trend.subtleTextColor, fontSize: 10, fontWeight: FontWeight.w600)),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: trend.subtleTextColor,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ],
           ),
         );
@@ -764,19 +916,26 @@ class UITrendMockupContent extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(color: Colors.black, width: 2),
-            boxShadow: const [BoxShadow(color: Colors.black, offset: Offset(3, 3))],
+            boxShadow: const [
+              BoxShadow(color: Colors.black, offset: Offset(3, 3)),
+            ],
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(Icons.auto_awesome, color: Colors.black, size: 24),
               const SizedBox(height: 8),
-              Text(label,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                      color: Colors.black, fontSize: 10, fontWeight: FontWeight.w800)),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
             ],
           ),
         );

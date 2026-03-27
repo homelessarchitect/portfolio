@@ -5,11 +5,7 @@ import '../data/ui_trends_catalog.dart';
 import '../domain/ui_trend.dart';
 import 'widgets/ui_trend_mockup_content.dart';
 
-enum UIStyle {
-  glassmorphism,
-  tokyoNight,
-  minimal,
-}
+enum UIStyle { glassmorphism, tokyoNight, minimal }
 
 class StylesGalleryFeature extends StatefulWidget {
   const StylesGalleryFeature({super.key});
@@ -178,10 +174,7 @@ class _StylesGalleryFeatureState extends State<StylesGalleryFeature> {
           ),
         );
       case UIStyle.minimal:
-        return Container(
-          key: key,
-          color: const Color(0xFFF4F4F5),
-        );
+        return Container(key: key, color: const Color(0xFFF4F4F5));
     }
   }
 
@@ -217,12 +210,7 @@ class _StylesGalleryFeatureState extends State<StylesGalleryFeature> {
             fontWeight: FontWeight.w900,
             letterSpacing: 2,
             shadows: _currentStyle == UIStyle.tokyoNight
-                ? const [
-                    Shadow(
-                      color: Color(0xFF00e5ff),
-                      blurRadius: 20,
-                    ),
-                  ]
+                ? const [Shadow(color: Color(0xFF00e5ff), blurRadius: 20)]
                 : null,
           ),
         ),
@@ -249,10 +237,7 @@ class _StylesGalleryFeatureState extends State<StylesGalleryFeature> {
         borderRadius: BorderRadius.circular(40),
         border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
-            blurRadius: 20,
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 20),
         ],
       ),
       child: ClipRRect(
@@ -271,8 +256,10 @@ class _StylesGalleryFeatureState extends State<StylesGalleryFeature> {
                 },
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
                   decoration: BoxDecoration(
                     color: isSelected ? Colors.white : Colors.transparent,
                     borderRadius: BorderRadius.circular(30),
@@ -281,8 +268,9 @@ class _StylesGalleryFeatureState extends State<StylesGalleryFeature> {
                     _styleTitle(style),
                     style: TextStyle(
                       color: isSelected ? Colors.black : Colors.white70,
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.w500,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.w500,
                     ),
                   ),
                 ),

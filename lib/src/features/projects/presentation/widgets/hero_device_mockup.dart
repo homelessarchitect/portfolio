@@ -16,11 +16,7 @@ class HeroDeviceMockup extends StatefulWidget {
   /// Height of the hero container.
   final double height;
 
-  const HeroDeviceMockup({
-    super.key,
-    required this.project,
-    this.height = 600,
-  });
+  const HeroDeviceMockup({super.key, required this.project, this.height = 600});
 
   @override
   State<HeroDeviceMockup> createState() => _HeroDeviceMockupState();
@@ -51,21 +47,21 @@ class _HeroDeviceMockupState extends State<HeroDeviceMockup>
       curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
     );
 
-    _macbookSlide = Tween<Offset>(
-      begin: const Offset(0, 0.15),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _entranceController,
-      curve: const Interval(0.0, 0.7, curve: Curves.easeOutCubic),
-    ));
+    _macbookSlide =
+        Tween<Offset>(begin: const Offset(0, 0.15), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _entranceController,
+            curve: const Interval(0.0, 0.7, curve: Curves.easeOutCubic),
+          ),
+        );
 
-    _phoneSlide = Tween<Offset>(
-      begin: const Offset(0, 0.25),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _entranceController,
-      curve: const Interval(0.15, 0.85, curve: Curves.easeOutCubic),
-    ));
+    _phoneSlide = Tween<Offset>(begin: const Offset(0, 0.25), end: Offset.zero)
+        .animate(
+          CurvedAnimation(
+            parent: _entranceController,
+            curve: const Interval(0.15, 0.85, curve: Curves.easeOutCubic),
+          ),
+        );
 
     // Continuous floating (gentle oscillation on the phone)
     _floatController = AnimationController(
@@ -85,9 +81,9 @@ class _HeroDeviceMockupState extends State<HeroDeviceMockup>
 
   @override
   Widget build(BuildContext context) {
-    final hasMobile =
-        widget.project.platforms.contains(ProjectPlatform.mobile);
-    final hasWeb = widget.project.platforms.contains(ProjectPlatform.web) ||
+    final hasMobile = widget.project.platforms.contains(ProjectPlatform.mobile);
+    final hasWeb =
+        widget.project.platforms.contains(ProjectPlatform.web) ||
         widget.project.platforms.contains(ProjectPlatform.desktop);
     final hasViews = widget.project.homeViews.isNotEmpty;
 
@@ -100,10 +96,7 @@ class _HeroDeviceMockupState extends State<HeroDeviceMockup>
     );
   }
 
-  Widget _buildDeviceMockups({
-    required bool hasMobile,
-    required bool hasWeb,
-  }) {
+  Widget _buildDeviceMockups({required bool hasMobile, required bool hasWeb}) {
     if (hasMobile && hasWeb) {
       return _buildPhoneAndMacbook();
     } else if (hasMobile) {
@@ -140,9 +133,8 @@ class _HeroDeviceMockupState extends State<HeroDeviceMockup>
                 child: AnimatedBuilder(
                   animation: _floatController,
                   builder: (context, child) {
-                    final float = math.sin(
-                            _floatController.value * math.pi) *
-                        6;
+                    final float =
+                        math.sin(_floatController.value * math.pi) * 6;
                     return Transform.translate(
                       offset: Offset(0, float),
                       child: child,
@@ -175,8 +167,7 @@ class _HeroDeviceMockupState extends State<HeroDeviceMockup>
             child: AnimatedBuilder(
               animation: _floatController,
               builder: (context, child) {
-                final float =
-                    math.sin(_floatController.value * math.pi) * 6;
+                final float = math.sin(_floatController.value * math.pi) * 6;
                 return Transform.translate(
                   offset: Offset(0, float),
                   child: child,
@@ -253,10 +244,7 @@ class _HeroPhoneMockup extends StatelessWidget {
   final Project project;
   final double maxHeight;
 
-  const _HeroPhoneMockup({
-    required this.project,
-    required this.maxHeight,
-  });
+  const _HeroPhoneMockup({required this.project, required this.maxHeight});
 
   @override
   Widget build(BuildContext context) {
@@ -289,8 +277,7 @@ class _HeroPhoneMockup extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.all(phoneWidth * 0.04),
               child: ClipRRect(
-                borderRadius:
-                    BorderRadius.circular(phoneWidth * 0.12),
+                borderRadius: BorderRadius.circular(phoneWidth * 0.12),
                 child: mobileView != null
                     ? OverflowBox(
                         alignment: Alignment.topCenter,
@@ -328,10 +315,7 @@ class _HeroMacbookMockup extends StatelessWidget {
   final Project project;
   final double maxWidth;
 
-  const _HeroMacbookMockup({
-    required this.project,
-    required this.maxWidth,
-  });
+  const _HeroMacbookMockup({required this.project, required this.maxWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -355,10 +339,7 @@ class _HeroMacbookMockup extends StatelessWidget {
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
                 ),
-                border: Border.all(
-                  color: const Color(0xFF3A3A3C),
-                  width: 3,
-                ),
+                border: Border.all(color: const Color(0xFF3A3A3C), width: 3),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.3),
@@ -408,10 +389,7 @@ class _HeroMacbookMockup extends StatelessWidget {
                 bottomLeft: Radius.circular(4),
                 bottomRight: Radius.circular(4),
               ),
-              border: Border.all(
-                color: const Color(0xFF888888),
-                width: 1,
-              ),
+              border: Border.all(color: const Color(0xFF888888), width: 1),
             ),
             child: Center(
               child: Container(

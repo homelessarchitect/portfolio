@@ -12,27 +12,16 @@ class SandManagerWebHomeView extends StatelessWidget {
           title: const Text('Sand Manager — Admin Dashboard'),
           elevation: 2,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.add_business),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: const Icon(Icons.list_alt),
-              onPressed: () {},
-            ),
+            IconButton(icon: const Icon(Icons.add_business), onPressed: () {}),
+            IconButton(icon: const Icon(Icons.list_alt), onPressed: () {}),
             const SizedBox(width: 8),
           ],
         ),
         body: const Row(
           children: [
-            SizedBox(
-              width: 350,
-              child: _StaticBusinessListPanel(),
-            ),
+            SizedBox(width: 350, child: _StaticBusinessListPanel()),
             VerticalDivider(width: 1),
-            Expanded(
-              child: _StaticBusinessDetailPanel(),
-            ),
+            Expanded(child: _StaticBusinessDetailPanel()),
           ],
         ),
       ),
@@ -46,8 +35,16 @@ class _StaticBusinessListPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final businesses = [
-      {'id': '1', 'name': 'Ferretería El Tornillo', 'ownerEmail': 'admin@eltornillo.co'},
-      {'id': '2', 'name': 'Materiales La 50', 'ownerEmail': 'gerencia@la50.com'},
+      {
+        'id': '1',
+        'name': 'Ferretería El Tornillo',
+        'ownerEmail': 'admin@eltornillo.co',
+      },
+      {
+        'id': '2',
+        'name': 'Materiales La 50',
+        'ownerEmail': 'gerencia@la50.com',
+      },
       {'id': '3', 'name': 'Constructora XYZ', 'ownerEmail': 'admin@xyz.com'},
     ];
 
@@ -74,9 +71,7 @@ class _StaticBusinessListPanel extends StatelessWidget {
             itemBuilder: (context, index) {
               final b = businesses[index];
               return ListTile(
-                leading: CircleAvatar(
-                  child: Text(b['name']![0]),
-                ),
+                leading: CircleAvatar(child: Text(b['name']![0])),
                 title: Text(b['name']!),
                 subtitle: Text('Owner: ${b['ownerEmail']}'),
                 selected: b['id'] == '1', // El Tornillo is selected
@@ -99,9 +94,15 @@ class _StaticBusinessDetailPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Business License Details', style: Theme.of(context).textTheme.headlineMedium),
+          Text(
+            'Business License Details',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
           const SizedBox(height: 8),
-          const Text('Business ID: b_eltornillo_10293', style: TextStyle(color: Colors.grey)),
+          const Text(
+            'Business ID: b_eltornillo_10293',
+            style: TextStyle(color: Colors.grey),
+          ),
           const SizedBox(height: 32),
           _buildLicenseCard(context),
           const SizedBox(height: 48),
@@ -118,7 +119,9 @@ class _StaticBusinessDetailPanel extends StatelessWidget {
   Widget _buildLicenseCard(BuildContext context) {
     return Card(
       elevation: 0,
-      color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+      color: Theme.of(
+        context,
+      ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(color: Theme.of(context).dividerColor),
@@ -131,23 +134,40 @@ class _StaticBusinessDetailPanel extends StatelessWidget {
               context,
               'Status',
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.green.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: Colors.green),
                 ),
-                child: const Text('ACTIVE', style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 12)),
+                child: const Text(
+                  'ACTIVE',
+                  style: TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                ),
               ),
             ),
             const Divider(height: 32),
             _buildInfoRow(
               context,
               'Valid Until',
-              const Text('2025-12-31 23:59', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                '2025-12-31 23:59',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             const Divider(height: 32),
-            _buildInfoRow(context, 'Last Updated', const Text('2024-03-20 10:15')),
+            _buildInfoRow(
+              context,
+              'Last Updated',
+              const Text('2024-03-20 10:15'),
+            ),
             const Divider(height: 32),
             _buildInfoRow(
               context,
@@ -155,9 +175,15 @@ class _StaticBusinessDetailPanel extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('5', style: TextStyle(fontWeight: FontWeight.bold)),
+                  const Text(
+                    '5',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   const SizedBox(width: 8),
-                  IconButton(icon: const Icon(Icons.edit, size: 18), onPressed: () {}),
+                  IconButton(
+                    icon: const Icon(Icons.edit, size: 18),
+                    onPressed: () {},
+                  ),
                 ],
               ),
             ),
@@ -179,7 +205,10 @@ class _StaticBusinessDetailPanel extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Employees / Cashiers', style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              'Employees / Cashiers',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             TextButton.icon(
               onPressed: () {},
               icon: const Icon(Icons.person_add_alt),
@@ -216,7 +245,10 @@ class _StaticBusinessDetailPanel extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Administrative Actions', style: Theme.of(context).textTheme.titleLarge),
+        Text(
+          'Administrative Actions',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         const SizedBox(height: 16),
         Wrap(
           spacing: 16,
@@ -241,7 +273,12 @@ class _StaticBusinessDetailPanel extends StatelessWidget {
 
   Widget _buildPaymentHistorySection(BuildContext context) {
     final payments = [
-      {'amount': '50.00', 'method': 'STRIPE', 'notes': 'Annual Subscription', 'date': 'Mar 20, 2024'},
+      {
+        'amount': '50.00',
+        'method': 'STRIPE',
+        'notes': 'Annual Subscription',
+        'date': 'Mar 20, 2024',
+      },
     ];
 
     return Column(
@@ -277,7 +314,13 @@ class _StaticBusinessDetailPanel extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontWeight: FontWeight.w500)),
+        Text(
+          label,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         value,
       ],
     );

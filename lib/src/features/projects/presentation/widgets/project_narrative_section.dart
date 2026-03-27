@@ -83,14 +83,21 @@ class ProjectNarrativeSection extends StatelessWidget {
                                 maxHeight: constraints.maxHeight * 0.6,
                               ),
                               child: DeviceMockup(
-                                type: project.platforms.contains(ProjectPlatform.mobile)
+                                type:
+                                    project.platforms.contains(
+                                      ProjectPlatform.mobile,
+                                    )
                                     ? DeviceType.phone
                                     : DeviceType.laptop,
-                                width: project.platforms.contains(ProjectPlatform.mobile)
+                                width:
+                                    project.platforms.contains(
+                                      ProjectPlatform.mobile,
+                                    )
                                     ? 300
                                     : 600,
                                 height: constraints.maxHeight * 0.6,
-                                child: project.homeViews[ProjectPlatform.mobile] ??
+                                child:
+                                    project.homeViews[ProjectPlatform.mobile] ??
                                     project.homeViews[ProjectPlatform.web] ??
                                     const SizedBox(),
                               ),

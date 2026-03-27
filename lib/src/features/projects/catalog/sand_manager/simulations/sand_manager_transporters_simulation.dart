@@ -2,21 +2,27 @@ import 'package:flutter/material.dart';
 import '../views/shared/sand_manager_theme.dart';
 
 class SandManagerTransportersSimulation extends StatelessWidget {
-  const SandManagerTransportersSimulation({super.key});
+  final bool showAppBar;
+  const SandManagerTransportersSimulation({super.key, this.showAppBar = true});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppDesignSystem.backgroundVariant,
-      appBar: AppBar(
-        title: const Text('TRANSPORTADORES', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16)),
-        backgroundColor: AppDesignSystem.pureWhite,
-        foregroundColor: AppDesignSystem.deepBlack,
-        elevation: 0,
-        actions: [
-          IconButton(icon: const Icon(Icons.add), onPressed: () {}),
-        ],
-      ),
+      appBar: showAppBar
+          ? AppBar(
+              title: const Text(
+                'TRANSPORTADORES',
+                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+              ),
+              backgroundColor: AppDesignSystem.pureWhite,
+              foregroundColor: AppDesignSystem.deepBlack,
+              elevation: 0,
+              actions: [
+                IconButton(icon: const Icon(Icons.add), onPressed: () {}),
+              ],
+            )
+          : null,
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemCount: _mockTransporters.length,
@@ -30,11 +36,17 @@ class SandManagerTransportersSimulation extends StatelessWidget {
               leading: Icon(
                 Icons.local_shipping,
                 size: 32,
-                color: transporter.isAvailable ? AppDesignSystem.statusSuccess : AppDesignSystem.impactOrange,
+                color: transporter.isAvailable
+                    ? AppDesignSystem.statusSuccess
+                    : AppDesignSystem.impactOrange,
               ),
               title: Text(
                 transporter.truckPlate,
-                style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18, color: AppDesignSystem.deepBlack),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 18,
+                  color: AppDesignSystem.deepBlack,
+                ),
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,13 +58,17 @@ class SandManagerTransportersSimulation extends StatelessWidget {
               ),
               trailing: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                color: transporter.isAvailable ? AppDesignSystem.statusSuccess.withValues(alpha: 0.1) : AppDesignSystem.impactOrange.withValues(alpha: 0.1),
+                color: transporter.isAvailable
+                    ? AppDesignSystem.statusSuccess.withValues(alpha: 0.1)
+                    : AppDesignSystem.impactOrange.withValues(alpha: 0.1),
                 child: Text(
                   transporter.isAvailable ? 'DISPONIBLE' : 'EN RUTA',
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w900,
-                    color: transporter.isAvailable ? AppDesignSystem.statusSuccess : AppDesignSystem.impactOrange,
+                    color: transporter.isAvailable
+                        ? AppDesignSystem.statusSuccess
+                        : AppDesignSystem.impactOrange,
                   ),
                 ),
               ),
@@ -70,7 +86,12 @@ class _MockTransporter {
   final double capacity;
   final bool isAvailable;
 
-  _MockTransporter(this.truckPlate, this.driverName, this.capacity, this.isAvailable);
+  _MockTransporter(
+    this.truckPlate,
+    this.driverName,
+    this.capacity,
+    this.isAvailable,
+  );
 }
 
 final _mockTransporters = [

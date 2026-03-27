@@ -6,11 +6,7 @@ class HelpTagOverlay extends StatefulWidget {
   final List<HelpStep> steps;
   final bool visible;
 
-  const HelpTagOverlay({
-    super.key,
-    required this.steps,
-    this.visible = true,
-  });
+  const HelpTagOverlay({super.key, required this.steps, this.visible = true});
 
   @override
   State<HelpTagOverlay> createState() => _HelpTagOverlayState();
@@ -304,35 +300,29 @@ class _DashedLinePainter extends CustomPainter {
 
     final path = Path();
     final endPoint = Offset.lerp(from, to, progress)!;
-    
+
     // Dashed line
     const dashLength = 6.0;
     const gapLength = 4.0;
-    
+
     final dx = endPoint.dx - from.dx;
     final dy = endPoint.dy - from.dy;
     final distance = (endPoint - from).distance;
-    
+
     if (distance == 0) return;
 
     final unitDx = dx / distance;
     final unitDy = dy / distance;
-    
+
     double drawn = 0;
     path.moveTo(from.dx, from.dy);
-    
+
     while (drawn < distance) {
       final dashEnd = (drawn + dashLength).clamp(0.0, distance);
-      path.lineTo(
-        from.dx + unitDx * dashEnd,
-        from.dy + unitDy * dashEnd,
-      );
+      path.lineTo(from.dx + unitDx * dashEnd, from.dy + unitDy * dashEnd);
       drawn = dashEnd + gapLength;
       if (drawn < distance) {
-        path.moveTo(
-          from.dx + unitDx * drawn,
-          from.dy + unitDy * drawn,
-        );
+        path.moveTo(from.dx + unitDx * drawn, from.dy + unitDy * drawn);
       }
     }
 

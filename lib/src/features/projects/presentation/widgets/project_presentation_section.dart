@@ -7,8 +7,13 @@ import 'project_miniature.dart';
 
 class ProjectPresentationSection extends ConsumerWidget {
   final Project project;
+  final String? heroPrefix;
 
-  const ProjectPresentationSection({super.key, required this.project});
+  const ProjectPresentationSection({
+    super.key,
+    required this.project,
+    this.heroPrefix,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,7 +24,8 @@ class ProjectPresentationSection extends ConsumerWidget {
     final double miniatureHeight = viewportHeight * 0.75;
 
     // Watch the shared provider — no local lifecycle management needed.
-    final videoAsync = (project.isBackgroundVideo && project.backgroundUrl != null)
+    final videoAsync =
+        (project.isBackgroundVideo && project.backgroundUrl != null)
         ? ref.watch(videoControllerProvider(project.backgroundUrl!))
         : const AsyncValue<VideoPlayerController>.loading();
 
@@ -87,7 +93,7 @@ class ProjectPresentationSection extends ConsumerWidget {
             right: 0,
             child: Center(
               child: Hero(
-                tag: 'project_miniature_${project.id}',
+                tag: '${heroPrefix ?? ''}project_miniature_${project.id}',
                 child: Container(
                   constraints: BoxConstraints(
                     maxHeight: miniatureHeight,
@@ -149,19 +155,26 @@ class ProjectPresentationSection extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(24),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.surface
-                            .withValues(alpha: 0.15),
+                        color: theme.colorScheme.surface.withValues(
+                          alpha: 0.15,
+                        ),
                         border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.2)),
+                          color: Colors.white.withValues(alpha: 0.2),
+                        ),
                         borderRadius: BorderRadius.circular(24),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.terminal_rounded,
-                              size: 16, color: Colors.white),
+                          const Icon(
+                            Icons.terminal_rounded,
+                            size: 16,
+                            color: Colors.white,
+                          ),
                           const SizedBox(width: 8),
                           Text(
                             'TECH DETAILS',

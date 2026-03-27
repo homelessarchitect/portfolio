@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import '../views/shared/sand_manager_theme.dart';
 
 class SandManagerAuthSimulation extends StatefulWidget {
-  const SandManagerAuthSimulation({super.key});
+  final bool showAppBar;
+  const SandManagerAuthSimulation({super.key, this.showAppBar = true});
 
   @override
-  State<SandManagerAuthSimulation> createState() => _SandManagerAuthSimulationState();
+  State<SandManagerAuthSimulation> createState() =>
+      _SandManagerAuthSimulationState();
 }
 
 class _SandManagerAuthSimulationState extends State<SandManagerAuthSimulation> {
@@ -34,19 +36,31 @@ class _SandManagerAuthSimulationState extends State<SandManagerAuthSimulation> {
     if (_loggedIn) {
       return Scaffold(
         backgroundColor: AppDesignSystem.pureWhite,
-        appBar: AppBar(
-          backgroundColor: AppDesignSystem.deepBlack,
-          foregroundColor: AppDesignSystem.pureWhite,
-          title: const Text('BIENVENIDO', style: TextStyle(fontWeight: FontWeight.w900)),
-          actions: [
-            IconButton(icon: const Icon(Icons.logout), onPressed: _logout),
-          ],
-        ),
+        appBar: widget.showAppBar
+            ? AppBar(
+                backgroundColor: AppDesignSystem.deepBlack,
+                foregroundColor: AppDesignSystem.pureWhite,
+                title: const Text(
+                  'BIENVENIDO',
+                  style: TextStyle(fontWeight: FontWeight.w900),
+                ),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.logout),
+                    onPressed: _logout,
+                  ),
+                ],
+              )
+            : null,
         body: const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.check_circle, size: 64, color: AppDesignSystem.statusSuccess),
+              Icon(
+                Icons.check_circle,
+                size: 64,
+                color: AppDesignSystem.statusSuccess,
+              ),
               SizedBox(height: 16),
               Text(
                 'SESIÓN INICIADA\nROL: ADMINISTRADOR',
@@ -72,7 +86,11 @@ class _SandManagerAuthSimulationState extends State<SandManagerAuthSimulation> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(Icons.security, size: 48, color: AppDesignSystem.deepBlack),
+                  const Icon(
+                    Icons.security,
+                    size: 48,
+                    color: AppDesignSystem.deepBlack,
+                  ),
                   const SizedBox(height: 16),
                   const Text(
                     'SAND MANAGER AUTH',
@@ -94,14 +112,24 @@ class _SandManagerAuthSimulationState extends State<SandManagerAuthSimulation> {
                     obscureText: true,
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24, letterSpacing: 8),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      letterSpacing: 8,
+                    ),
                     decoration: const InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppDesignSystem.deepBlack, width: 2),
+                        borderSide: BorderSide(
+                          color: AppDesignSystem.deepBlack,
+                          width: 2,
+                        ),
                         borderRadius: BorderRadius.zero,
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppDesignSystem.impactOrange, width: 3),
+                        borderSide: BorderSide(
+                          color: AppDesignSystem.impactOrange,
+                          width: 3,
+                        ),
                         borderRadius: BorderRadius.zero,
                       ),
                       filled: true,
@@ -118,18 +146,28 @@ class _SandManagerAuthSimulationState extends State<SandManagerAuthSimulation> {
                       elevation: 0,
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.zero,
-                        side: BorderSide(color: AppDesignSystem.deepBlack, width: 2),
+                        side: BorderSide(
+                          color: AppDesignSystem.deepBlack,
+                          width: 2,
+                        ),
                       ),
                     ),
                     child: _isLoading
                         ? const SizedBox(
                             width: 24,
                             height: 24,
-                            child: CircularProgressIndicator(color: AppDesignSystem.pureWhite, strokeWidth: 3),
+                            child: CircularProgressIndicator(
+                              color: AppDesignSystem.pureWhite,
+                              strokeWidth: 3,
+                            ),
                           )
                         : const Text(
                             'INGRESAR',
-                            style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16, letterSpacing: 1.5),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 16,
+                              letterSpacing: 1.5,
+                            ),
                           ),
                   ),
                 ],

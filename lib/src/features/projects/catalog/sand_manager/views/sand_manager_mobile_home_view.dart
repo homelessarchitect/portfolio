@@ -12,11 +12,19 @@ class SandManagerMobileHomeView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Para la Home View estática (foto viva), leemos los datos mock
     // Usamos IgnorePointer y físicas de scroll nulas para cumplir el standard
-    final summaryAsync = ref.watch(watchCashFlowSummaryProvider(const CashFlowParams()));
-    final transactionsAsync = ref.watch(watchCashTransactionsProvider(const CashFlowParams()));
+    final summaryAsync = ref.watch(
+      watchCashFlowSummaryProvider(const CashFlowParams()),
+    );
+    final transactionsAsync = ref.watch(
+      watchCashTransactionsProvider(const CashFlowParams()),
+    );
     final methodsAsync = ref.watch(paymentMethodsStreamProvider);
 
-    final currencyFormat = NumberFormat.currency(locale: 'es_CO', symbol: '\$', decimalDigits: 0);
+    final currencyFormat = NumberFormat.currency(
+      locale: 'es_CO',
+      symbol: '\$',
+      decimalDigits: 0,
+    );
     final dateFormat = DateFormat('dd/MM/yyyy HH:mm');
 
     return IgnorePointer(
@@ -28,13 +36,16 @@ class SandManagerMobileHomeView extends ConsumerWidget {
           title: Text(
             'CAJA / FINANZAS',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.5,
-                ),
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.5,
+            ),
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.date_range, color: AppDesignSystem.deepBlack),
+              icon: const Icon(
+                Icons.date_range,
+                color: AppDesignSystem.deepBlack,
+              ),
               onPressed: () {},
             ),
           ],
@@ -56,7 +67,11 @@ class SandManagerMobileHomeView extends ConsumerWidget {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: summaryAsync.when(
-                  data: (summary) => _buildSummaryCards(summary, 'Histórico Completo', currencyFormat),
+                  data: (summary) => _buildSummaryCards(
+                    summary,
+                    'Histórico Completo',
+                    currencyFormat,
+                  ),
                   loading: () => const SizedBox(height: 100),
                   error: (err, _) => const SizedBox.shrink(),
                 ),
@@ -64,7 +79,10 @@ class SandManagerMobileHomeView extends ConsumerWidget {
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 16.0,
+                ),
                 child: Text(
                   'TRANSACCIONES',
                   style: TextStyle(
@@ -79,70 +97,92 @@ class SandManagerMobileHomeView extends ConsumerWidget {
             transactionsAsync.when(
               data: (transactions) {
                 return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final t = transactions[index];
-                      final isIncome = t.type == CashTransactionType.income;
-                      return ImpactCard(
-                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                        child: ListTile(
-                          leading: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: isIncome
-                                  ? AppDesignSystem.statusSuccess.withValues(alpha: 0.2)
-                                  : AppDesignSystem.statusError.withValues(alpha: 0.2),
-                              border: Border.all(color: AppDesignSystem.deepBlack, width: 2),
-                            ),
-                            child: Icon(
-                              isIncome ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
-                              color: isIncome ? AppDesignSystem.statusSuccess : AppDesignSystem.statusError,
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final t = transactions[index];
+                    final isIncome = t.type == CashTransactionType.income;
+                    return ImpactCard(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 6,
+                      ),
+                      child: ListTile(
+                        leading: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: isIncome
+                                ? AppDesignSystem.statusSuccess.withValues(
+                                    alpha: 0.2,
+                                  )
+                                : AppDesignSystem.statusError.withValues(
+                                    alpha: 0.2,
+                                  ),
+                            border: Border.all(
+                              color: AppDesignSystem.deepBlack,
+                              width: 2,
                             ),
                           ),
-                          title: Text(
-                            t.description.toUpperCase(),
-                            style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13),
+                          child: Icon(
+                            isIncome
+                                ? Icons.keyboard_arrow_down
+                                : Icons.keyboard_arrow_up,
+                            color: isIncome
+                                ? AppDesignSystem.statusSuccess
+                                : AppDesignSystem.statusError,
                           ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                dateFormat.format(t.date),
-                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
+                        ),
+                        title: Text(
+                          t.description.toUpperCase(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 13,
+                          ),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              dateFormat.format(t.date),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 11,
                               ),
-                              if (t.methodName != null)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 2.0),
-                                  child: Text(
-                                    t.methodName!.toUpperCase(),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 10,
-                                       color: AppDesignSystem.deepBlack.withValues(alpha: 0.4),
+                            ),
+                            if (t.methodName != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 2.0),
+                                child: Text(
+                                  t.methodName!.toUpperCase(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 10,
+                                    color: AppDesignSystem.deepBlack.withValues(
+                                      alpha: 0.4,
                                     ),
                                   ),
                                 ),
-                            ],
-                          ),
-                          trailing: Text(
-                            currencyFormat.format(t.amount),
-                            style: TextStyle(
-                              color: isIncome ? AppDesignSystem.statusSuccess : AppDesignSystem.statusError,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 16,
-                              letterSpacing: -0.5,
-                            ),
+                              ),
+                          ],
+                        ),
+                        trailing: Text(
+                          currencyFormat.format(t.amount),
+                          style: TextStyle(
+                            color: isIncome
+                                ? AppDesignSystem.statusSuccess
+                                : AppDesignSystem.statusError,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 16,
+                            letterSpacing: -0.5,
                           ),
                         ),
-                      );
-                    },
-                    childCount: transactions.length,
-                  ),
+                      ),
+                    );
+                  }, childCount: transactions.length),
                 );
               },
               loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
-              error: (err, _) => const SliverToBoxAdapter(child: SizedBox.shrink()),
+              error: (err, _) =>
+                  const SliverToBoxAdapter(child: SizedBox.shrink()),
             ),
           ],
         ),
@@ -160,21 +200,29 @@ class SandManagerMobileHomeView extends ConsumerWidget {
         children: [
           const _AccountBadge(name: 'TODOS', isSelected: true),
           ...methods.map((m) {
-            return Consumer(builder: (context, ref, _) {
-              final balanceAsync = ref.watch(watchCashFlowSummaryProvider(CashFlowParams(methodId: m.id)));
-              return _AccountBadge(
-                name: m.name,
-                isSelected: false,
-                balance: balanceAsync.whenOrNull(data: (s) => s.netFlow),
-              );
-            });
+            return Consumer(
+              builder: (context, ref, _) {
+                final balanceAsync = ref.watch(
+                  watchCashFlowSummaryProvider(CashFlowParams(methodId: m.id)),
+                );
+                return _AccountBadge(
+                  name: m.name,
+                  isSelected: false,
+                  balance: balanceAsync.whenOrNull(data: (s) => s.netFlow),
+                );
+              },
+            );
           }),
         ],
       ),
     );
   }
 
-  Widget _buildSummaryCards(CashFlowSummary summary, String filterText, NumberFormat currencyFormat) {
+  Widget _buildSummaryCards(
+    CashFlowSummary summary,
+    String filterText,
+    NumberFormat currencyFormat,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -332,7 +380,9 @@ class _AccountBadge extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? AppDesignSystem.impactOrange : AppDesignSystem.pureWhite,
+          color: isSelected
+              ? AppDesignSystem.impactOrange
+              : AppDesignSystem.pureWhite,
           border: Border.all(color: AppDesignSystem.deepBlack, width: 2),
           boxShadow: isSelected
               ? []
@@ -351,13 +401,19 @@ class _AccountBadge extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.w900,
                 fontSize: 10,
-                color: isSelected ? AppDesignSystem.deepBlack : Colors.grey[700],
+                color: isSelected
+                    ? AppDesignSystem.deepBlack
+                    : Colors.grey[700],
               ),
             ),
             if (balance != null) ...[
               const SizedBox(height: 2),
               Text(
-                NumberFormat.currency(locale: 'es_CO', symbol: '\$', decimalDigits: 0).format(balance),
+                NumberFormat.currency(
+                  locale: 'es_CO',
+                  symbol: '\$',
+                  decimalDigits: 0,
+                ).format(balance),
                 style: const TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 12,
@@ -402,7 +458,9 @@ class _MockBottomNavBar extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: isSelected ? AppDesignSystem.impactOrange : AppDesignSystem.deepBlack,
+          color: isSelected
+              ? AppDesignSystem.impactOrange
+              : AppDesignSystem.deepBlack,
           size: 24,
         ),
         const SizedBox(height: 4),
@@ -411,7 +469,9 @@ class _MockBottomNavBar extends StatelessWidget {
           style: TextStyle(
             fontSize: 9,
             fontWeight: FontWeight.w900,
-            color: isSelected ? AppDesignSystem.impactOrange : AppDesignSystem.deepBlack,
+            color: isSelected
+                ? AppDesignSystem.impactOrange
+                : AppDesignSystem.deepBlack,
           ),
         ),
       ],

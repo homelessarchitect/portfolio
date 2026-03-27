@@ -17,7 +17,10 @@ class SaleFormScreen extends StatelessWidget {
         elevation: 0,
         title: const Text(
           'NUEVA VENTA',
-          style: TextStyle(fontWeight: FontWeight.w900, color: AppDesignSystem.deepBlack),
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            color: AppDesignSystem.deepBlack,
+          ),
         ),
       ),
       body: const SingleChildScrollView(
@@ -134,7 +137,10 @@ class _MockSaleFormState extends ConsumerState<_MockSaleForm> {
                     elevation: 0,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.zero,
-                      side: BorderSide(color: AppDesignSystem.deepBlack, width: 4),
+                      side: BorderSide(
+                        color: AppDesignSystem.deepBlack,
+                        width: 4,
+                      ),
                     ),
                   ),
                   child: const Text(
@@ -182,11 +188,17 @@ class _MockSaleFormState extends ConsumerState<_MockSaleForm> {
           decoration: InputDecoration(
             prefixIcon: Icon(icon, color: AppDesignSystem.deepBlack),
             enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppDesignSystem.deepBlack, width: 2),
+              borderSide: BorderSide(
+                color: AppDesignSystem.deepBlack,
+                width: 2,
+              ),
               borderRadius: BorderRadius.zero,
             ),
             focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppDesignSystem.impactOrange, width: 3),
+              borderSide: BorderSide(
+                color: AppDesignSystem.impactOrange,
+                width: 3,
+              ),
               borderRadius: BorderRadius.zero,
             ),
             filled: true,
@@ -214,28 +226,48 @@ class _MockSaleFormState extends ConsumerState<_MockSaleForm> {
         DropdownButtonFormField<MockSaleStatus>(
           isExpanded: true,
           initialValue: _status,
-          icon: const Icon(Icons.arrow_drop_down_circle_outlined, color: AppDesignSystem.deepBlack),
+          icon: const Icon(
+            Icons.arrow_drop_down_circle_outlined,
+            color: AppDesignSystem.deepBlack,
+          ),
           items: MockSaleStatus.values.map((s) {
             String label = '';
-            switch(s) {
-              case MockSaleStatus.paid: label = 'PAGADO (CONTADO)'; break;
-              case MockSaleStatus.credit: label = 'CRÉDITO'; break;
-              case MockSaleStatus.partial: label = 'PAGO PARCIAL'; break;
-              case MockSaleStatus.cancelled: label = 'ANULADO'; break;
+            switch (s) {
+              case MockSaleStatus.paid:
+                label = 'PAGADO (CONTADO)';
+                break;
+              case MockSaleStatus.credit:
+                label = 'CRÉDITO';
+                break;
+              case MockSaleStatus.partial:
+                label = 'PAGO PARCIAL';
+                break;
+              case MockSaleStatus.cancelled:
+                label = 'ANULADO';
+                break;
             }
             return DropdownMenuItem(value: s, child: Text(label));
           }).toList(),
           onChanged: (val) {
             if (val != null) setState(() => _status = val);
           },
-          style: const TextStyle(fontWeight: FontWeight.bold, color: AppDesignSystem.deepBlack),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: AppDesignSystem.deepBlack,
+          ),
           decoration: const InputDecoration(
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppDesignSystem.deepBlack, width: 2),
+              borderSide: BorderSide(
+                color: AppDesignSystem.deepBlack,
+                width: 2,
+              ),
               borderRadius: BorderRadius.zero,
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppDesignSystem.impactOrange, width: 3),
+              borderSide: BorderSide(
+                color: AppDesignSystem.impactOrange,
+                width: 3,
+              ),
               borderRadius: BorderRadius.zero,
             ),
             filled: true,
@@ -288,12 +320,18 @@ class _SaleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final currencyFormat = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
+    final currencyFormat = NumberFormat.currency(
+      symbol: '\$',
+      decimalDigits: 0,
+    );
 
     return ImpactCard(
       margin: EdgeInsets.zero,
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
         title: Row(
           children: [
             Expanded(
@@ -317,7 +355,11 @@ class _SaleCard extends StatelessWidget {
             const SizedBox(height: 8),
             Row(
               children: [
-                const Icon(Icons.receipt_long, size: 14, color: AppDesignSystem.deepBlack),
+                const Icon(
+                  Icons.receipt_long,
+                  size: 14,
+                  color: AppDesignSystem.deepBlack,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   '#${sale.id} • ${DateFormat('HH:mm').format(sale.date)}',
@@ -381,7 +423,9 @@ class _StatusChip extends StatelessWidget {
       child: Text(
         label,
         style: theme.textTheme.labelSmall?.copyWith(
-          color: color == AppDesignSystem.impactOrange ? AppDesignSystem.deepBlack : AppDesignSystem.pureWhite,
+          color: color == AppDesignSystem.impactOrange
+              ? AppDesignSystem.deepBlack
+              : AppDesignSystem.pureWhite,
           fontWeight: FontWeight.w900,
           letterSpacing: 1,
         ),

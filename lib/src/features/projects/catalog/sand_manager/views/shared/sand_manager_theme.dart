@@ -47,20 +47,12 @@ class AppDesignSystem {
 
   // Shadows - Neobrutalist Offset
   static List<BoxShadow> get softShadow => [
-        const BoxShadow(
-          color: deepBlack,
-          offset: Offset(4, 4),
-          blurRadius: 0,
-        ),
-      ];
+    const BoxShadow(color: deepBlack, offset: Offset(4, 4), blurRadius: 0),
+  ];
 
   static List<BoxShadow> get impactShadow => [
-        const BoxShadow(
-          color: deepBlack,
-          offset: Offset(6, 6),
-          blurRadius: 0,
-        ),
-      ];
+    const BoxShadow(color: deepBlack, offset: Offset(6, 6), blurRadius: 0),
+  ];
 }
 
 class ImpactCard extends StatelessWidget {
@@ -103,10 +95,7 @@ class ImpactCard extends StatelessWidget {
     );
 
     if (onTap != null) {
-      return InkWell(
-        onTap: onTap,
-        child: content,
-      );
+      return InkWell(onTap: onTap, child: content);
     }
 
     return content;

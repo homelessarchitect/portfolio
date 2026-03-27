@@ -44,8 +44,9 @@ class NestedDrawer extends ConsumerWidget {
             color: theme.colorScheme.surface,
             padding: const EdgeInsets.only(top: 80),
             child: _MainMenu(
-              onSelect: (category) =>
-                  ref.read(drawerStateProvider.notifier).openSubDrawer(category),
+              onSelect: (category) => ref
+                  .read(drawerStateProvider.notifier)
+                  .openSubDrawer(category),
             ),
           ),
         ),
@@ -54,15 +55,20 @@ class NestedDrawer extends ConsumerWidget {
         AnimatedPositioned(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          left: drawerState.level == DrawerLevel.sub ? menuWidth : -menuWidth * 2,
+          left: drawerState.level == DrawerLevel.sub
+              ? menuWidth
+              : -menuWidth * 2,
           top: 0,
           bottom: 0,
-          width: (drawerState.selectedCategory == 'Proyectos' ||
+          width:
+              (drawerState.selectedCategory == 'Proyectos' ||
                   drawerState.selectedCategory == 'UI Trends')
               ? menuWidth * 1.4
               : menuWidth,
           child: Container(
-            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.97),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(
+              alpha: 0.97,
+            ),
             child: _SubMenu(
               category: drawerState.selectedCategory ?? "",
               onBack: () => ref.read(drawerStateProvider.notifier).backToMain(),
@@ -99,11 +105,18 @@ class _MainMenu extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      opt,
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: -0.5,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            opt,
+                            style: theme.textTheme.headlineSmall?.copyWith(
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const Icon(Icons.chevron_right, size: 20),
@@ -125,13 +138,19 @@ class _MainMenu extends StatelessWidget {
           ...comingSoonOptions.map(
             (opt) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Text(
-                opt,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: -0.5,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
-                ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      opt,
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: -0.5,
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -176,7 +195,9 @@ class _SubMenu extends ConsumerWidget {
         else if (category == 'UI Trends')
           Expanded(child: _UITrendsHorizontalScroll(onClose: onClose))
         else
-          Expanded(child: _GenericSubMenu(category: category, onClose: onClose)),
+          Expanded(
+            child: _GenericSubMenu(category: category, onClose: onClose),
+          ),
       ],
     );
   }
@@ -298,10 +319,12 @@ class _GenericSubMenu extends StatelessWidget {
               itemBuilder: (context, index) {
                 final item = items[index];
                 return ListTile(
-                  title: Text(
-                    item['title']!,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w300,
+                  title: Expanded( // Wrapped title in Expanded
+                    child: Text(
+                      item['title']!,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios, size: 14),

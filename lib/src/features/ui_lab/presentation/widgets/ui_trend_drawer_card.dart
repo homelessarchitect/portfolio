@@ -113,20 +113,24 @@ class UITrendDrawerCard extends StatelessWidget {
                     const SizedBox(height: 12),
                     Row(
                       children: [
-                        ...trend.palette.take(4).map(
-                          (c) => Container(
-                            width: 12,
-                            height: 12,
-                            margin: const EdgeInsets.only(right: 4),
-                            decoration: BoxDecoration(
-                              color: c,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: trend.textColor.withValues(alpha: 0.2),
+                        ...trend.palette
+                            .take(4)
+                            .map(
+                              (c) => Container(
+                                width: 12,
+                                height: 12,
+                                margin: const EdgeInsets.only(right: 4),
+                                decoration: BoxDecoration(
+                                  color: c,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: trend.textColor.withValues(
+                                      alpha: 0.2,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
                         const Spacer(),
                         Icon(
                           Icons.arrow_forward,
@@ -243,7 +247,9 @@ class _MiniPhoneMockup extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.6)),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.6),
+                      ),
                     ),
                   ),
                 ),
@@ -258,7 +264,9 @@ class _MiniPhoneMockup extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.4)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.4),
+                  ),
                 ),
               ),
             ),

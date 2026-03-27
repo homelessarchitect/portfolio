@@ -97,8 +97,11 @@ class _HeroSection extends StatelessWidget {
             child: _GlassPill(
               trend: trend,
               child: IconButton(
-                icon: Icon(Icons.arrow_back_ios_new,
-                    size: 18, color: trend.textColor),
+                icon: Icon(
+                  Icons.arrow_back_ios_new,
+                  size: 18,
+                  color: trend.textColor,
+                ),
                 onPressed: () => context.pop(),
               ),
             ),
@@ -133,7 +136,10 @@ class _HeroSection extends StatelessWidget {
                     shadows: isNight
                         ? [
                             Shadow(color: trend.accentColor, blurRadius: 30),
-                            Shadow(color: trend.secondaryAccent, blurRadius: 60),
+                            Shadow(
+                              color: trend.secondaryAccent,
+                              blurRadius: 60,
+                            ),
                           ]
                         : null,
                   ),
@@ -141,7 +147,10 @@ class _HeroSection extends StatelessWidget {
                 const SizedBox(height: 20),
                 _GlassPill(
                   trend: trend,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 8,
+                  ),
                   child: Text(
                     trend.tagline,
                     style: TextStyle(
@@ -180,8 +189,16 @@ class _UITrendDesignExplorerState extends State<UITrendDesignExplorer> {
   static const _views = [
     (label: 'Login', type: UITrendViewType.login, icon: Icons.login_outlined),
     (label: 'Form', type: UITrendViewType.form, icon: Icons.edit_note_outlined),
-    (label: 'Cards', type: UITrendViewType.cards, icon: Icons.credit_card_outlined),
-    (label: 'Carousel', type: UITrendViewType.carousel, icon: Icons.view_carousel_outlined),
+    (
+      label: 'Cards',
+      type: UITrendViewType.cards,
+      icon: Icons.credit_card_outlined,
+    ),
+    (
+      label: 'Carousel',
+      type: UITrendViewType.carousel,
+      icon: Icons.view_carousel_outlined,
+    ),
   ];
 
   UITrend get trend => widget.trend;
@@ -276,8 +293,9 @@ class _UITrendDesignExplorerState extends State<UITrendDesignExplorer> {
                         .map((v) => (label: v.label, icon: v.icon))
                         .toList(),
                     onViewChanged: (i) => setState(() => _selectedView = i),
-                    onSwatchChanged: (i) => setState(() =>
-                        _selectedSwatch = (_selectedSwatch == i) ? -1 : i),
+                    onSwatchChanged: (i) => setState(
+                      () => _selectedSwatch = (_selectedSwatch == i) ? -1 : i,
+                    ),
                   ),
                 ),
               ],
@@ -289,9 +307,7 @@ class _UITrendDesignExplorerState extends State<UITrendDesignExplorer> {
           // ── Bottom view carousel ──────────────────────────────────────
           _ViewCarousel(
             trend: trend,
-            views: _views
-                .map((v) => (label: v.label, type: v.type))
-                .toList(),
+            views: _views.map((v) => (label: v.label, type: v.type)).toList(),
             selectedIndex: _selectedView,
             accentOverride: _accentOverride,
             onSelect: (i) => setState(() => _selectedView = i),
@@ -325,9 +341,7 @@ class _DevicePreviewArea extends StatelessWidget {
       decoration: BoxDecoration(
         color: trend.surfaceColor.withValues(alpha: 0.25),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: trend.accentColor.withValues(alpha: 0.15),
-        ),
+        border: Border.all(color: trend.accentColor.withValues(alpha: 0.15)),
       ),
       clipBehavior: Clip.antiAlias,
       child: Center(
@@ -494,8 +508,7 @@ class _PanelSectionState extends State<_PanelSection> {
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(16),
-                border:
-                    Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
               ),
               child: child,
             ),
@@ -517,7 +530,7 @@ class _PanelSectionState extends State<_PanelSection> {
                   BoxShadow(
                     color: widget.trend.accentColor.withValues(alpha: 0.08),
                     blurRadius: 12,
-                  )
+                  ),
                 ]
               : const [BoxShadow(color: Colors.black, offset: Offset(3, 3))],
         ),
@@ -599,7 +612,10 @@ class _ColorSwatchGrid extends StatelessWidget {
         Text(
           'Toca para sobreescribir el acento',
           style: TextStyle(
-              color: trend.subtleTextColor, fontSize: 11, height: 1.4),
+            color: trend.subtleTextColor,
+            fontSize: 11,
+            height: 1.4,
+          ),
         ),
         const SizedBox(height: 16),
         Wrap(
@@ -617,7 +633,8 @@ class _ColorSwatchGrid extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: color,
                   borderRadius: BorderRadius.circular(
-                      trend.id == 'neo_clean' ? 0 : 10),
+                    trend.id == 'neo_clean' ? 0 : 10,
+                  ),
                   border: Border.all(
                     color: isSelected ? Colors.white : Colors.transparent,
                     width: 3,
@@ -628,18 +645,16 @@ class _ColorSwatchGrid extends StatelessWidget {
                             color: color.withValues(alpha: 0.6),
                             blurRadius: 16,
                             spreadRadius: 2,
-                          )
+                          ),
                         ]
                       : trend.id == 'neo_clean'
-                          ? const [
-                              BoxShadow(
-                                  color: Colors.black, offset: Offset(2, 2))
-                            ]
-                          : null,
+                      ? const [
+                          BoxShadow(color: Colors.black, offset: Offset(2, 2)),
+                        ]
+                      : null,
                 ),
                 child: isSelected
-                    ? const Icon(Icons.check,
-                        color: Colors.white, size: 20)
+                    ? const Icon(Icons.check, color: Colors.white, size: 20)
                     : null,
               ),
             );
@@ -703,7 +718,8 @@ class _ViewSelector extends StatelessWidget {
                     ? trend.accentColor.withValues(alpha: 0.15)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(
-                    trend.id == 'neo_clean' ? 0 : 10),
+                  trend.id == 'neo_clean' ? 0 : 10,
+                ),
                 border: Border.all(
                   color: isSelected
                       ? trend.accentColor
@@ -715,7 +731,7 @@ class _ViewSelector extends StatelessWidget {
                         BoxShadow(
                           color: trend.accentColor.withValues(alpha: 0.2),
                           blurRadius: 10,
-                        )
+                        ),
                       ]
                     : null,
               ),
@@ -732,7 +748,9 @@ class _ViewSelector extends StatelessWidget {
                   Text(
                     views[i].label,
                     style: TextStyle(
-                      color: isSelected ? trend.textColor : trend.subtleTextColor,
+                      color: isSelected
+                          ? trend.textColor
+                          : trend.subtleTextColor,
                       fontWeight: isSelected
                           ? FontWeight.bold
                           : FontWeight.normal,
@@ -741,8 +759,11 @@ class _ViewSelector extends StatelessWidget {
                   ),
                   const Spacer(),
                   if (isSelected)
-                    Icon(Icons.chevron_right,
-                        color: trend.accentColor, size: 16),
+                    Icon(
+                      Icons.chevron_right,
+                      color: trend.accentColor,
+                      size: 16,
+                    ),
                 ],
               ),
             ),
@@ -793,7 +814,8 @@ class _ViewCarousel extends StatelessWidget {
                     height: 88,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(
-                          trend.id == 'neo_clean' ? 0 : 12),
+                        trend.id == 'neo_clean' ? 0 : 12,
+                      ),
                       border: Border.all(
                         color: isSelected
                             ? trend.accentColor
@@ -801,14 +823,14 @@ class _ViewCarousel extends StatelessWidget {
                         width: isSelected ? 2 : 1,
                       ),
                       color: trend.surfaceColor.withValues(
-                          alpha: isSelected ? 0.5 : 0.2),
+                        alpha: isSelected ? 0.5 : 0.2,
+                      ),
                       boxShadow: isSelected && trend.id == 'tokyo_night'
                           ? [
                               BoxShadow(
-                                color:
-                                    trend.accentColor.withValues(alpha: 0.3),
+                                color: trend.accentColor.withValues(alpha: 0.3),
                                 blurRadius: 12,
-                              )
+                              ),
                             ]
                           : null,
                     ),
@@ -890,9 +912,10 @@ class _NeonOrb extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-              color: color.withValues(alpha: 0.4),
-              blurRadius: 80,
-              spreadRadius: 20),
+            color: color.withValues(alpha: 0.4),
+            blurRadius: 80,
+            spreadRadius: 20,
+          ),
         ],
       ),
     );
@@ -940,7 +963,9 @@ class _GlassPill extends StatelessWidget {
             color: Colors.black.withValues(alpha: 0.25),
             borderRadius: BorderRadius.circular(40),
             border: Border.all(
-                color: trend.textColor.withValues(alpha: 0.15), width: 1),
+              color: trend.textColor.withValues(alpha: 0.15),
+              width: 1,
+            ),
           ),
           child: child,
         ),

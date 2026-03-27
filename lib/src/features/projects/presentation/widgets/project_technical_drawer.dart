@@ -9,9 +9,11 @@ class ProjectTechnicalDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     // Count implemented modules
-    final implementedCount = project.technicalModules.where((m) => m.isImplementedInMock).length;
+    final implementedCount = project.technicalModules
+        .where((m) => m.isImplementedInMock)
+        .length;
     final totalCount = project.technicalModules.length;
     final progress = totalCount > 0 ? implementedCount / totalCount : 0.0;
 
@@ -69,18 +71,24 @@ class ProjectTechnicalDrawer extends StatelessWidget {
                       children: [
                         Text(
                           'Progreso de Réplicas Restantes',
-                          style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         Text(
                           '$implementedCount / $totalCount',
-                          style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.primary, fontWeight: FontWeight.bold),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     LinearProgressIndicator(
                       value: progress,
-                      backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                      backgroundColor:
+                          theme.colorScheme.surfaceContainerHighest,
                       color: theme.colorScheme.primary,
                       minHeight: 6,
                       borderRadius: BorderRadius.circular(3),
@@ -95,43 +103,53 @@ class ProjectTechnicalDrawer extends StatelessWidget {
               child: ListView.separated(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 itemCount: project.technicalModules.length,
-                separatorBuilder: (context, index) => const Divider(height: 1, indent: 24, endIndent: 24),
+                separatorBuilder: (context, index) =>
+                    const Divider(height: 1, indent: 24, endIndent: 24),
                 itemBuilder: (context, index) {
                   final module = project.technicalModules[index];
                   final isImplemented = module.isImplementedInMock;
-                  
+
                   return ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 8,
+                    ),
                     leading: Container(
                       width: 32,
                       height: 32,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: isImplemented 
-                            ? theme.colorScheme.primary.withValues(alpha: 0.1) 
+                        color: isImplemented
+                            ? theme.colorScheme.primary.withValues(alpha: 0.1)
                             : theme.colorScheme.surfaceContainerHighest,
                         border: Border.all(
-                          color: isImplemented 
-                              ? theme.colorScheme.primary 
+                          color: isImplemented
+                              ? theme.colorScheme.primary
                               : theme.dividerColor,
                         ),
                       ),
                       child: Icon(
-                        isImplemented ? Icons.check_rounded : Icons.pending_outlined,
+                        isImplemented
+                            ? Icons.check_rounded
+                            : Icons.pending_outlined,
                         size: 16,
-                        color: isImplemented 
-                            ? theme.colorScheme.primary 
+                        color: isImplemented
+                            ? theme.colorScheme.primary
                             : theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
                     title: Text(
                       module.name,
                       style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: isImplemented ? FontWeight.bold : FontWeight.w500,
-                        color: isImplemented ? theme.colorScheme.onSurface : theme.colorScheme.onSurfaceVariant,
+                        fontWeight: isImplemented
+                            ? FontWeight.bold
+                            : FontWeight.w500,
+                        color: isImplemented
+                            ? theme.colorScheme.onSurface
+                            : theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
-                    subtitle: module.description != null 
+                    subtitle: module.description != null
                         ? Padding(
                             padding: const EdgeInsets.only(top: 4),
                             child: Text(
@@ -143,9 +161,12 @@ class ProjectTechnicalDrawer extends StatelessWidget {
                             ),
                           )
                         : null,
-                    trailing: isImplemented 
+                    trailing: isImplemented
                         ? Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
                               color: theme.colorScheme.primary,
                               borderRadius: BorderRadius.circular(12),
@@ -153,7 +174,9 @@ class ProjectTechnicalDrawer extends StatelessWidget {
                             child: Text(
                               'LIVE',
                               style: theme.textTheme.labelSmall?.copyWith(
-                                color: project.onPrimaryColor ?? theme.colorScheme.onPrimary,
+                                color:
+                                    project.onPrimaryColor ??
+                                    theme.colorScheme.onPrimary,
                                 fontSize: 9,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 1,
@@ -188,14 +211,19 @@ class ProjectTechnicalDrawer extends StatelessWidget {
                       runSpacing: 8,
                       children: project.services.map((service) {
                         return Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
                           decoration: BoxDecoration(
                             border: Border.all(color: theme.dividerColor),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Text(
                             service,
-                            style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w500),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         );
                       }).toList(),

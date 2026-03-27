@@ -6,11 +6,13 @@ import 'widgets/help_tag_overlay.dart';
 class FeatureSimulationView extends StatefulWidget {
   final Project project;
   final ProjectFeature feature;
+  final String? heroPrefix;
 
   const FeatureSimulationView({
     super.key,
     required this.project,
     required this.feature,
+    this.heroPrefix,
   });
 
   @override
@@ -97,7 +99,9 @@ class _FeatureSimulationViewState extends State<FeatureSimulationView> {
             width: 320,
             decoration: const BoxDecoration(
               color: Color(0xFF141414),
-              border: Border(right: BorderSide(color: Colors.white10, width: 0.5)),
+              border: Border(
+                right: BorderSide(color: Colors.white10, width: 0.5),
+              ),
             ),
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(28),
@@ -113,9 +117,9 @@ class _FeatureSimulationViewState extends State<FeatureSimulationView> {
                       height: 1.6,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 36),
-                  
+
                   _SidebarHeader(label: "GUÍA DE USO"),
                   const SizedBox(height: 12),
                   Container(
@@ -125,7 +129,8 @@ class _FeatureSimulationViewState extends State<FeatureSimulationView> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      widget.feature.guide ?? "Interactúa con la simulación para probar esta funcionalidad.",
+                      widget.feature.guide ??
+                          "Interactúa con la simulación para probar esta funcionalidad.",
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: Colors.white60,
                         height: 1.8,
@@ -133,9 +138,9 @@ class _FeatureSimulationViewState extends State<FeatureSimulationView> {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 36),
-                  
+
                   // Help tags toggle
                   if (widget.feature.helpSteps.isNotEmpty) ...[
                     _SidebarHeader(label: "AYUDA INTERACTIVA"),
@@ -146,10 +151,10 @@ class _FeatureSimulationViewState extends State<FeatureSimulationView> {
                     ),
                     const SizedBox(height: 36),
                   ],
-                  
+
                   _SidebarHeader(label: "DISPOSITIVO"),
                   const SizedBox(height: 12),
-                  
+
                   // Device selection — platform-locked
                   ..._availableDevices.map((device) {
                     final isSelected = _selectedDevice == device;
@@ -165,7 +170,7 @@ class _FeatureSimulationViewState extends State<FeatureSimulationView> {
               ),
             ),
           ),
-          
+
           // --- Simulation Stage ---
           Expanded(
             child: Container(
@@ -180,10 +185,14 @@ class _FeatureSimulationViewState extends State<FeatureSimulationView> {
                           ? _DualDevicePreview(
                               screens: screens,
                               deviceType: _selectedDevice,
+                              featureId: widget.feature.id,
+                              heroPrefix: widget.heroPrefix,
                             )
                           : _SingleDevicePreview(
                               screen: screens.isNotEmpty ? screens.first : null,
                               deviceType: _selectedDevice,
+                              featureId: widget.feature.id,
+                              heroPrefix: widget.heroPrefix,
                             ),
                     ),
                   ),
@@ -209,16 +218,20 @@ class _FeatureSimulationViewState extends State<FeatureSimulationView> {
 class _DualDevicePreview extends StatelessWidget {
   final List<SimulationScreen> screens;
   final DeviceType deviceType;
+  final String featureId;
+  final String? heroPrefix;
 
   const _DualDevicePreview({
     required this.screens,
     required this.deviceType,
+    required this.featureId,
+    this.heroPrefix,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -231,10 +244,13 @@ class _DualDevicePreview extends StatelessWidget {
               Flexible(
                 child: FittedBox(
                   fit: BoxFit.contain,
+                child: Hero(
+                  tag: '${heroPrefix ?? ''}feature_${featureId}_mockup',
                   child: DeviceMockup(
                     type: deviceType,
                     child: screens[0].builder(),
                   ),
+                ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -271,21 +287,33 @@ class _DualDevicePreview extends StatelessWidget {
 class _SingleDevicePreview extends StatelessWidget {
   final SimulationScreen? screen;
   final DeviceType deviceType;
+  final String featureId;
+  final String? heroPrefix;
 
   const _SingleDevicePreview({
     required this.screen,
     required this.deviceType,
+    required this.featureId,
+    this.heroPrefix,
   });
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.contain,
-      child: DeviceMockup(
-        type: deviceType,
-        child: screen != null
-            ? screen!.builder()
-            : const Center(child: Text("Sin Simulación", style: TextStyle(color: Colors.white54))),
+    return Hero(
+      tag: '${heroPrefix ?? ''}feature_${featureId}_mockup',
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: DeviceMockup(
+          type: deviceType,
+          child: screen != null
+              ? screen!.builder()
+              : const Center(
+                  child: Text(
+                    "Sin Simulación",
+                    style: TextStyle(color: Colors.white54),
+                  ),
+                ),
+        ),
       ),
     );
   }
@@ -324,10 +352,7 @@ class _HelpToggleButton extends StatelessWidget {
   final bool isActive;
   final VoidCallback onTap;
 
-  const _HelpToggleButton({
-    required this.isActive,
-    required this.onTap,
-  });
+  const _HelpToggleButton({required this.isActive, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -418,27 +443,33 @@ class _ConfigButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
             border: Border.all(
-              color: isSelected 
-                ? theme.colorScheme.primary 
-                : Colors.white.withValues(alpha: 0.05),
+              color: isSelected
+                  ? theme.colorScheme.primary
+                  : Colors.white.withValues(alpha: 0.05),
             ),
             borderRadius: BorderRadius.circular(8),
-            color: isSelected 
-              ? theme.colorScheme.primary.withValues(alpha: 0.1) 
-              : Colors.white.withValues(alpha: 0.02),
+            color: isSelected
+                ? theme.colorScheme.primary.withValues(alpha: 0.1)
+                : Colors.white.withValues(alpha: 0.02),
           ),
           child: Row(
             children: [
               Icon(
                 icon,
-                color: isSupported ? (isSelected ? theme.colorScheme.primary : Colors.white70) : Colors.white12,
+                color: isSupported
+                    ? (isSelected ? theme.colorScheme.primary : Colors.white70)
+                    : Colors.white12,
                 size: 18,
               ),
               const SizedBox(width: 16),
               Text(
                 label,
                 style: theme.textTheme.labelMedium?.copyWith(
-                  color: isSupported ? (isSelected ? theme.colorScheme.primary : Colors.white70) : Colors.white12,
+                  color: isSupported
+                      ? (isSelected
+                            ? theme.colorScheme.primary
+                            : Colors.white70)
+                      : Colors.white12,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1,
                 ),
@@ -447,10 +478,16 @@ class _ConfigButton extends StatelessWidget {
               if (!isSupported)
                 Text(
                   "N/A",
-                  style: theme.textTheme.labelSmall?.copyWith(color: Colors.white12),
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: Colors.white12,
+                  ),
                 )
               else if (isSelected)
-                Icon(Icons.check_circle_outline, size: 16, color: theme.colorScheme.primary),
+                Icon(
+                  Icons.check_circle_outline,
+                  size: 16,
+                  color: theme.colorScheme.primary,
+                ),
             ],
           ),
         ),

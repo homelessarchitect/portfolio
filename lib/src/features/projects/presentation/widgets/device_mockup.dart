@@ -85,9 +85,7 @@ class _PhoneFrame extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(
-                44,
-              ), // Inner screen corners
+              borderRadius: BorderRadius.circular(44), // Inner screen corners
               child: SizedBox(
                 width: 390,
                 height: 844,

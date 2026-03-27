@@ -5,8 +5,13 @@ import 'device_mockup.dart';
 
 class ProjectFeaturesSection extends StatelessWidget {
   final Project project;
+  final String? heroPrefix;
 
-  const ProjectFeaturesSection({super.key, required this.project});
+  const ProjectFeaturesSection({
+    super.key,
+    required this.project,
+    this.heroPrefix,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +38,7 @@ class ProjectFeaturesSection extends StatelessWidget {
           child: LayoutBuilder(
             builder: (context, constraints) {
               final isWide = constraints.maxWidth > 1000;
-              
+
               return ListView.separated(
                 padding: const EdgeInsets.symmetric(horizontal: 60),
                 scrollDirection: Axis.horizontal,
@@ -41,14 +46,15 @@ class ProjectFeaturesSection extends StatelessWidget {
                 separatorBuilder: (context, index) => const SizedBox(width: 40),
                 itemBuilder: (context, index) {
                   final feature = project.features[index];
-                  final cardWidth = isWide 
-                      ? (constraints.maxWidth - 120 - 40) / 2 
+                  final cardWidth = isWide
+                      ? (constraints.maxWidth - 120 - 40) / 2
                       : (constraints.maxWidth - 120).clamp(400.0, 800.0);
-                  
+
                   return _FeatureCard(
                     feature: feature,
                     project: project,
                     width: cardWidth,
+                    heroPrefix: heroPrefix,
                   );
                 },
               );
@@ -64,18 +70,20 @@ class _FeatureCard extends StatelessWidget {
   final ProjectFeature feature;
   final Project project;
   final double width;
+  final String? heroPrefix;
 
   const _FeatureCard({
     required this.feature,
     required this.project,
     required this.width,
+    this.heroPrefix,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final deviceType = feature.targetPlatform == FeatureTargetPlatform.web 
-        ? DeviceType.laptop 
+    final deviceType = feature.targetPlatform == FeatureTargetPlatform.web
+        ? DeviceType.laptop
         : DeviceType.phone;
 
     return InkWell(
@@ -83,10 +91,8 @@ class _FeatureCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => FeatureSimulationView(
-              project: project,
-              feature: feature,
-            ),
+            builder: (context) =>
+                FeatureSimulationView(project: project, feature: feature),
           ),
         );
       },
@@ -97,7 +103,10 @@ class _FeatureCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
           color: const Color(0xFF141414),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 0.5),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.1),
+            width: 0.5,
+          ),
         ),
         child: Row(
           children: [
@@ -105,23 +114,23 @@ class _FeatureCard extends StatelessWidget {
             Expanded(
               flex: 5,
               child: Hero(
-                tag: 'feature_${feature.id}_mockup',
+                tag: '${heroPrefix ?? ''}feature_${feature.id}_mockup',
                 child: Center(
                   child: FittedBox(
                     fit: BoxFit.contain,
                     child: DeviceMockup(
                       type: deviceType,
-                      child: feature.simulationScreens.isNotEmpty 
-                        ? feature.simulationScreens.first.builder()
-                        : Container(color: Colors.black26),
+                      child: feature.simulationScreens.isNotEmpty
+                          ? feature.simulationScreens.first.builder()
+                          : Container(color: Colors.black26),
                     ),
                   ),
                 ),
               ),
             ),
-            
+
             const SizedBox(width: 40),
-            
+
             // Right: Content
             Expanded(
               flex: 4,
@@ -130,13 +139,18 @@ class _FeatureCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      feature.targetPlatform == FeatureTargetPlatform.web ? "WEB APP" : "MOBILE APP",
+                      feature.targetPlatform == FeatureTargetPlatform.web
+                          ? "WEB APP"
+                          : "MOBILE APP",
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: theme.colorScheme.primary,
                         fontWeight: FontWeight.bold,
@@ -189,4 +203,3 @@ class _FeatureCard extends StatelessWidget {
     );
   }
 }
-

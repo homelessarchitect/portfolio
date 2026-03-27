@@ -1,7 +1,9 @@
 import 'package:flutter/widgets.dart';
 
 enum ProjectPlatform { web, mobile, desktop }
+
 enum ProjectStatus { live, inDevelopment, archived }
+
 enum FeatureTargetPlatform { mobile, web }
 
 class SimulationScreen {
@@ -20,8 +22,10 @@ class HelpStep {
   final int stepNumber;
   final String title;
   final String? description;
+
   /// Relative position (0.0 to 1.0) from top
   final double top;
+
   /// Relative position (0.0 to 1.0) from left
   final double left;
 
@@ -77,7 +81,7 @@ class Project {
   final Map<ProjectPlatform, Widget> homeViews;
   final List<ProjectFeature> features;
   final List<TechnicalModule> technicalModules;
-  
+
   final String description;
   final String imageUrl;
   final String? logoUrl;
@@ -85,6 +89,7 @@ class Project {
   final String? demoUrl;
 
   // New fields for restructured detail view
+  final String concept;
   final String problem;
   final String solution;
   final String storytelling;
@@ -93,7 +98,12 @@ class Project {
   final String? backgroundUrl;
   final bool isBackgroundVideo;
   final List<SimulationScreen> designScreens;
-  
+
+  // Section Images
+  final String? conceptImageUrl;
+  final String? historyImageUrl;
+  final String? problemSolutionImageUrl;
+
   // Brand Colors
   final Color? primaryColor;
   final Color? onPrimaryColor;
@@ -108,7 +118,7 @@ class Project {
     required this.status,
     required this.homeViews,
     required this.features,
-    
+
     this.description = '',
     this.imageUrl = '',
     this.logoUrl,
@@ -116,6 +126,7 @@ class Project {
     this.demoUrl,
 
     // New fields initializers
+    this.concept = '',
     this.problem = '',
     this.solution = '',
     this.storytelling = '',
@@ -125,6 +136,9 @@ class Project {
     this.isBackgroundVideo = false,
     this.designScreens = const [],
     this.technicalModules = const [],
+    this.conceptImageUrl,
+    this.historyImageUrl,
+    this.problemSolutionImageUrl,
     this.primaryColor,
     this.onPrimaryColor,
   });
