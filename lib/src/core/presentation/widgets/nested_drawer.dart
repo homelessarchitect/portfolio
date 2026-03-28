@@ -89,12 +89,13 @@ class NestedDrawer extends ConsumerWidget {
 }
 
 // ---- Main first-level menu ----
-class _MainMenu extends StatelessWidget {
+class _MainMenu extends ConsumerWidget {
   final Function(String) onSelect;
   const _MainMenu({required this.onSelect});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final drawerState = ref.watch(drawerStateProvider);
     final activeOptions = ["Proyectos", "UI Trends"];
     final comingSoonOptions = ["Laboratorio", "Tested Packages"];
     final theme = Theme.of(context);
@@ -105,32 +106,62 @@ class _MainMenu extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ...activeOptions.map(
-            (opt) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: InkWell(
-                onTap: () => onSelect(opt),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            opt,
-                            style: theme.textTheme.headlineSmall?.copyWith(
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: -0.5,
-                            ),
-                          ),
-                        ],
+            (opt) {
+              final currentPath = GoRouterState.of(context).uri.path;
+              final isInCategoryRoute = (opt == "Proyectos" &&
+                      currentPath.startsWith('/projects')) ||
+                  (opt == "UI Trends" &&
+                      (currentPath.startsWith('/ui-trends') ||
+                          currentPath.startsWith('/lab')));
+
+              final isSelected =
+                  drawerState.selectedCategory == opt || isInCategoryRoute;
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: InkWell(
+                  onTap: () => onSelect(opt),
+                  child: Row(
+                    children: [
+                      // Selection Indicator
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: 4,
+                        height: isSelected ? 24 : 0,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
                       ),
-                    ),
-                    const Icon(Icons.chevron_right, size: 20),
-                  ],
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: isSelected ? 12 : 0,
+                      ),
+                      Expanded(
+                        child: Text(
+                          opt,
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            fontWeight:
+                                isSelected ? FontWeight.w700 : FontWeight.w500,
+                            letterSpacing: -0.5,
+                            color: isSelected
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.onSurface,
+                          ),
+                        ),
+                      ),
+                      Icon(
+                        Icons.chevron_right,
+                        size: 20,
+                        color: isSelected
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.onSurface,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
           const SizedBox(height: 32),
           Text(

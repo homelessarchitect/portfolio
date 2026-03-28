@@ -31,8 +31,147 @@
 
   <title>homelessarchitect</title>
   <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #0e1117;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #0e1117;
+      z-index: 9999;
+      transition: opacity 0.8s ease-out, visibility 0.8s;
+    }
+
+    #splash-screen.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: 0.5rem;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    .logo-subtext {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.8rem;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeIn 1.5s 0.5s ease-out forwards;
+      margin-left: 0.8rem; /* Offset for letter-spacing */
+    }
+
+    .loader-bar {
+      width: 100px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      position: relative;
+      margin-top: 40px;
+      overflow: hidden;
+    }
+
+    .loader-progress {
+      position: absolute;
+      width: 40%;
+      height: 100%;
+      background: #ffffff;
+      animation: loading 2s infinite ease-in-out;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes loading {
+      0% { left: -40%; }
+      50% { left: 100%; }
+      100% { left: 100%; }
+    }
+
+    /* Architectural lines animation */
+    .line-decor {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .line-h { height: 1px; width: 0; animation: expandW 2s ease-in-out forwards; }
+    .line-v { width: 1px; height: 0; animation: expandH 2s 0.2s ease-in-out forwards; }
+
+    @keyframes expandW { to { width: 100%; } }
+    @keyframes expandH { to { height: 100%; } }
+  </style>
 </head>
 <body>
+  <div id="splash-screen">
+    <!-- Subtle architectural background lines -->
+    <div class="line-decor line-h" style="top: 20%;"></div>
+    <div class="line-decor line-h" style="bottom: 20%;"></div>
+    <div class="line-decor line-v" style="left: 20%;"></div>
+    <div class="line-decor line-v" style="right: 20%;"></div>
+
+    <div class="logo-container">
+      <div class="logo-text">Homeless</div>
+      <div class="logo-text" style="animation-delay: 0.2s;">Architect</div>
+      <div class="logo-subtext">Digital Craftsman</div>
+      <div class="loader-bar">
+        <div class="loader-progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('load', function() {
+      // Small delay to ensure the splash screen animation had some time to shine
+      setTimeout(function() {
+        var splash = document.getElementById('splash-screen');
+        splash.classList.add('fade-out');
+        // Remove from DOM after fade animation
+        setTimeout(function() {
+          splash.remove();
+        }, 800);
+      }, 2500); 
+    });
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
