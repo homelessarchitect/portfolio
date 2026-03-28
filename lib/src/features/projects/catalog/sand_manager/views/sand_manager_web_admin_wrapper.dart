@@ -14,22 +14,22 @@ class SandManagerWebAdminWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppDesignSystem.backgroundVariant,
+      backgroundColor: AppDesignSystem.backgroundVariant(context),
       body: Row(
         children: [
           // Sidebar
           Container(
             width: 250,
-            color: AppDesignSystem.deepBlack,
+            color: AppDesignSystem.deepBlack(context),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Padding(
+                Padding(
                   padding: EdgeInsets.all(24.0),
                   child: Text(
                     'SAND MANAGER\nADMIN',
                     style: TextStyle(
-                      color: AppDesignSystem.pureWhite,
+                      color: AppDesignSystem.pureWhite(context),
                       fontWeight: FontWeight.w900,
                       fontSize: 18,
                       letterSpacing: 2.0,
@@ -38,38 +38,44 @@ class SandManagerWebAdminWrapper extends StatelessWidget {
                 ),
                 const SizedBox(height: 32),
                 _buildSidebarItem(
+                  context,
                   Icons.dashboard,
                   'DASHBOARD',
                   title == 'ADMIN DASHBOARD',
                 ),
                 _buildSidebarItem(
+                  context,
                   Icons.payments,
                   'FLUJO DE CAJA',
                   title == 'RESUMEN FINANCIERO',
                 ),
                 _buildSidebarItem(
+                  context,
                   Icons.shopping_cart,
                   'VENTAS',
                   title == 'VENTAS',
                 ),
                 _buildSidebarItem(
+                  context,
                   Icons.inventory_2,
                   'INVENTARIO',
                   title == 'INVENTARIO',
                 ),
                 _buildSidebarItem(
+                  context,
                   Icons.people,
                   'CLIENTES',
                   title == 'CLIENTES',
                 ),
                 _buildSidebarItem(
+                  context,
                   Icons.receipt_long,
                   'FACTURACIÓN',
                   title == 'FACTURACIÓN',
                 ),
                 const Spacer(),
-                _buildSidebarItem(Icons.settings, 'AJUSTES', false),
-                _buildSidebarItem(Icons.logout, 'SALIR', false),
+                _buildSidebarItem(context, Icons.settings, 'AJUSTES', false),
+                _buildSidebarItem(context, Icons.logout, 'SALIR', false),
                 const SizedBox(height: 24),
               ],
             ),
@@ -82,36 +88,36 @@ class SandManagerWebAdminWrapper extends StatelessWidget {
                 // Topbar
                 Container(
                   height: 70,
-                  color: AppDesignSystem.pureWhite,
+                  color: AppDesignSystem.pureWhite(context),
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Row(
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
-                          color: AppDesignSystem.deepBlack,
+                        style: TextStyle(
+                          color: AppDesignSystem.deepBlack(context),
                           fontWeight: FontWeight.w900,
                           fontSize: 20,
                         ),
                       ),
                       const Spacer(),
-                      const Icon(
+                      Icon(
                         Icons.search,
-                        color: AppDesignSystem.deepBlack,
+                        color: AppDesignSystem.deepBlack(context),
                       ),
                       const SizedBox(width: 16),
-                      const Icon(
+                      Icon(
                         Icons.notifications_none,
-                        color: AppDesignSystem.deepBlack,
+                        color: AppDesignSystem.deepBlack(context),
                       ),
                       const SizedBox(width: 24),
-                      const CircleAvatar(
+                      CircleAvatar(
                         backgroundColor: AppDesignSystem.impactOrange,
                         child: Text(
                           'AD',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: AppDesignSystem.deepBlack,
+                            color: AppDesignSystem.deepBlack(context),
                           ),
                         ),
                       ),
@@ -128,7 +134,8 @@ class SandManagerWebAdminWrapper extends StatelessWidget {
     );
   }
 
-  Widget _buildSidebarItem(IconData icon, String label, bool isSelected) {
+  Widget _buildSidebarItem(
+      BuildContext context, IconData icon, String label, bool isSelected) {
     return Container(
       color: isSelected ? AppDesignSystem.impactOrange : Colors.transparent,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -137,8 +144,8 @@ class SandManagerWebAdminWrapper extends StatelessWidget {
           Icon(
             icon,
             color: isSelected
-                ? AppDesignSystem.deepBlack
-                : AppDesignSystem.pureWhite,
+                ? AppDesignSystem.deepBlack(context)
+                : AppDesignSystem.pureWhite(context),
             size: 20,
           ),
           const SizedBox(width: 16),
@@ -146,8 +153,8 @@ class SandManagerWebAdminWrapper extends StatelessWidget {
             label,
             style: TextStyle(
               color: isSelected
-                  ? AppDesignSystem.deepBlack
-                  : AppDesignSystem.pureWhite,
+                  ? AppDesignSystem.deepBlack(context)
+                  : AppDesignSystem.pureWhite(context),
               fontWeight: FontWeight.w900,
               fontSize: 12,
               letterSpacing: 1.0,

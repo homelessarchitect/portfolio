@@ -44,7 +44,7 @@ final sandManagerProject = Project(
         ),
         SimulationScreen(
           label: 'Dashboard',
-          builder: () => const CashboxDashboardScreen(),
+          builder: () => const CashboxMobileDashboardScreen(),
         ),
       ],
       helpSteps: [
@@ -333,7 +333,7 @@ final sandManagerProject = Project(
     // --- WEB ADMIN SCREENS ---
     SimulationScreen(
       label: 'Dashboard Admin',
-      builder: () => const CashboxDashboardScreen(),
+      builder: () => const SandManagerWebHomeView(),
       platform: ProjectPlatform.web,
     ),
     SimulationScreen(

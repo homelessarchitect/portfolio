@@ -8,15 +8,15 @@ class SandManagerProductsSimulation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppDesignSystem.backgroundVariant,
+      backgroundColor: AppDesignSystem.backgroundVariant(context),
       appBar: showAppBar
           ? AppBar(
               title: const Text(
                 'MATERIALES',
                 style: TextStyle(fontWeight: FontWeight.w900),
               ),
-              backgroundColor: AppDesignSystem.pureWhite,
-              foregroundColor: AppDesignSystem.deepBlack,
+              backgroundColor: AppDesignSystem.pureWhite(context),
+              foregroundColor: AppDesignSystem.deepBlack(context),
               elevation: 0,
               actions: [
                 IconButton(icon: const Icon(Icons.add), onPressed: () {}),
@@ -35,7 +35,7 @@ class SandManagerProductsSimulation extends StatelessWidget {
         itemBuilder: (context, index) {
           final product = _mockProducts[index];
           return ImpactCard(
-            backgroundColor: AppDesignSystem.pureWhite,
+            backgroundColor: AppDesignSystem.pureWhite(context),
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
@@ -44,12 +44,12 @@ class SandManagerProductsSimulation extends StatelessWidget {
                   Expanded(
                     child: Container(
                       width: double.infinity,
-                      color: AppDesignSystem.backgroundVariant,
-                      child: const Center(
+                      color: AppDesignSystem.backgroundVariant(context),
+                      child: Center(
                         child: Icon(
                           Icons.landscape,
                           size: 48,
-                          color: AppDesignSystem.deepBlack,
+                          color: AppDesignSystem.deepBlack(context),
                         ),
                       ),
                     ),
@@ -57,9 +57,9 @@ class SandManagerProductsSimulation extends StatelessWidget {
                   const SizedBox(height: 12),
                   Text(
                     product.name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w900,
-                      color: AppDesignSystem.deepBlack,
+                      color: AppDesignSystem.deepBlack(context),
                       fontSize: 14,
                     ),
                     maxLines: 2,

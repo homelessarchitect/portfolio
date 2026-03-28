@@ -31,7 +31,7 @@ class ProjectStorySection extends StatelessWidget {
                 image: AssetImage(imageUrl!),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.4),
+                  Colors.black.withValues(alpha: 0.5),
                   BlendMode.darken,
                 ),
               )
@@ -60,6 +60,13 @@ class ProjectStorySection extends StatelessWidget {
                         color: Colors.white,
                         fontWeight: FontWeight.w900,
                         letterSpacing: -1,
+                        shadows: [
+                          Shadow(
+                            color: Colors.black.withValues(alpha: 0.5),
+                            offset: const Offset(0, 4),
+                            blurRadius: 10,
+                          ),
+                        ],
                       ),
                       textAlign: isLeftAligned
                           ? TextAlign.left
@@ -76,7 +83,7 @@ class ProjectStorySection extends StatelessWidget {
                     Text(
                       description,
                       style: textTheme.headlineSmall?.copyWith(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         height: 1.5,
                         fontWeight: FontWeight.w300,
                       ),

@@ -35,11 +35,11 @@ class _SandManagerAuthSimulationState extends State<SandManagerAuthSimulation> {
   Widget build(BuildContext context) {
     if (_loggedIn) {
       return Scaffold(
-        backgroundColor: AppDesignSystem.pureWhite,
+        backgroundColor: AppDesignSystem.pureWhite(context),
         appBar: widget.showAppBar
             ? AppBar(
-                backgroundColor: AppDesignSystem.deepBlack,
-                foregroundColor: AppDesignSystem.pureWhite,
+                backgroundColor: AppDesignSystem.deepBlack(context),
+                foregroundColor: AppDesignSystem.pureWhite(context),
                 title: const Text(
                   'BIENVENIDO',
                   style: TextStyle(fontWeight: FontWeight.w900),
@@ -52,7 +52,7 @@ class _SandManagerAuthSimulationState extends State<SandManagerAuthSimulation> {
                 ],
               )
             : null,
-        body: const Center(
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -61,8 +61,8 @@ class _SandManagerAuthSimulationState extends State<SandManagerAuthSimulation> {
                 size: 64,
                 color: AppDesignSystem.statusSuccess,
               ),
-              SizedBox(height: 16),
-              Text(
+              const SizedBox(height: 16),
+              const Text(
                 'SESIÓN INICIADA\nROL: ADMINISTRADOR',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontWeight: FontWeight.w900, fontSize: 18),
@@ -74,31 +74,31 @@ class _SandManagerAuthSimulationState extends State<SandManagerAuthSimulation> {
     }
 
     return Scaffold(
-      backgroundColor: AppDesignSystem.backgroundVariant,
+      backgroundColor: AppDesignSystem.backgroundVariant(context),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: ImpactCard(
-            backgroundColor: AppDesignSystem.pureWhite,
+            backgroundColor: AppDesignSystem.pureWhite(context),
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.security,
                     size: 48,
-                    color: AppDesignSystem.deepBlack,
+                    color: AppDesignSystem.deepBlack(context),
                   ),
                   const SizedBox(height: 16),
-                  const Text(
+                  Text(
                     'SAND MANAGER AUTH',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 18,
-                      color: AppDesignSystem.deepBlack,
+                      color: AppDesignSystem.deepBlack(context),
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -117,15 +117,15 @@ class _SandManagerAuthSimulationState extends State<SandManagerAuthSimulation> {
                       fontSize: 24,
                       letterSpacing: 8,
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: AppDesignSystem.deepBlack,
+                          color: AppDesignSystem.deepBlack(context),
                           width: 2,
                         ),
                         borderRadius: BorderRadius.zero,
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           color: AppDesignSystem.impactOrange,
                           width: 3,
@@ -133,31 +133,31 @@ class _SandManagerAuthSimulationState extends State<SandManagerAuthSimulation> {
                         borderRadius: BorderRadius.zero,
                       ),
                       filled: true,
-                      fillColor: AppDesignSystem.backgroundVariant,
+                      fillColor: AppDesignSystem.backgroundVariant(context),
                     ),
                   ),
                   const SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: _isLoading ? null : _login,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppDesignSystem.deepBlack,
-                      foregroundColor: AppDesignSystem.pureWhite,
+                      backgroundColor: AppDesignSystem.deepBlack(context),
+                      foregroundColor: AppDesignSystem.pureWhite(context),
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       elevation: 0,
-                      shape: const RoundedRectangleBorder(
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.zero,
                         side: BorderSide(
-                          color: AppDesignSystem.deepBlack,
+                          color: AppDesignSystem.deepBlack(context),
                           width: 2,
                         ),
                       ),
                     ),
                     child: _isLoading
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 24,
                             height: 24,
                             child: CircularProgressIndicator(
-                              color: AppDesignSystem.pureWhite,
+                              color: AppDesignSystem.pureWhite(context),
                               strokeWidth: 3,
                             ),
                           )

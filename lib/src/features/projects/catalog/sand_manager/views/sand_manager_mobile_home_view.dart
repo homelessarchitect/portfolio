@@ -27,11 +27,12 @@ class SandManagerMobileHomeView extends ConsumerWidget {
     );
     final dateFormat = DateFormat('dd/MM/yyyy HH:mm');
 
-    return IgnorePointer(
-      child: Scaffold(
-        backgroundColor: AppDesignSystem.backgroundVariant,
+    return Material(
+      child: IgnorePointer(
+        child: Scaffold(
+        backgroundColor: AppDesignSystem.backgroundVariant(context),
         appBar: AppBar(
-          backgroundColor: AppDesignSystem.backgroundVariant,
+          backgroundColor: AppDesignSystem.backgroundVariant(context),
           elevation: 0,
           title: Text(
             'CAJA / FINANZAS',
@@ -42,9 +43,9 @@ class SandManagerMobileHomeView extends ConsumerWidget {
           ),
           actions: [
             IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.date_range,
-                color: AppDesignSystem.deepBlack,
+                color: AppDesignSystem.deepBlack(context),
               ),
               onPressed: () {},
             ),
@@ -68,6 +69,7 @@ class SandManagerMobileHomeView extends ConsumerWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: summaryAsync.when(
                   data: (summary) => _buildSummaryCards(
+                    context,
                     summary,
                     'Histórico Completo',
                     currencyFormat,
@@ -89,7 +91,7 @@ class SandManagerMobileHomeView extends ConsumerWidget {
                     fontSize: 14,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.2,
-                    color: AppDesignSystem.deepBlack.withValues(alpha: 0.6),
+                    color: AppDesignSystem.deepBlack(context).withValues(alpha: 0.6),
                   ),
                 ),
               ),
@@ -118,7 +120,7 @@ class SandManagerMobileHomeView extends ConsumerWidget {
                                     alpha: 0.2,
                                   ),
                             border: Border.all(
-                              color: AppDesignSystem.deepBlack,
+                              color: AppDesignSystem.deepBlack(context),
                               width: 2,
                             ),
                           ),
@@ -156,7 +158,7 @@ class SandManagerMobileHomeView extends ConsumerWidget {
                                   style: TextStyle(
                                     fontWeight: FontWeight.w900,
                                     fontSize: 10,
-                                    color: AppDesignSystem.deepBlack.withValues(
+                                    color: AppDesignSystem.deepBlack(context).withValues(
                                       alpha: 0.4,
                                     ),
                                   ),
@@ -188,8 +190,9 @@ class SandManagerMobileHomeView extends ConsumerWidget {
         ),
         bottomNavigationBar: const _MockBottomNavBar(),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildAccountSelector(List<PaymentMethod> methods) {
     return SingleChildScrollView(
@@ -219,6 +222,7 @@ class SandManagerMobileHomeView extends ConsumerWidget {
   }
 
   Widget _buildSummaryCards(
+    BuildContext context,
     CashFlowSummary summary,
     String filterText,
     NumberFormat currencyFormat,
@@ -230,14 +234,14 @@ class SandManagerMobileHomeView extends ConsumerWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             decoration: BoxDecoration(
-              color: AppDesignSystem.deepBlack,
-              border: Border.all(color: AppDesignSystem.deepBlack, width: 2),
+              color: AppDesignSystem.deepBlack(context),
+              border: Border.all(color: AppDesignSystem.deepBlack(context), width: 2),
             ),
             child: Text(
               filterText.toUpperCase(),
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w900,
-                color: AppDesignSystem.pureWhite,
+                color: AppDesignSystem.pureWhite(context),
                 fontSize: 12,
                 letterSpacing: 1.5,
               ),
@@ -258,10 +262,10 @@ class SandManagerMobileHomeView extends ConsumerWidget {
                 const SizedBox(height: 8),
                 Text(
                   currencyFormat.format(summary.netFlow),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.w900,
-                    color: AppDesignSystem.deepBlack,
+                    color: AppDesignSystem.deepBlack(context),
                   ),
                 ),
               ],
@@ -382,14 +386,14 @@ class _AccountBadge extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? AppDesignSystem.impactOrange
-              : AppDesignSystem.pureWhite,
-          border: Border.all(color: AppDesignSystem.deepBlack, width: 2),
+              : AppDesignSystem.pureWhite(context),
+          border: Border.all(color: AppDesignSystem.deepBlack(context), width: 2),
           boxShadow: isSelected
               ? []
               : [
-                  const BoxShadow(
-                    color: AppDesignSystem.deepBlack,
-                    offset: Offset(2, 2),
+                   BoxShadow(
+                    color: AppDesignSystem.deepBlack(context),
+                    offset: const Offset(2, 2),
                   ),
                 ],
         ),
@@ -402,7 +406,7 @@ class _AccountBadge extends StatelessWidget {
                 fontWeight: FontWeight.w900,
                 fontSize: 10,
                 color: isSelected
-                    ? AppDesignSystem.deepBlack
+                    ? AppDesignSystem.deepBlack(context)
                     : Colors.grey[700],
               ),
             ),
@@ -434,25 +438,26 @@ class _MockBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 70,
-      decoration: const BoxDecoration(
-        color: AppDesignSystem.pureWhite,
+      decoration: BoxDecoration(
+        color: AppDesignSystem.pureWhite(context),
         border: Border(
-          top: BorderSide(color: AppDesignSystem.deepBlack, width: 3),
+          top: BorderSide(color: AppDesignSystem.deepBlack(context), width: 3),
         ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(Icons.account_balance_wallet, 'CAJA', true),
-          _buildNavItem(Icons.shopping_cart, 'VENTAS', false),
-          _buildNavItem(Icons.inventory, 'STOCK', false),
-          _buildNavItem(Icons.settings, 'AJUSTES', false),
+          _buildNavItem(context, Icons.account_balance_wallet, 'CAJA', true),
+          _buildNavItem(context, Icons.shopping_cart, 'VENTAS', false),
+          _buildNavItem(context, Icons.inventory, 'STOCK', false),
+          _buildNavItem(context, Icons.settings, 'AJUSTES', false),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, bool isSelected) {
+  Widget _buildNavItem(
+      BuildContext context, IconData icon, String label, bool isSelected) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -460,7 +465,7 @@ class _MockBottomNavBar extends StatelessWidget {
           icon,
           color: isSelected
               ? AppDesignSystem.impactOrange
-              : AppDesignSystem.deepBlack,
+              : AppDesignSystem.deepBlack(context),
           size: 24,
         ),
         const SizedBox(height: 4),
@@ -471,7 +476,7 @@ class _MockBottomNavBar extends StatelessWidget {
             fontWeight: FontWeight.w900,
             color: isSelected
                 ? AppDesignSystem.impactOrange
-                : AppDesignSystem.deepBlack,
+                : AppDesignSystem.deepBlack(context),
           ),
         ),
       ],

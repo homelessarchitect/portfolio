@@ -40,13 +40,16 @@ class NestedDrawer extends ConsumerWidget {
           top: 0,
           bottom: 0,
           width: menuWidth,
-          child: Container(
-            color: theme.colorScheme.surface,
-            padding: const EdgeInsets.only(top: 80),
-            child: _MainMenu(
-              onSelect: (category) => ref
-                  .read(drawerStateProvider.notifier)
-                  .openSubDrawer(category),
+          child: SafeArea(
+            bottom: false,
+            child: Container(
+              color: theme.colorScheme.surface,
+              padding: const EdgeInsets.only(top: 20),
+              child: _MainMenu(
+                onSelect: (category) => ref
+                    .read(drawerStateProvider.notifier)
+                    .openSubDrawer(category),
+              ),
             ),
           ),
         ),
@@ -65,14 +68,18 @@ class NestedDrawer extends ConsumerWidget {
                   drawerState.selectedCategory == 'UI Trends')
               ? menuWidth * 1.4
               : menuWidth,
-          child: Container(
-            color: theme.colorScheme.surfaceContainerHighest.withValues(
-              alpha: 0.97,
-            ),
-            child: _SubMenu(
-              category: drawerState.selectedCategory ?? "",
-              onBack: () => ref.read(drawerStateProvider.notifier).backToMain(),
-              onClose: () => ref.read(drawerStateProvider.notifier).close(),
+          child: SafeArea(
+            bottom: false,
+            child: Container(
+              color: theme.colorScheme.surfaceContainerHighest.withValues(
+                alpha: 0.97,
+              ),
+              padding: const EdgeInsets.only(top: 20),
+              child: _SubMenu(
+                category: drawerState.selectedCategory ?? "",
+                onBack: () => ref.read(drawerStateProvider.notifier).backToMain(),
+                onClose: () => ref.read(drawerStateProvider.notifier).close(),
+              ),
             ),
           ),
         ),
@@ -179,12 +186,15 @@ class _SubMenu extends ConsumerWidget {
       children: [
         // Header row (back + close)
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
           child: Row(
             children: [
-              IconButton(onPressed: onBack, icon: const Icon(Icons.arrow_back)),
+              IconButton(
+                onPressed: onBack,
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+              ),
               const Spacer(),
-              IconButton(onPressed: onClose, icon: const Icon(Icons.close)),
+              // Removed onClose IconButton to avoid overlap with PorscheHeader actions
             ],
           ),
         ),

@@ -22,7 +22,7 @@ ThemeData _buildMockTheme(BuildContext context, bool isDark, Project project) {
     ),
     useMaterial3: true,
     scaffoldBackgroundColor: isDark
-        ? const Color(0xFF0D0D0D)
+        ? const Color(0xFF050505)
         : const Color(0xFFF5F5F7),
     fontFamily: Theme.of(context).textTheme.bodyMedium?.fontFamily,
   );
@@ -50,8 +50,9 @@ class _ProjectDesignExplorerState extends State<ProjectDesignExplorer> {
 
   List<SimulationScreen> get _screens =>
       widget.project.designScreens.where((s) {
-        if (s.platform == null)
+        if (s.platform == null) {
           return true; // Show in both if not explicitly tagged
+        }
         if (_viewingMobile) return s.platform == ProjectPlatform.mobile;
         return s.platform == ProjectPlatform.web ||
             s.platform == ProjectPlatform.desktop;
@@ -74,59 +75,65 @@ class _ProjectDesignExplorerState extends State<ProjectDesignExplorer> {
         widget.project.platforms.contains(ProjectPlatform.desktop);
     final showPlatformSelector = hasMobile && hasWeb;
 
-    final viewportHeight = MediaQuery.sizeOf(context).height;
-
-    return Container(
-      height: viewportHeight,
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeInOut,
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 40),
+      color: _isDarkMode
+          ? const Color(0xFF050505)
+          : theme.colorScheme.surfaceContainerLowest.withValues(alpha: 0.5),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final previewHeight = constraints.maxHeight * 0.6;
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constraints.maxHeight),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // ── Heading ──────────────────────────────────────────────────────
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 80),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'EXPLORACIÓN DE DISEÑO',
-                          style: theme.textTheme.labelLarge?.copyWith(
-                            color: theme.colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 4,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'Excepcional por dentro y por fuera.',
-                          style: theme.textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1,
-                          ),
-                        ),
-                      ],
+          // Fallback to a fixed height if the parent (like a SliverToBoxAdapter) 
+          // provides infinite height constraints.
+          final previewHeight = constraints.hasBoundedHeight 
+              ? constraints.maxHeight * 0.6 
+              : _kMainPreviewHeight;
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ── Heading ──────────────────────────────────────────────────────
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: constraints.maxWidth < 800 ? 20 : 80,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'EXPLORACIÓN DE DISEÑO',
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 4,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Excepcional por dentro y por fuera.',
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-                  const SizedBox(height: 48),
+              const SizedBox(height: 48),
 
-                  // ── Configurator row: preview + panel ─────────────────────────
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 80),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // ── Left: main preview ──────────────────────────────────
-                        Expanded(
-                          child: SizedBox(
+              // ── Configurator row: preview + panel ─────────────────────────
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: constraints.maxWidth < 800 ? 20 : 80,
+                ),
+                child: constraints.maxWidth < 1000
+                    ? Column(
+                        children: [
+                          SizedBox(
                             height: previewHeight,
                             child: _MainPreview(
                               project: widget.project,
@@ -140,16 +147,8 @@ class _ProjectDesignExplorerState extends State<ProjectDesignExplorer> {
                                   setState(() => _selectedScreenIndex = i),
                             ),
                           ),
-                        ),
-
-                        const SizedBox(width: 48),
-
-                        // ── Right: configurator panel ─────────────────────────
-                        SizedBox(
-                          width:
-                              _kPanelWidth +
-                              40, // Slightly wider for full screen
-                          child: _ConfiguratorPanel(
+                          const SizedBox(height: 32),
+                          _ConfiguratorPanel(
                             isDarkMode: _isDarkMode,
                             styleDescription: widget.project.styleDescription,
                             onThemeChanged: (v) =>
@@ -159,31 +158,71 @@ class _ProjectDesignExplorerState extends State<ProjectDesignExplorer> {
                             onPlatformChanged: (v) {
                               setState(() {
                                 _viewingMobile = v;
-                                _selectedScreenIndex =
-                                    0; // Reset index to avoid bounds error when screens list changes length
+                                _selectedScreenIndex = 0;
                               });
                             },
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
+                        ],
+                      )
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // ── Left: main preview ──────────────────────────────────
+                          Expanded(
+                            child: SizedBox(
+                              height: previewHeight,
+                              child: _MainPreview(
+                                project: widget.project,
+                                screens: _screens,
+                                selectedIndex: _selectedScreenIndex,
+                                isDarkMode: _isDarkMode,
+                                isMobile: _viewingMobile,
+                                onDarkModeToggle: (v) =>
+                                    setState(() => _isDarkMode = v),
+                                onDotTap: (i) =>
+                                    setState(() => _selectedScreenIndex = i),
+                              ),
+                            ),
+                          ),
 
-                  const SizedBox(height: 48),
+                          const SizedBox(width: 48),
 
-                  // ── Bottom thumbnail carousel ──────────────────────────────────
-                  if (_screens.isNotEmpty)
-                    _BottomCarousel(
-                      project: widget.project,
-                      screens: _screens,
-                      selectedIndex: _selectedScreenIndex,
-                      isDarkMode: _isDarkMode,
-                      isMobile: _viewingMobile,
-                      onSelect: (i) => setState(() => _selectedScreenIndex = i),
-                    ),
-                ],
+                          // ── Right: configurator panel ─────────────────────────
+                          SizedBox(
+                            width: _kPanelWidth + 40,
+                            child: _ConfiguratorPanel(
+                              isDarkMode: _isDarkMode,
+                              styleDescription:
+                                  widget.project.styleDescription,
+                              onThemeChanged: (v) =>
+                                  setState(() => _isDarkMode = v),
+                              showPlatformSelector: showPlatformSelector,
+                              isMobileApp: _viewingMobile,
+                              onPlatformChanged: (v) {
+                                setState(() {
+                                  _viewingMobile = v;
+                                  _selectedScreenIndex = 0;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
               ),
-            ),
+
+              const SizedBox(height: 48),
+
+              // ── Bottom thumbnail carousel ──────────────────────────────────
+              if (_screens.isNotEmpty)
+                _BottomCarousel(
+                  project: widget.project,
+                  screens: _screens,
+                  selectedIndex: _selectedScreenIndex,
+                  isDarkMode: _isDarkMode,
+                  isMobile: _viewingMobile,
+                  onSelect: (i) => setState(() => _selectedScreenIndex = i),
+                ),
+            ],
           );
         },
       ),
@@ -238,9 +277,11 @@ class _MainPreview extends StatelessWidget {
     return Container(
       height: _kMainPreviewHeight,
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withValues(
-          alpha: 0.25,
-        ),
+        color: isDarkMode
+            ? const Color(0xFF0F0F0F)
+            : theme.colorScheme.surfaceContainerHighest.withValues(
+                alpha: 0.25,
+              ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: theme.colorScheme.outline.withValues(alpha: 0.12),
@@ -396,7 +437,9 @@ class _BottomCarousel extends StatelessWidget {
         children: [
           Expanded(
             child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 80),
+              padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width < 800 ? 20 : 80,
+              ),
               scrollDirection: Axis.horizontal,
               itemCount: screens.length,
               separatorBuilder: (_, _) => const SizedBox(width: 12),
@@ -416,8 +459,10 @@ class _BottomCarousel extends StatelessWidget {
                             : theme.colorScheme.outline.withValues(alpha: 0.25),
                         width: isSelected ? 2.5 : 1,
                       ),
-                      color: theme.colorScheme.surfaceContainerHighest
-                          .withValues(alpha: 0.3),
+                      color: isDarkMode
+                          ? const Color(0xFF1A1A1A)
+                          : theme.colorScheme.surfaceContainerHighest
+                              .withValues(alpha: 0.3),
                     ),
                     clipBehavior: Clip.antiAlias,
                     child: Stack(
@@ -503,7 +548,9 @@ class _ConfiguratorPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: isDarkMode
+            ? const Color(0xFF121212)
+            : Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.12),
@@ -677,7 +724,7 @@ class _ThemePalette extends StatelessWidget {
             GestureDetector(
               onTap: () => onChanged(true),
               child: swatch(
-                color: const Color(0xFF0D0D0D),
+                color: const Color(0xFF050505),
                 label: 'Dark',
                 selected: isDarkMode,
               ),

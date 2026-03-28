@@ -17,12 +17,15 @@ class StickySectionTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final paddingTop = MediaQuery.paddingOf(context).top;
+
     return SliverPersistentHeader(
       pinned: true,
       delegate: _StickyTabBarDelegate(
         tabs: tabs,
         onTabSelected: onTabSelected,
         currentIndex: currentIndex,
+        paddingTop: paddingTop,
       ),
     );
   }
@@ -32,11 +35,13 @@ class _StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   final List<String> tabs;
   final Function(int) onTabSelected;
   final int currentIndex;
+  final double paddingTop;
 
   _StickyTabBarDelegate({
     required this.tabs,
     required this.onTabSelected,
     required this.currentIndex,
+    required this.paddingTop,
   });
 
   @override
@@ -47,18 +52,20 @@ class _StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   ) {
     final progress = (shrinkOffset / maxExtent).clamp(0.0, 1.0);
     final surfaceColor = Theme.of(context).colorScheme.surface;
+    const toolbarHeight = kToolbarHeight;
 
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10 * progress, sigmaY: 10 * progress),
         child: Container(
-          color: surfaceColor.withOpacity(0.8 * progress),
+          padding: EdgeInsets.only(top: paddingTop + toolbarHeight),
+          color: surfaceColor.withValues(alpha: 0.8 * progress),
           alignment: Alignment.center,
           child: Container(
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: Colors.white.withOpacity(0.1 * progress),
+                  color: Colors.white.withValues(alpha: 0.1 * progress),
                   width: 1,
                 ),
               ),
@@ -82,8 +89,8 @@ class _StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
                           style: TextStyle(
                             color: isSelected
                                 ? Theme.of(context).colorScheme.primary
-                                : Colors.white.withOpacity(
-                                    0.6 + (0.4 * progress),
+                                : Colors.white.withValues(
+                                    alpha: 0.6 + (0.4 * progress),
                                   ),
                             fontWeight: isSelected
                                 ? FontWeight.bold
@@ -112,13 +119,15 @@ class _StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 80.0;
+  double get maxExtent => paddingTop + kToolbarHeight + 64.0;
 
   @override
-  double get minExtent => 80.0;
+  double get minExtent => paddingTop + kToolbarHeight + 64.0;
 
   @override
   bool shouldRebuild(covariant _StickyTabBarDelegate oldDelegate) {
-    return currentIndex != oldDelegate.currentIndex || tabs != oldDelegate.tabs;
+    return currentIndex != oldDelegate.currentIndex ||
+        tabs != oldDelegate.tabs ||
+        paddingTop != oldDelegate.paddingTop;
   }
 }

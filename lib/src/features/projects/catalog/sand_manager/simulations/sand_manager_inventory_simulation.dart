@@ -8,15 +8,15 @@ class SandManagerInventorySimulation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppDesignSystem.backgroundVariant,
+      backgroundColor: AppDesignSystem.backgroundVariant(context),
       appBar: showAppBar
           ? AppBar(
               title: const Text(
                 'INVENTARIO',
                 style: TextStyle(fontWeight: FontWeight.w900),
               ),
-              backgroundColor: AppDesignSystem.pureWhite,
-              foregroundColor: AppDesignSystem.deepBlack,
+              backgroundColor: AppDesignSystem.pureWhite(context),
+              foregroundColor: AppDesignSystem.deepBlack(context),
               elevation: 0,
             )
           : null,
@@ -27,7 +27,7 @@ class SandManagerInventorySimulation extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = _mockInventory[index];
           return ImpactCard(
-            backgroundColor: AppDesignSystem.pureWhite,
+            backgroundColor: AppDesignSystem.pureWhite(context),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Row(
@@ -35,10 +35,10 @@ class SandManagerInventorySimulation extends StatelessWidget {
                   Container(
                     width: 60,
                     height: 60,
-                    color: AppDesignSystem.deepBlack,
-                    child: const Icon(
+                    color: AppDesignSystem.deepBlack(context),
+                    child: Icon(
                       Icons.inventory_2,
-                      color: AppDesignSystem.pureWhite,
+                      color: AppDesignSystem.pureWhite(context),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -48,9 +48,9 @@ class SandManagerInventorySimulation extends StatelessWidget {
                       children: [
                         Text(
                           item.product,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.w900,
-                            color: AppDesignSystem.deepBlack,
+                            color: AppDesignSystem.deepBlack(context),
                             fontSize: 16,
                           ),
                         ),
@@ -59,7 +59,7 @@ class SandManagerInventorySimulation extends StatelessWidget {
                         const SizedBox(height: 8),
                         LinearProgressIndicator(
                           value: item.current / item.capacity,
-                          backgroundColor: AppDesignSystem.backgroundVariant,
+                          backgroundColor: AppDesignSystem.backgroundVariant(context),
                           color: item.current < (item.capacity * 0.2)
                               ? AppDesignSystem.statusError
                               : AppDesignSystem.impactOrange,
@@ -80,10 +80,10 @@ class SandManagerInventorySimulation extends StatelessWidget {
                       ),
                       Text(
                         '${item.current} m³',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w900,
                           fontSize: 20,
-                          color: AppDesignSystem.deepBlack,
+                          color: AppDesignSystem.deepBlack(context),
                         ),
                       ),
                     ],
@@ -95,9 +95,10 @@ class SandManagerInventorySimulation extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         onPressed: () {},
         backgroundColor: AppDesignSystem.impactOrange,
-        foregroundColor: AppDesignSystem.deepBlack,
+        foregroundColor: AppDesignSystem.deepBlack(context),
         shape: const RoundedRectangleBorder(),
         child: const Icon(Icons.add),
       ),

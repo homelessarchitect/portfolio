@@ -2,7 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../domain/ui_trend.dart';
 
-/// Compact preview card used in the drawer's horizontal scroll for UI Trends.
+/// Refactored drawer card for UI Trends.
+/// Matches the style of ProjectDrawerThumbnail for UI consistency.
 class UITrendDrawerCard extends StatelessWidget {
   final UITrend trend;
   final VoidCallback onTap;
@@ -15,134 +16,144 @@ class UITrendDrawerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        height: 280,
-        margin: const EdgeInsets.only(bottom: 24),
-        decoration: BoxDecoration(
-          gradient: trend.backgroundGradient,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: trend.accentColor.withValues(alpha: 0.25),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Mockup Area (matches height of ProjectDrawerThumbnail)
+            SizedBox(
+              height: 160,
+              width: double.infinity,
+              child: _TrendMockup(trend: trend),
             ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Stack(
-            children: [
-              // Background glow decoration
-              if (trend.id == 'tokyo_night') ...[
-                Positioned(
-                  top: -20,
-                  right: -20,
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: trend.accentColor.withValues(alpha: 0.4),
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: trend.accentColor.withValues(alpha: 0.5),
-                          blurRadius: 40,
-                          spreadRadius: 10,
-                        ),
-                      ],
+
+            const SizedBox(height: 16),
+
+            // Title + Info row
+            Row(
+              children: [
+                // Palette Accent Square
+                Container(
+                  width: 32,
+                  height: 32,
+                  margin: const EdgeInsets.only(right: 12),
+                  decoration: BoxDecoration(
+                    color: trend.accentColor,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: trend.accentColor.withValues(alpha: 0.3),
+                        blurRadius: 10,
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.palette_outlined,
+                      size: 16,
+                      color: trend.textColor.withValues(alpha: 0.9),
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: -20,
-                  left: -20,
-                  child: Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: trend.secondaryAccent.withValues(alpha: 0.4),
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: trend.secondaryAccent.withValues(alpha: 0.5),
-                          blurRadius: 40,
-                          spreadRadius: 10,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        trend.name,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.5,
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-
-              // Content
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Mini phone mockup
-                    _MiniPhoneMockup(trend: trend),
-
-                    const Spacer(),
-
-                    // Bottom info
-                    Text(
-                      trend.name.toUpperCase(),
-                      style: TextStyle(
-                        color: trend.textColor,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 2,
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      trend.tagline,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: trend.subtleTextColor,
-                        fontSize: 11,
-                        height: 1.4,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        ...trend.palette
-                            .take(4)
-                            .map(
-                              (c) => Container(
-                                width: 12,
-                                height: 12,
-                                margin: const EdgeInsets.only(right: 4),
-                                decoration: BoxDecoration(
-                                  color: c,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: trend.textColor.withValues(
-                                      alpha: 0.2,
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          ...trend.palette.take(3).map(
+                                (c) => Container(
+                                  width: 10,
+                                  height: 10,
+                                  margin: const EdgeInsets.only(right: 6),
+                                  decoration: BoxDecoration(
+                                    color: c,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: theme.colorScheme.onSurface
+                                          .withValues(alpha: 0.1),
                                     ),
                                   ),
                                 ),
                               ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              trend.tagline,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurface
+                                    .withValues(alpha: 0.5),
+                              ),
                             ),
-                        const Spacer(),
-                        Icon(
-                          Icons.arrow_forward,
-                          size: 14,
-                          color: trend.textColor.withValues(alpha: 0.6),
-                        ),
-                      ],
-                    ),
-                  ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // Divider matching the style in ProjectDrawerThumbnail
+            Divider(
+              height: 1,
+              thickness: 1,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TrendMockup extends StatelessWidget {
+  final UITrend trend;
+  const _TrendMockup({required this.trend});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 80,
+        height: 160,
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.2),
+              blurRadius: 15,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(4),
+        child: Container(
+          decoration: BoxDecoration(
+            color: trend.bgColor,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: _TrendScreenPreview(trend: trend),
           ),
         ),
       ),
@@ -150,77 +161,17 @@ class UITrendDrawerCard extends StatelessWidget {
   }
 }
 
-class _MiniPhoneMockup extends StatelessWidget {
+class _TrendScreenPreview extends StatelessWidget {
   final UITrend trend;
-
-  const _MiniPhoneMockup({required this.trend});
+  const _TrendScreenPreview({required this.trend});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: 70,
-        height: 130,
-        child: Stack(
-          children: [
-            // Phone body
-            Container(
-              decoration: BoxDecoration(
-                color: trend.id == 'glassmorphism'
-                    ? Colors.white.withValues(alpha: 0.3)
-                    : const Color(0xFF1C1C1E),
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(
-                  color: trend.id == 'glassmorphism'
-                      ? Colors.white.withValues(alpha: 0.6)
-                      : trend.accentColor.withValues(alpha: 0.6),
-                  width: 1.5,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: trend.accentColor.withValues(alpha: 0.3),
-                    blurRadius: 15,
-                  ),
-                ],
-              ),
-              // Screen content
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(13),
-                child: Padding(
-                  padding: const EdgeInsets.all(3),
-                  child: _buildMockupScreen(),
-                ),
-              ),
-            ),
-            // Notch
-            Positioned(
-              top: 6,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Container(
-                  width: 22,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMockupScreen() {
     if (trend.id == 'glassmorphism') {
       return Container(
         color: const Color(0xFFD4AEFF),
         child: Stack(
           children: [
-            // Purple blob
             Positioned(
               top: -10,
               right: -10,
@@ -233,7 +184,6 @@ class _MiniPhoneMockup extends StatelessWidget {
                 ),
               ),
             ),
-            // Glass card
             Positioned(
               left: 8,
               top: 30,
@@ -334,7 +284,7 @@ class _MiniPhoneMockup extends StatelessWidget {
         ),
       );
     } else {
-      // Neo clean
+      // Default: Neo clean
       return Container(
         color: Colors.white,
         child: Column(

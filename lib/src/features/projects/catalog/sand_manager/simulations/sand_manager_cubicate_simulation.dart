@@ -6,7 +6,7 @@ class SandManagerCubicateSimulation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const _MockCubicateScreen();
+    return _MockCubicateScreen();
   }
 }
 
@@ -85,13 +85,13 @@ class _MockCubicateScreenState extends State<_MockCubicateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppDesignSystem.backgroundVariant,
+      backgroundColor: AppDesignSystem.backgroundVariant(context),
       appBar: AppBar(
         title: const Text(
           'CALCULADORA DE MEDIDAS',
           style: TextStyle(fontWeight: FontWeight.w900),
         ),
-        backgroundColor: AppDesignSystem.backgroundVariant,
+        backgroundColor: AppDesignSystem.backgroundVariant(context),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -101,7 +101,7 @@ class _MockCubicateScreenState extends State<_MockCubicateScreen> {
           children: [
             SegmentedButton<CalculationMode>(
               style: SegmentedButton.styleFrom(
-                selectedForegroundColor: AppDesignSystem.deepBlack,
+                selectedForegroundColor: AppDesignSystem.deepBlack(context),
                 selectedBackgroundColor: AppDesignSystem.impactOrange,
               ),
               segments: const [
@@ -132,7 +132,7 @@ class _MockCubicateScreenState extends State<_MockCubicateScreen> {
             ),
             const SizedBox(height: 24),
             ImpactCard(
-              backgroundColor: AppDesignSystem.pureWhite,
+              backgroundColor: AppDesignSystem.pureWhite(context),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -168,7 +168,7 @@ class _MockCubicateScreenState extends State<_MockCubicateScreen> {
             const SizedBox(height: 32),
             if (_result != null && _result! > 0)
               ImpactCard(
-                backgroundColor: AppDesignSystem.deepBlack,
+                backgroundColor: AppDesignSystem.deepBlack(context),
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Column(
@@ -177,8 +177,8 @@ class _MockCubicateScreenState extends State<_MockCubicateScreen> {
                         _mode == CalculationMode.capacity
                             ? 'VOLUMEN CALCULADO'
                             : 'ALTURA A LLENAR',
-                        style: const TextStyle(
-                          color: AppDesignSystem.pureWhite,
+                        style: TextStyle(
+                          color: AppDesignSystem.pureWhite(context),
                           fontWeight: FontWeight.bold,
                           letterSpacing: 1.5,
                         ),
@@ -204,14 +204,14 @@ class _MockCubicateScreenState extends State<_MockCubicateScreen> {
               child: ElevatedButton(
                 onPressed: _reset,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppDesignSystem.pureWhite,
-                  foregroundColor: AppDesignSystem.deepBlack,
+                  backgroundColor: AppDesignSystem.pureWhite(context),
+                  foregroundColor: AppDesignSystem.deepBlack(context),
                   padding: const EdgeInsets.symmetric(vertical: 24),
                   elevation: 0,
-                  shape: const RoundedRectangleBorder(
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.zero,
                     side: BorderSide(
-                      color: AppDesignSystem.deepBlack,
+                      color: AppDesignSystem.deepBlack(context),
                       width: 4,
                     ),
                   ),
@@ -242,25 +242,25 @@ class _MockCubicateScreenState extends State<_MockCubicateScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w900,
             fontSize: 12,
             letterSpacing: 1.0,
-            color: AppDesignSystem.deepBlack,
+            color: AppDesignSystem.deepBlack(context),
           ),
         ),
         const SizedBox(height: 8),
         TextField(
           controller: controller,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          cursorColor: AppDesignSystem.deepBlack,
+          cursorColor: AppDesignSystem.deepBlack(context),
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           onChanged: (_) => _calculate(),
           decoration: InputDecoration(
-            prefixIcon: Icon(icon, color: AppDesignSystem.deepBlack),
-            enabledBorder: const OutlineInputBorder(
+            prefixIcon: Icon(icon, color: AppDesignSystem.deepBlack(context)),
+            enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: AppDesignSystem.deepBlack,
+                color: AppDesignSystem.deepBlack(context),
                 width: 2,
               ),
               borderRadius: BorderRadius.zero,
@@ -273,7 +273,7 @@ class _MockCubicateScreenState extends State<_MockCubicateScreen> {
               borderRadius: BorderRadius.zero,
             ),
             filled: true,
-            fillColor: AppDesignSystem.backgroundVariant,
+            fillColor: AppDesignSystem.backgroundVariant(context),
             suffixText:
                 'm', // Default, might be m³ for capacity, but we clarify in label
             suffixStyle: const TextStyle(fontWeight: FontWeight.bold),

@@ -11,15 +11,15 @@ class CashboxFormScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppDesignSystem.pureWhite,
+      backgroundColor: AppDesignSystem.pureWhite(context),
       appBar: AppBar(
-        backgroundColor: AppDesignSystem.pureWhite,
+        backgroundColor: AppDesignSystem.pureWhite(context),
         elevation: 0,
-        title: const Text(
+        title: Text(
           'NUEVO GASTO',
           style: TextStyle(
             fontWeight: FontWeight.w900,
-            color: AppDesignSystem.deepBlack,
+            color: AppDesignSystem.deepBlack(context),
           ),
         ),
       ),
@@ -31,9 +31,9 @@ class CashboxFormScreen extends StatelessWidget {
   }
 }
 
-/// Dashboard screen showing live transactions — shown in its own device mockup (Web/Admin style).
-class CashboxDashboardScreen extends ConsumerWidget {
-  const CashboxDashboardScreen({super.key});
+/// Dashboard screen showing live transactions — now mobile-styled for the app.
+class CashboxMobileDashboardScreen extends ConsumerWidget {
+  const CashboxMobileDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,321 +52,217 @@ class CashboxDashboardScreen extends ConsumerWidget {
     final dateFormat = DateFormat('dd/MM/yyyy HH:mm');
 
     return Scaffold(
-      backgroundColor: AppDesignSystem.backgroundVariant,
-      body: Row(
-        children: [
-          // Sidebar
-          Container(
-            width: 250,
-            color: AppDesignSystem.deepBlack,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(24.0),
-                  child: Text(
-                    'SAND MANAGER\nADMIN',
-                    style: TextStyle(
-                      color: AppDesignSystem.pureWhite,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 18,
-                      letterSpacing: 2.0,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 32),
-                _buildSidebarItem(Icons.dashboard, 'DASHBOARD', true),
-                _buildSidebarItem(Icons.payments, 'FLUJO DE CAJA', false),
-                _buildSidebarItem(Icons.shopping_cart, 'VENTAS', false),
-                _buildSidebarItem(Icons.inventory_2, 'INVENTARIO', false),
-                _buildSidebarItem(Icons.people, 'CLIENTES', false),
-                const Spacer(),
-                _buildSidebarItem(Icons.settings, 'AJUSTES', false),
-                _buildSidebarItem(Icons.logout, 'SALIR', false),
-                const SizedBox(height: 24),
-              ],
-            ),
+      backgroundColor: AppDesignSystem.backgroundVariant(context),
+      appBar: AppBar(
+        backgroundColor: AppDesignSystem.pureWhite(context),
+        elevation: 0,
+        centerTitle: false,
+        title: Text(
+          'RESUMEN FINANCIERO',
+          style: TextStyle(
+            color: AppDesignSystem.deepBlack(context),
+            fontWeight: FontWeight.w900,
+            fontSize: 20,
           ),
-
-          // Main Content
-          Expanded(
-            child: Column(
-              children: [
-                // Topbar
-                Container(
-                  height: 70,
-                  color: AppDesignSystem.pureWhite,
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: const Row(
-                    children: [
-                      Text(
-                        'Resumen Financiero',
-                        style: TextStyle(
-                          color: AppDesignSystem.deepBlack,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 20,
-                        ),
-                      ),
-                      Spacer(),
-                      Icon(Icons.search, color: AppDesignSystem.deepBlack),
-                      SizedBox(width: 16),
-                      Icon(
-                        Icons.notifications_none,
-                        color: AppDesignSystem.deepBlack,
-                      ),
-                      SizedBox(width: 24),
-                      CircleAvatar(
-                        backgroundColor: AppDesignSystem.impactOrange,
-                        child: Text(
-                          'AD',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppDesignSystem.deepBlack,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // Dashboard Body
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(32),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // KPIs
-                        summaryAsync.when(
-                          data: (summary) => LayoutBuilder(
-                            builder: (context, constraints) {
-                              final useVertical = constraints.maxWidth < 600;
-                              return Wrap(
-                                spacing: 16,
-                                runSpacing: 16,
-                                children: [
-                                  SizedBox(
-                                    width: useVertical
-                                        ? double.infinity
-                                        : (constraints.maxWidth - 32) / 3,
-                                    child: _buildKpiCard(
-                                      'BALANCE NETO',
-                                      summary.netFlow,
-                                      AppDesignSystem.impactOrange,
-                                      currencyFormat,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: useVertical
-                                        ? double.infinity
-                                        : (constraints.maxWidth - 32) / 3,
-                                    child: _buildKpiCard(
-                                      'INGRESOS',
-                                      summary.totalPaidIncome,
-                                      AppDesignSystem.statusSuccess,
-                                      currencyFormat,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: useVertical
-                                        ? double.infinity
-                                        : (constraints.maxWidth - 32) / 3,
-                                    child: _buildKpiCard(
-                                      'EGRESOS',
-                                      summary.totalPaidExpense,
-                                      AppDesignSystem.statusError,
-                                      currencyFormat,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                          loading: () =>
-                              const Center(child: CircularProgressIndicator()),
-                          error: (_, _) => const SizedBox(),
-                        ),
-
-                        const SizedBox(height: 32),
-                        const Text(
-                          'ÚLTIMAS TRANSACCIONES',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 16,
-                            color: AppDesignSystem.deepBlack,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Transactions Table
-                        transactionsAsync.when(
-                          data: (transactions) => ImpactCard(
-                            backgroundColor: AppDesignSystem.pureWhite,
-                            child: ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: transactions.length,
-                              separatorBuilder: (_, _) => const Divider(
-                                height: 1,
-                                color: AppDesignSystem.backgroundVariant,
-                              ),
-                              itemBuilder: (context, index) {
-                                final t = transactions[index];
-                                final isIncome =
-                                    t.type == CashTransactionType.income;
-                                return Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          color: isIncome
-                                              ? AppDesignSystem.statusSuccess
-                                                    .withValues(alpha: 0.1)
-                                              : AppDesignSystem.statusError
-                                                    .withValues(alpha: 0.1),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Icon(
-                                          isIncome
-                                              ? Icons.keyboard_arrow_down
-                                              : Icons.keyboard_arrow_up,
-                                          color: isIncome
-                                              ? AppDesignSystem.statusSuccess
-                                              : AppDesignSystem.statusError,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Expanded(
-                                        flex: 2,
-                                        child: Text(
-                                          t.description.toUpperCase(),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w900,
-                                            color: AppDesignSystem.deepBlack,
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          dateFormat.format(t.date),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Text(
-                                          t.methodName ?? 'N/A',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        currencyFormat.format(t.amount),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w900,
-                                          fontSize: 16,
-                                          color: isIncome
-                                              ? AppDesignSystem.statusSuccess
-                                              : AppDesignSystem.statusError,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          loading: () =>
-                              const Center(child: CircularProgressIndicator()),
-                          error: (_, _) => const SizedBox(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search, color: AppDesignSystem.deepBlack(context)),
+            onPressed: () {},
           ),
+          IconButton(
+            icon: Icon(
+              Icons.notifications_none,
+              color: AppDesignSystem.deepBlack(context),
+            ),
+            onPressed: () {},
+          ),
+          const SizedBox(width: 8),
         ],
       ),
-    );
-  }
-
-  Widget _buildSidebarItem(IconData icon, String label, bool isSelected) {
-    return Container(
-      color: isSelected ? AppDesignSystem.impactOrange : Colors.transparent,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            color: isSelected
-                ? AppDesignSystem.deepBlack
-                : AppDesignSystem.pureWhite,
-            size: 20,
-          ),
-          const SizedBox(width: 16),
-          Text(
-            label,
-            style: TextStyle(
-              color: isSelected
-                  ? AppDesignSystem.deepBlack
-                  : AppDesignSystem.pureWhite,
-              fontWeight: FontWeight.w900,
-              fontSize: 12,
-              letterSpacing: 1.0,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildKpiCard(
-    String title,
-    double amount,
-    Color brandColor,
-    NumberFormat currencyFormat,
-  ) {
-    return ImpactCard(
-      backgroundColor: AppDesignSystem.pureWhite,
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // KPIs
+            summaryAsync.when(
+              data: (summary) => Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: [
+                  _buildKpiCard(
+                    context,
+                    'BALANCE NETO',
+                    summary.netFlow,
+                    AppDesignSystem.impactOrange,
+                    currencyFormat,
+                    isFullWidth: true,
+                  ),
+                  _buildKpiCard(
+                    context,
+                    'INGRESOS',
+                    summary.totalPaidIncome,
+                    AppDesignSystem.statusSuccess,
+                    currencyFormat,
+                  ),
+                  _buildKpiCard(
+                    context,
+                    'EGRESOS',
+                    summary.totalPaidExpense,
+                    AppDesignSystem.statusError,
+                    currencyFormat,
+                  ),
+                ],
+              ),
+              loading: () =>
+                  const Center(child: CircularProgressIndicator()),
+              error: (_, _) => const SizedBox(),
+            ),
+
+            const SizedBox(height: 32),
             Text(
-              title,
+              'ÚLTIMAS TRANSACCIONES',
               style: TextStyle(
                 fontWeight: FontWeight.w900,
-                fontSize: 12,
-                color: AppDesignSystem.deepBlack.withValues(alpha: 0.6),
-                letterSpacing: 1.0,
+                fontSize: 16,
+                color: AppDesignSystem.deepBlack(context),
               ),
             ),
             const SizedBox(height: 16),
-            FittedBox(
-              child: Text(
-                currencyFormat.format(amount),
-                style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 32,
-                  color: brandColor == AppDesignSystem.impactOrange
-                      ? AppDesignSystem.deepBlack
-                      : brandColor,
+
+            // Transactions List
+            transactionsAsync.when(
+              data: (transactions) => ImpactCard(
+                backgroundColor: AppDesignSystem.pureWhite(context),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: transactions.length,
+                  separatorBuilder: (_, _) => Divider(
+                    height: 1,
+                    color: AppDesignSystem.backgroundVariant(context),
+                  ),
+                  itemBuilder: (context, index) {
+                    final t = transactions[index];
+                    final isIncome =
+                        t.type == CashTransactionType.income;
+                    return ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      leading: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: isIncome
+                              ? AppDesignSystem.statusSuccess
+                                    .withValues(alpha: 0.1)
+                              : AppDesignSystem.statusError
+                                    .withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          isIncome
+                              ? Icons.keyboard_arrow_down
+                              : Icons.keyboard_arrow_up,
+                          color: isIncome
+                              ? AppDesignSystem.statusSuccess
+                              : AppDesignSystem.statusError,
+                        ),
+                      ),
+                      title: Text(
+                        t.description.toUpperCase(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          color: AppDesignSystem.deepBlack(context),
+                          fontSize: 13,
+                        ),
+                      ),
+                      subtitle: Text(
+                        '${dateFormat.format(t.date)} • ${t.methodName ?? "N/A"}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 11,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      trailing: Text(
+                        currencyFormat.format(t.amount),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 14,
+                          color: isIncome
+                              ? AppDesignSystem.statusSuccess
+                              : AppDesignSystem.statusError,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
+              loading: () =>
+                  const Center(child: CircularProgressIndicator()),
+              error: (_, _) => const SizedBox(),
             ),
+            const SizedBox(height: 24),
           ],
         ),
       ),
     );
   }
+
+  Widget _buildKpiCard(
+    BuildContext context,
+    String title,
+    double amount,
+    Color brandColor,
+    NumberFormat currencyFormat, {
+    bool isFullWidth = false,
+  }) {
+    return SizedBox(
+      width: isFullWidth
+          ? double.infinity
+          : (MediaQuery.of(context).size.width - 44) / 2,
+      child: ImpactCard(
+        backgroundColor: AppDesignSystem.pureWhite(context),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 10,
+                  color: AppDesignSystem.deepBlack(context).withValues(alpha: 0.6),
+                  letterSpacing: 1.0,
+                ),
+              ),
+              const SizedBox(height: 12),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  currencyFormat.format(amount),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 24,
+                    color: brandColor == AppDesignSystem.impactOrange
+                        ? AppDesignSystem.deepBlack(context)
+                        : brandColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
+
 
 class _MockExpenseForm extends ConsumerStatefulWidget {
   const _MockExpenseForm();
@@ -420,7 +316,7 @@ class _MockExpenseFormState extends ConsumerState<_MockExpenseForm> {
     final methodsAsync = ref.watch(paymentMethodsStreamProvider);
 
     return ImpactCard(
-      backgroundColor: AppDesignSystem.pureWhite,
+      backgroundColor: AppDesignSystem.pureWhite(context),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Form(
@@ -428,22 +324,24 @@ class _MockExpenseFormState extends ConsumerState<_MockExpenseForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 "NUEVO GASTO RECURRENTE",
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 16,
-                  color: AppDesignSystem.deepBlack,
+                  color: AppDesignSystem.deepBlack(context),
                 ),
               ),
               const SizedBox(height: 24),
               _buildTextField(
+                context,
                 controller: _totalController,
                 label: 'MONTO (COP)',
                 icon: Icons.payments,
               ),
               const SizedBox(height: 16),
               _buildTextField(
+                context,
                 controller: _descController,
                 label: 'DESCRIPCIÓN',
                 icon: Icons.notes,
@@ -459,6 +357,7 @@ class _MockExpenseFormState extends ConsumerState<_MockExpenseForm> {
                     });
                   }
                   return _buildDropdown(
+                    context,
                     label: 'MÉTODO DE PAGO',
                     value: _selectedMethod,
                     items: methods,
@@ -475,13 +374,13 @@ class _MockExpenseFormState extends ConsumerState<_MockExpenseForm> {
                   onPressed: _submit,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppDesignSystem.statusError,
-                    foregroundColor: AppDesignSystem.pureWhite,
+                    foregroundColor: AppDesignSystem.pureWhite(context),
                     padding: const EdgeInsets.symmetric(vertical: 24),
                     elevation: 0,
-                    shape: const RoundedRectangleBorder(
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.zero,
                       side: BorderSide(
-                        color: AppDesignSystem.deepBlack,
+                        color: AppDesignSystem.deepBlack(context),
                         width: 4,
                       ),
                     ),
@@ -503,7 +402,8 @@ class _MockExpenseFormState extends ConsumerState<_MockExpenseForm> {
     );
   }
 
-  Widget _buildTextField({
+  Widget _buildTextField(
+    BuildContext context, {
     required TextEditingController controller,
     required String label,
     required IconData icon,
@@ -513,24 +413,24 @@ class _MockExpenseFormState extends ConsumerState<_MockExpenseForm> {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w900,
             fontSize: 12,
             letterSpacing: 1.0,
-            color: AppDesignSystem.deepBlack,
+            color: AppDesignSystem.deepBlack(context),
           ),
         ),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
-          cursorColor: AppDesignSystem.deepBlack,
+          cursorColor: AppDesignSystem.deepBlack(context),
           style: const TextStyle(fontWeight: FontWeight.bold),
           validator: (v) => v!.isEmpty ? "Requerido" : null,
           decoration: InputDecoration(
-            prefixIcon: Icon(icon, color: AppDesignSystem.deepBlack),
-            enabledBorder: const OutlineInputBorder(
+            prefixIcon: Icon(icon, color: AppDesignSystem.deepBlack(context)),
+            enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: AppDesignSystem.deepBlack,
+                color: AppDesignSystem.deepBlack(context),
                 width: 2,
               ),
               borderRadius: BorderRadius.zero,
@@ -543,14 +443,15 @@ class _MockExpenseFormState extends ConsumerState<_MockExpenseForm> {
               borderRadius: BorderRadius.zero,
             ),
             filled: true,
-            fillColor: AppDesignSystem.backgroundVariant,
+            fillColor: AppDesignSystem.backgroundVariant(context),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildDropdown({
+  Widget _buildDropdown(
+    BuildContext context, {
     required String label,
     required PaymentMethod? value,
     required List<PaymentMethod> items,
@@ -561,20 +462,20 @@ class _MockExpenseFormState extends ConsumerState<_MockExpenseForm> {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w900,
             fontSize: 12,
             letterSpacing: 1.0,
-            color: AppDesignSystem.deepBlack,
+            color: AppDesignSystem.deepBlack(context),
           ),
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<PaymentMethod>(
           isExpanded: true,
           initialValue: value,
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_drop_down_circle_outlined,
-            color: AppDesignSystem.deepBlack,
+            color: AppDesignSystem.deepBlack(context),
           ),
           items: items
               .map(
@@ -585,19 +486,19 @@ class _MockExpenseFormState extends ConsumerState<_MockExpenseForm> {
               )
               .toList(),
           onChanged: onChanged,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: AppDesignSystem.deepBlack,
+            color: AppDesignSystem.deepBlack(context),
           ),
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: AppDesignSystem.deepBlack,
+                color: AppDesignSystem.deepBlack(context),
                 width: 2,
               ),
               borderRadius: BorderRadius.zero,
             ),
-            focusedBorder: OutlineInputBorder(
+            focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: AppDesignSystem.impactOrange,
                 width: 3,
@@ -605,7 +506,7 @@ class _MockExpenseFormState extends ConsumerState<_MockExpenseForm> {
               borderRadius: BorderRadius.zero,
             ),
             filled: true,
-            fillColor: AppDesignSystem.backgroundVariant,
+            fillColor: AppDesignSystem.backgroundVariant(context),
           ),
         ),
       ],

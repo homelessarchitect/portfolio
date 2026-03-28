@@ -7,6 +7,29 @@ import '../../domain/project.dart';
 //  Inspired by the Porsche models sub-menu.                            //
 // ------------------------------------------------------------------ //
 
+ThemeData _buildMockTheme(BuildContext context, bool isDark, Project project) {
+  if (project.primaryColor == null) {
+    return isDark ? ThemeData.dark() : ThemeData.light();
+  }
+
+  final seed = project.primaryColor!;
+  final onPrimary =
+      project.onPrimaryColor ?? (isDark ? Colors.black : Colors.white);
+
+  return ThemeData(
+    brightness: isDark ? Brightness.dark : Brightness.light,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: seed,
+      brightness: isDark ? Brightness.dark : Brightness.light,
+      primary: seed,
+      onPrimary: onPrimary,
+    ),
+    useMaterial3: true,
+    scaffoldBackgroundColor: isDark ? const Color(0xFF050505) : const Color(0xFFF5F5F7),
+    fontFamily: Theme.of(context).textTheme.bodyMedium?.fontFamily,
+  );
+}
+
 class ProjectDrawerThumbnail extends StatelessWidget {
   final Project project;
   final VoidCallback onTap;
@@ -191,62 +214,36 @@ class _PhoneMockup extends StatelessWidget {
       child: SizedBox(
         width: 90,
         height: 180,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            // Phone body
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.18),
-                    blurRadius: 18,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(4),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: mobileView != null
-                      ? OverflowBox(
-                          alignment: Alignment.topCenter,
-                          maxWidth: 400,
-                          maxHeight: 800,
-                          child: Transform.scale(
-                            scale: 0.21,
-                            alignment: Alignment.topCenter,
-                            child: SizedBox(
-                              width: 400,
-                              height: 860,
-                              child: mobileView,
-                            ),
-                          ),
-                        )
-                      : Container(color: Colors.grey.shade800),
-                ),
-              ),
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child: Container(
+            width: 414, // iPhone 11/XR width
+            height: 896,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(55),
+              boxShadow: const [
+                BoxShadow(color: Colors.black45, blurRadius: 20, offset: Offset(0, 10)),
+              ],
             ),
-            // Notch
-            Positioned(
-              top: 6,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Container(
-                  width: 24,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(3),
+            padding: const EdgeInsets.all(12),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(44),
+              child: Theme(
+                data: _buildMockTheme(context, true, project),
+                child: MediaQuery(
+                  data: MediaQuery.of(context).copyWith(
+                    size: const Size(390, 844),
+                    padding: const EdgeInsets.only(top: 44, bottom: 34),
+                  ),
+                  child: Material(
+                    color: project.primaryColor ?? const Color(0xFF0F0F0F),
+                    child: mobileView ?? const Placeholder(),
                   ),
                 ),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -272,76 +269,45 @@ class _MacbookMockup extends StatelessWidget {
       child: SizedBox(
         width: 220,
         height: 146,
-        child: Column(
-          children: [
-            // Screen
-            Expanded(
-              child: Container(
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Screen
+              Container(
+                width: 1440 + 32,
+                height: 900 + 44,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1C1C1E),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    topRight: Radius.circular(8),
-                  ),
-                  border: Border.all(color: const Color(0xFF323232), width: 2),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.2),
-                      blurRadius: 16,
-                      offset: const Offset(0, 6),
+                  color: const Color(0xFF1C1E1C),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                  border: Border.all(color: const Color(0xFF333333), width: 3),
+                ),
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 28, bottom: 16),
+                child: ClipRRect(
+                  child: Theme(
+                    data: _buildMockTheme(context, true, project),
+                    child: MediaQuery(
+                      data: MediaQuery.of(context).copyWith(size: const Size(1440, 900)),
+                      child: Material(
+                        color: Colors.white,
+                        child: webView ?? const Placeholder(),
+                      ),
                     ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(3),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(6),
-                      topRight: Radius.circular(6),
-                    ),
-                    child: webView != null
-                        ? OverflowBox(
-                            alignment: Alignment.topCenter,
-                            maxWidth: 1440,
-                            maxHeight: 900,
-                            child: Transform.scale(
-                              scale: 0.149,
-                              alignment: Alignment.topLeft,
-                              child: SizedBox(
-                                width: 1440,
-                                height: 860,
-                                child: webView,
-                              ),
-                            ),
-                          )
-                        : Container(color: Colors.grey.shade900),
                   ),
                 ),
               ),
-            ),
-            // Base / trackpad bar
-            Container(
-              height: 12,
-              decoration: BoxDecoration(
-                color: const Color(0xFFB0B0B0),
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(3),
-                  bottomRight: Radius.circular(3),
-                ),
-                border: Border.all(color: const Color(0xFF888888), width: 1),
-              ),
-              child: Center(
-                child: Container(
-                  width: 40,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF888888),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+              // Base
+              Container(
+                width: 1440 + 32 + 80,
+                height: 16,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF333333),
+                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(8)),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -11,15 +11,15 @@ class SaleFormScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppDesignSystem.backgroundVariant,
+      backgroundColor: AppDesignSystem.backgroundVariant(context),
       appBar: AppBar(
-        backgroundColor: AppDesignSystem.backgroundVariant,
+        backgroundColor: AppDesignSystem.backgroundVariant(context),
         elevation: 0,
-        title: const Text(
+        title: Text(
           'NUEVA VENTA',
           style: TextStyle(
             fontWeight: FontWeight.w900,
-            color: AppDesignSystem.deepBlack,
+            color: AppDesignSystem.deepBlack(context),
           ),
         ),
       ),
@@ -94,7 +94,7 @@ class _MockSaleFormState extends ConsumerState<_MockSaleForm> {
   @override
   Widget build(BuildContext context) {
     return ImpactCard(
-      backgroundColor: AppDesignSystem.pureWhite,
+      backgroundColor: AppDesignSystem.pureWhite(context),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Form(
@@ -102,22 +102,24 @@ class _MockSaleFormState extends ConsumerState<_MockSaleForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 "NUEVA VENTA",
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 16,
-                  color: AppDesignSystem.deepBlack,
+                  color: AppDesignSystem.deepBlack(context),
                 ),
               ),
               const SizedBox(height: 24),
               _buildTextField(
+                context,
                 controller: _clientController,
                 label: 'CLIENTE',
                 icon: Icons.person,
               ),
               const SizedBox(height: 16),
               _buildTextField(
+                context,
                 controller: _totalController,
                 label: 'TOTAL (COP)',
                 icon: Icons.payments,
@@ -132,13 +134,13 @@ class _MockSaleFormState extends ConsumerState<_MockSaleForm> {
                   onPressed: _submit,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppDesignSystem.impactOrange,
-                    foregroundColor: AppDesignSystem.deepBlack,
+                    foregroundColor: AppDesignSystem.deepBlack(context),
                     padding: const EdgeInsets.symmetric(vertical: 24),
                     elevation: 0,
-                    shape: const RoundedRectangleBorder(
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.zero,
                       side: BorderSide(
-                        color: AppDesignSystem.deepBlack,
+                        color: AppDesignSystem.deepBlack(context),
                         width: 4,
                       ),
                     ),
@@ -160,7 +162,8 @@ class _MockSaleFormState extends ConsumerState<_MockSaleForm> {
     );
   }
 
-  Widget _buildTextField({
+  Widget _buildTextField(
+    BuildContext context, {
     required TextEditingController controller,
     required String label,
     required IconData icon,
@@ -171,25 +174,25 @@ class _MockSaleFormState extends ConsumerState<_MockSaleForm> {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w900,
             fontSize: 12,
             letterSpacing: 1.0,
-            color: AppDesignSystem.deepBlack,
+            color: AppDesignSystem.deepBlack(context),
           ),
         ),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
           keyboardType: keyboardType,
-          cursorColor: AppDesignSystem.deepBlack,
+          cursorColor: AppDesignSystem.deepBlack(context),
           style: const TextStyle(fontWeight: FontWeight.bold),
           validator: (v) => v!.isEmpty ? "Requerido" : null,
           decoration: InputDecoration(
-            prefixIcon: Icon(icon, color: AppDesignSystem.deepBlack),
-            enabledBorder: const OutlineInputBorder(
+            prefixIcon: Icon(icon, color: AppDesignSystem.deepBlack(context)),
+            enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: AppDesignSystem.deepBlack,
+                color: AppDesignSystem.deepBlack(context),
                 width: 2,
               ),
               borderRadius: BorderRadius.zero,
@@ -202,7 +205,7 @@ class _MockSaleFormState extends ConsumerState<_MockSaleForm> {
               borderRadius: BorderRadius.zero,
             ),
             filled: true,
-            fillColor: AppDesignSystem.backgroundVariant,
+            fillColor: AppDesignSystem.backgroundVariant(context),
           ),
         ),
       ],
@@ -213,22 +216,22 @@ class _MockSaleFormState extends ConsumerState<_MockSaleForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'ESTADO',
           style: TextStyle(
             fontWeight: FontWeight.w900,
             fontSize: 12,
             letterSpacing: 1.0,
-            color: AppDesignSystem.deepBlack,
+            color: AppDesignSystem.deepBlack(context),
           ),
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<MockSaleStatus>(
           isExpanded: true,
           initialValue: _status,
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_drop_down_circle_outlined,
-            color: AppDesignSystem.deepBlack,
+            color: AppDesignSystem.deepBlack(context),
           ),
           items: MockSaleStatus.values.map((s) {
             String label = '';
@@ -251,19 +254,19 @@ class _MockSaleFormState extends ConsumerState<_MockSaleForm> {
           onChanged: (val) {
             if (val != null) setState(() => _status = val);
           },
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: AppDesignSystem.deepBlack,
+            color: AppDesignSystem.deepBlack(context),
           ),
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: AppDesignSystem.deepBlack,
+                color: AppDesignSystem.deepBlack(context),
                 width: 2,
               ),
               borderRadius: BorderRadius.zero,
             ),
-            focusedBorder: OutlineInputBorder(
+            focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: AppDesignSystem.impactOrange,
                 width: 3,
@@ -271,7 +274,7 @@ class _MockSaleFormState extends ConsumerState<_MockSaleForm> {
               borderRadius: BorderRadius.zero,
             ),
             filled: true,
-            fillColor: AppDesignSystem.backgroundVariant,
+            fillColor: AppDesignSystem.backgroundVariant(context),
           ),
         ),
       ],
@@ -288,9 +291,9 @@ class _MockSaleListScreen extends ConsumerWidget {
     final sales = ref.watch(mockSalesNotifierProvider);
 
     return Scaffold(
-      backgroundColor: AppDesignSystem.backgroundVariant,
+      backgroundColor: AppDesignSystem.backgroundVariant(context),
       appBar: AppBar(
-        backgroundColor: AppDesignSystem.backgroundVariant,
+        backgroundColor: AppDesignSystem.backgroundVariant(context),
         elevation: 0,
         title: Text(
           'VENTAS RECIENTES',
@@ -355,24 +358,24 @@ class _SaleCard extends StatelessWidget {
             const SizedBox(height: 8),
             Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.receipt_long,
                   size: 14,
-                  color: AppDesignSystem.deepBlack,
+                  color: AppDesignSystem.deepBlack(context),
                 ),
                 const SizedBox(width: 4),
                 Text(
                   '#${sale.id} • ${DateFormat('HH:mm').format(sale.date)}',
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: AppDesignSystem.deepBlack.withValues(alpha: 0.7),
+                    color: AppDesignSystem.deepBlack(context).withValues(alpha: 0.7),
                   ),
                 ),
                 const Spacer(),
                 Text(
                   currencyFormat.format(sale.total),
                   style: theme.textTheme.titleMedium?.copyWith(
-                    color: AppDesignSystem.deepBlack,
+                    color: AppDesignSystem.deepBlack(context),
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -405,7 +408,7 @@ class _StatusChip extends StatelessWidget {
         label = 'CRÉDITO';
         break;
       case MockSaleStatus.partial:
-        color = const Color(0xFF0055FF);
+        color = AppDesignSystem.impactBlue;
         label = 'PARCIAL';
         break;
       case MockSaleStatus.cancelled:
@@ -418,14 +421,14 @@ class _StatusChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: color,
-        border: Border.all(color: AppDesignSystem.deepBlack, width: 2),
+        border: Border.all(color: AppDesignSystem.deepBlack(context), width: 2),
       ),
       child: Text(
         label,
         style: theme.textTheme.labelSmall?.copyWith(
           color: color == AppDesignSystem.impactOrange
-              ? AppDesignSystem.deepBlack
-              : AppDesignSystem.pureWhite,
+              ? AppDesignSystem.deepBlack(context)
+              : AppDesignSystem.pureWhite(context),
           fontWeight: FontWeight.w900,
           letterSpacing: 1,
         ),

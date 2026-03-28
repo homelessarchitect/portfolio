@@ -8,15 +8,15 @@ class SandManagerTransportersSimulation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppDesignSystem.backgroundVariant,
+      backgroundColor: AppDesignSystem.backgroundVariant(context),
       appBar: showAppBar
           ? AppBar(
               title: const Text(
                 'TRANSPORTADORES',
                 style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
               ),
-              backgroundColor: AppDesignSystem.pureWhite,
-              foregroundColor: AppDesignSystem.deepBlack,
+              backgroundColor: AppDesignSystem.pureWhite(context),
+              foregroundColor: AppDesignSystem.deepBlack(context),
               elevation: 0,
               actions: [
                 IconButton(icon: const Icon(Icons.add), onPressed: () {}),
@@ -30,7 +30,7 @@ class SandManagerTransportersSimulation extends StatelessWidget {
         itemBuilder: (context, index) {
           final transporter = _mockTransporters[index];
           return ImpactCard(
-            backgroundColor: AppDesignSystem.pureWhite,
+            backgroundColor: AppDesignSystem.pureWhite(context),
             child: ListTile(
               contentPadding: const EdgeInsets.all(16),
               leading: Icon(
@@ -42,10 +42,10 @@ class SandManagerTransportersSimulation extends StatelessWidget {
               ),
               title: Text(
                 transporter.truckPlate,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 18,
-                  color: AppDesignSystem.deepBlack,
+                  color: AppDesignSystem.deepBlack(context),
                 ),
               ),
               subtitle: Column(

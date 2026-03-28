@@ -8,15 +8,15 @@ class SandManagerClientsSimulation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppDesignSystem.backgroundVariant,
+      backgroundColor: AppDesignSystem.backgroundVariant(context),
       appBar: showAppBar
           ? AppBar(
               title: const Text(
                 'CLIENTES',
                 style: TextStyle(fontWeight: FontWeight.w900),
               ),
-              backgroundColor: AppDesignSystem.pureWhite,
-              foregroundColor: AppDesignSystem.deepBlack,
+              backgroundColor: AppDesignSystem.pureWhite(context),
+              foregroundColor: AppDesignSystem.deepBlack(context),
               elevation: 0,
               actions: [
                 IconButton(icon: const Icon(Icons.search), onPressed: () {}),
@@ -31,24 +31,24 @@ class SandManagerClientsSimulation extends StatelessWidget {
         itemBuilder: (context, index) {
           final client = _mockClients[index];
           return ImpactCard(
-            backgroundColor: AppDesignSystem.pureWhite,
+            backgroundColor: AppDesignSystem.pureWhite(context),
             child: ListTile(
               contentPadding: const EdgeInsets.all(16),
               leading: CircleAvatar(
-                backgroundColor: AppDesignSystem.deepBlack,
+                backgroundColor: AppDesignSystem.deepBlack(context),
                 child: Text(
                   client.name.substring(0, 1),
-                  style: const TextStyle(
-                    color: AppDesignSystem.pureWhite,
+                  style: TextStyle(
+                    color: AppDesignSystem.pureWhite(context),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               title: Text(
                 client.name,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w900,
-                  color: AppDesignSystem.deepBlack,
+                  color: AppDesignSystem.deepBlack(context),
                 ),
               ),
               subtitle: Column(

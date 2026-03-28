@@ -8,15 +8,15 @@ class SandManagerInvoicesSimulation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppDesignSystem.backgroundVariant,
+      backgroundColor: AppDesignSystem.backgroundVariant(context),
       appBar: showAppBar
           ? AppBar(
               title: const Text(
                 'FACTURACIÓN',
                 style: TextStyle(fontWeight: FontWeight.w900),
               ),
-              backgroundColor: AppDesignSystem.pureWhite,
-              foregroundColor: AppDesignSystem.deepBlack,
+              backgroundColor: AppDesignSystem.pureWhite(context),
+              foregroundColor: AppDesignSystem.deepBlack(context),
               elevation: 0,
             )
           : null,
@@ -27,7 +27,7 @@ class SandManagerInvoicesSimulation extends StatelessWidget {
         itemBuilder: (context, index) {
           final invoice = _mockInvoices[index];
           return ImpactCard(
-            backgroundColor: AppDesignSystem.pureWhite,
+            backgroundColor: AppDesignSystem.pureWhite(context),
             child: ListTile(
               contentPadding: const EdgeInsets.all(16),
               leading: Icon(
@@ -39,9 +39,9 @@ class SandManagerInvoicesSimulation extends StatelessWidget {
               ),
               title: Text(
                 'FACTURA #${invoice.number}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w900,
-                  color: AppDesignSystem.deepBlack,
+                  color: AppDesignSystem.deepBlack(context),
                 ),
               ),
               subtitle: Column(
@@ -58,10 +58,10 @@ class SandManagerInvoicesSimulation extends StatelessWidget {
                 children: [
                   Text(
                     '\$${invoice.total}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 16,
-                      color: AppDesignSystem.deepBlack,
+                      color: AppDesignSystem.deepBlack(context),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -72,15 +72,15 @@ class SandManagerInvoicesSimulation extends StatelessWidget {
                     ),
                     color: invoice.isIssued
                         ? AppDesignSystem.statusSuccess
-                        : AppDesignSystem.backgroundVariant,
+                        : AppDesignSystem.backgroundVariant(context),
                     child: Text(
                       invoice.isIssued ? 'EMITIDA' : 'PENDIENTE',
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                         color: invoice.isIssued
-                            ? AppDesignSystem.pureWhite
-                            : AppDesignSystem.deepBlack,
+                            ? AppDesignSystem.pureWhite(context)
+                            : AppDesignSystem.deepBlack(context),
                       ),
                     ),
                   ),
@@ -91,13 +91,14 @@ class SandManagerInvoicesSimulation extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: null,
         onPressed: () {},
-        backgroundColor: AppDesignSystem.deepBlack,
-        foregroundColor: AppDesignSystem.pureWhite,
+        backgroundColor: AppDesignSystem.impactOrange,
+        foregroundColor: AppDesignSystem.deepBlack(context),
         shape: const RoundedRectangleBorder(),
-        icon: const Icon(Icons.flash_on),
+        icon: const Icon(Icons.add),
         label: const Text(
-          'EMITIR DIAN',
+          'NUEVA FACTURA',
           style: TextStyle(fontWeight: FontWeight.w900),
         ),
       ),

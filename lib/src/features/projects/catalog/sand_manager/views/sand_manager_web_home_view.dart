@@ -6,23 +6,25 @@ class SandManagerWebHomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Static "foto viva" for the Web Admin Dashboard
-    return IgnorePointer(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Sand Manager — Admin Dashboard'),
-          elevation: 2,
-          actions: [
-            IconButton(icon: const Icon(Icons.add_business), onPressed: () {}),
-            IconButton(icon: const Icon(Icons.list_alt), onPressed: () {}),
-            const SizedBox(width: 8),
-          ],
-        ),
-        body: const Row(
-          children: [
-            SizedBox(width: 350, child: _StaticBusinessListPanel()),
-            VerticalDivider(width: 1),
-            Expanded(child: _StaticBusinessDetailPanel()),
-          ],
+    return Material(
+      child: IgnorePointer(
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Sand Manager — Admin Dashboard'),
+            elevation: 2,
+            actions: [
+              IconButton(icon: const Icon(Icons.add_business), onPressed: () {}),
+              IconButton(icon: const Icon(Icons.list_alt), onPressed: () {}),
+              const SizedBox(width: 8),
+            ],
+          ),
+          body: const Row(
+            children: [
+              SizedBox(width: 350, child: _StaticBusinessListPanel()),
+              VerticalDivider(width: 1),
+              Expanded(child: _StaticBusinessDetailPanel()),
+            ],
+          ),
         ),
       ),
     );
