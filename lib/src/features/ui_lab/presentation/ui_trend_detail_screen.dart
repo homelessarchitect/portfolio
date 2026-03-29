@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../domain/ui_trend.dart';
 import '../../projects/presentation/widgets/device_mockup.dart';
 import 'widgets/ui_trend_mockup_content.dart';
+import 'widgets/style_guide_button.dart';
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  Top-level screen (preserves _HeroSection, adds UITrendDesignExplorer)
@@ -460,6 +462,28 @@ class _ConfiguratorPanel extends StatelessWidget {
               fontSize: 13,
               height: 1.6,
             ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        // Export Action
+        _PanelSection(
+          trend: trend,
+          title: 'Recursos para Agentes',
+          initiallyExpanded: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Descarga la documentación visual optimizada para que un LLM genere componentes en este estilo.',
+                style: TextStyle(
+                  color: trend.subtleTextColor,
+                  fontSize: 11,
+                  height: 1.4,
+                ),
+              ),
+              const SizedBox(height: 16),
+              StyleGuideDownloadButton(trend: trend),
+            ],
           ),
         ),
       ],
