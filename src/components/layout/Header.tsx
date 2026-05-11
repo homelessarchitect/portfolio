@@ -23,9 +23,12 @@ export function Header() {
             >
               Projects
             </Link>
-            <span className="rounded-md px-3 py-1.5 text-sm text-zinc-600 cursor-not-allowed">
-              UI Lab
-            </span>
+            <Link
+              href="/about"
+              className="rounded-md px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:bg-white/[0.06] hover:text-white"
+            >
+              About
+            </Link>
           </nav>
         </div>
 
