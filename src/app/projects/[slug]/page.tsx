@@ -4,6 +4,17 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { Header } from '@/components/layout/Header';
 import { projects, getProject } from '@/data/projects';
+import { PhoneSimulationMockup } from '@/components/ui/PhoneSimulationMockup';
+import { BrowserSimulationMockup } from '@/components/ui/BrowserSimulationMockup';
+import { SimulationWrapper } from '@/components/simulations/SimulationWrapper';
+
+const PHONE_SIM_IDS = new Set(['sand-manager', 'no-preguntes', 'arcinus']);
+const BROWSER_SIM_IDS = new Set(['asos', 'jardin']);
+
+const BROWSER_SIM_URL: Record<string, string> = {
+  asos: 'app.asos.co/dashboard',
+  jardin: 'app.jardin.edu.co/perfil',
+};
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -129,6 +140,32 @@ export default async function ProjectDetailPage({ params }: Props) {
         </section>
 
         <div className="mx-auto max-w-screen-xl px-6 pb-20">
+          {(PHONE_SIM_IDS.has(project.id) || BROWSER_SIM_IDS.has(project.id)) && (
+            <div className="mb-16">
+              <p className="mb-8 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
+                App Preview
+              </p>
+              <div className="flex flex-col items-center gap-4">
+                {PHONE_SIM_IDS.has(project.id) && (
+                  <PhoneSimulationMockup primaryColor={project.primaryColor} displayWidth={280}>
+                    <SimulationWrapper projectId={project.id} />
+                  </PhoneSimulationMockup>
+                )}
+                {BROWSER_SIM_IDS.has(project.id) && (
+                  <BrowserSimulationMockup
+                    displayWidth={560}
+                    urlLabel={BROWSER_SIM_URL[project.id]}
+                  >
+                    <SimulationWrapper projectId={project.id} />
+                  </BrowserSimulationMockup>
+                )}
+                <p className="text-center text-[11px] text-zinc-600">
+                  Simulación interactiva — navegá las pantallas reales
+                </p>
+              </div>
+            </div>
+          )}
+
           {project.problem && project.solution && (
             <div className="mb-16 grid gap-6 md:grid-cols-2">
               <div className="rounded-2xl border border-white/[0.06] bg-[#111] p-6">

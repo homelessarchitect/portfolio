@@ -1,5 +1,7 @@
 import Image from 'next/image';
 
+export const SIMULATION_DIMS = { w: 390, h: 845 };
+
 interface PhoneMockupProps {
   src: string;
   alt: string;

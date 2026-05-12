@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ['host.docker.internal', '192.168.1.5'],
   images: {
     remotePatterns: [
       {
