@@ -1,0 +1,31 @@
+{
+  "nav": {
+    "menu": "Menu",
+    "contact": "Contact",
+    "about": "About",
+    "projects": "Projects"
+  },
+  "hero": {
+    "cta": "Discover more"
+  },
+  "home": {
+    "tagline": "We don't make screenshots.",
+    "taglineAccent": "We make replicas.",
+    "taglineSub": "Every project is an interactive simulation of the real product. Visitors operate it before reading a single line of text.",
+    "projectsLabel": "Projects"
+  },
+  "gallery": {
+    "viewProject": "View project →"
+  },
+  "footer": {
+    "copyright": "Homeless Architect"
+  },
+  "a11y": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "contactEmail": "Contact by email",
+    "openLocale": "Change language",
+    "pauseVideo": "Pause video",
+    "playVideo": "Play video"
+  }
+}
