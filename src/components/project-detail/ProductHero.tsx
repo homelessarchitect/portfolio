@@ -5,12 +5,7 @@ import { Project, ProjectApp } from '@/types/project';
 import { PhoneSimulationMockup } from '@/components/ui/PhoneSimulationMockup';
 import { BrowserSimulationMockup } from '@/components/ui/BrowserSimulationMockup';
 import { SimulationWrapper } from '@/components/simulations/SimulationWrapper';
-
-const STATUS_LABEL: Record<string, string> = {
-  live: 'Live',
-  inDevelopment: 'En desarrollo',
-  archived: 'Archivado',
-};
+import { useLocale } from '@/context/LocaleContext';
 
 const STATUS_DOT: Record<string, string> = {
   live: 'bg-emerald-400',
@@ -45,6 +40,7 @@ function AppMockup({ app, project }: { app: ProjectApp; project: Project }) {
 }
 
 export function ProductHero({ project }: Props) {
+  const { t, locale } = useLocale();
   const apps = project.apps ?? [];
   const [activeAppId, setActiveAppId] = useState(apps[0]?.id ?? '');
   const activeApp = apps.find((a) => a.id === activeAppId) ?? apps[0];
@@ -97,7 +93,7 @@ export function ProductHero({ project }: Props) {
         {/* Title & meta */}
         <div className="flex flex-col items-center gap-3 text-center">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-600">
-            {project.category}
+            {project.category[locale]}
           </p>
 
           <h1 className="text-5xl font-black tracking-tight text-white sm:text-6xl">
@@ -108,7 +104,7 @@ export function ProductHero({ project }: Props) {
           <div className="flex items-center gap-3 text-xs text-zinc-500">
             <span className="flex items-center gap-1.5">
               <span className={`h-1.5 w-1.5 rounded-full ${STATUS_DOT[project.status]}`} />
-              {STATUS_LABEL[project.status]}
+              {t.status[project.status]}
             </span>
             <span className="text-zinc-700">·</span>
             <span>{project.year}</span>
@@ -134,7 +130,7 @@ export function ProductHero({ project }: Props) {
               href="#simulacion"
               className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black transition-opacity hover:opacity-80"
             >
-              Ver simulación
+              {t.detail.viewSimulation}
             </a>
             {liveUrl && (
               <a
@@ -143,7 +139,7 @@ export function ProductHero({ project }: Props) {
                 rel="noopener noreferrer"
                 className="rounded-full border border-white/[0.2] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:border-white/40"
               >
-                Demo en vivo ↗
+                {t.detail.liveDemo}
               </a>
             )}
           </div>

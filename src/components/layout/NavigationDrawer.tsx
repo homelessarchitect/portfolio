@@ -7,6 +7,7 @@ import { Project, ProjectApp } from '@/types/project';
 import { SimulationWrapper } from '@/components/simulations/SimulationWrapper';
 import { PhoneSimulationMockup } from '@/components/ui/PhoneSimulationMockup';
 import { BrowserSimulationMockup } from '@/components/ui/BrowserSimulationMockup';
+import { useLocale } from '@/context/LocaleContext';
 
 interface Props {
   isOpen: boolean;
@@ -19,11 +20,6 @@ const STATUS_DOT: Record<string, string> = {
   archived: 'bg-zinc-400',
 };
 
-const STATUS_LABEL: Record<string, string> = {
-  live: 'Live',
-  inDevelopment: 'En desarrollo',
-  archived: 'Archivado',
-};
 
 function ChevronRight({ className = '' }: { className?: string }) {
   return (
@@ -181,7 +177,7 @@ function ProjectList({ onSelect }: { onSelect: (id: string) => void }) {
 
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-semibold text-zinc-900">{project.title}</p>
-              <p className="mt-0.5 truncate text-xs text-zinc-500">{project.category}</p>
+              <p className="mt-0.5 truncate text-xs text-zinc-500">{project.category[locale]}</p>
               <div className="mt-1.5 flex flex-wrap gap-1">
                 {project.platforms.map((p) => (
                   <span
@@ -249,7 +245,7 @@ function ProjectDetail({
                     <p className="truncate text-sm font-semibold text-zinc-900">{app.label}</p>
                     <div className="mt-1 flex items-center gap-1.5">
                       <span className={`h-1.5 w-1.5 rounded-full ${STATUS_DOT[app.status]}`} />
-                      <span className="text-xs text-zinc-500">{STATUS_LABEL[app.status]}</span>
+                      <span className="text-xs text-zinc-500">{t.status[app.status]}</span>
                     </div>
                   </div>
                   <AppThumb app={app} />
@@ -307,6 +303,7 @@ function ProjectDetail({
 type MobileStep = 'nav' | 'list' | 'detail';
 
 export function NavigationDrawer({ isOpen, onClose }: Props) {
+  const { t, locale } = useLocale();
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const [mobileStep, setMobileStep] = useState<MobileStep>('nav');
 

@@ -1,22 +1,21 @@
-import { Project } from '@/types/project';
+'use client';
 
-const PLATFORM_DESC: Record<string, string> = {
-  web: 'Aplicación web — acceso desde cualquier navegador sin instalación.',
-  mobile: 'Aplicación móvil nativa — iOS y Android desde un único codebase.',
-  desktop: 'Aplicación de escritorio — integración directa con el sistema operativo.',
-};
+import { Project, ProjectPlatform } from '@/types/project';
+import { useLocale } from '@/context/LocaleContext';
 
 interface Props {
   project: Project;
 }
 
 export function TechSection({ project }: Props) {
+  const { t, locale } = useLocale();
+
   const headline = project.styleDescription
-    ? project.styleDescription
-    : `${project.services.slice(0, 2).join(' + ')} — arquitectura construida para escalar.`;
+    ? project.styleDescription[locale]
+    : `${project.services.slice(0, 2).join(' + ')} — ${t.detail.builtToScale}`;
 
   const appsCount = project.apps?.length ?? project.services.length;
-  const appsLabel = project.apps?.length ? 'Apps' : 'Servicios';
+  const appsLabel = project.apps?.length ? t.detail.apps : t.detail.services;
 
   return (
     <section className="border-b border-white/[0.04] bg-[#080808]">
@@ -24,20 +23,20 @@ export function TechSection({ project }: Props) {
         {/* Headline */}
         <div className="mb-16 max-w-2xl">
           <p className="mb-4 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
-            Stack técnico
+            {t.detail.techStack}
           </p>
           <h2 className="text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl">
             {headline}
           </h2>
         </div>
 
-        {/* KPIs — merged from KPISection */}
+        {/* KPIs */}
         <div className="mb-16 grid grid-cols-3 gap-6 border-b border-white/[0.04] pb-16">
           <div>
             <p className="text-6xl font-black tracking-tight text-white sm:text-7xl">
               {project.year}
             </p>
-            <p className="mt-2 text-xs text-zinc-500">Año</p>
+            <p className="mt-2 text-xs text-zinc-500">{t.detail.year}</p>
           </div>
           <div>
             <p className="leading-none">
@@ -48,7 +47,7 @@ export function TechSection({ project }: Props) {
                 <span className="ml-1 text-3xl font-black text-zinc-600">+</span>
               )}
             </p>
-            <p className="mt-2 text-xs text-zinc-500">Plataformas</p>
+            <p className="mt-2 text-xs text-zinc-500">{t.detail.platforms}</p>
           </div>
           <div>
             <p className="text-6xl font-black tracking-tight text-white sm:text-7xl">
@@ -61,7 +60,7 @@ export function TechSection({ project }: Props) {
         {/* Stack grid */}
         <div className="mb-16">
           <p className="mb-6 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
-            Tecnologías
+            {t.detail.technologies}
           </p>
           <div className="flex flex-wrap gap-3">
             {project.services.map((service, i) => (
@@ -69,7 +68,6 @@ export function TechSection({ project }: Props) {
                 key={service}
                 className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.03] px-4 py-3"
               >
-                {/* Index indicator */}
                 <span className="text-[10px] font-black tabular-nums text-zinc-700">
                   {String(i + 1).padStart(2, '0')}
                 </span>
@@ -82,7 +80,7 @@ export function TechSection({ project }: Props) {
         {/* Platforms */}
         <div>
           <p className="mb-6 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
-            Plataformas
+            {t.detail.platforms}
           </p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {project.platforms.map((platform) => (
@@ -91,14 +89,10 @@ export function TechSection({ project }: Props) {
                 className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6"
               >
                 <p className="mb-2 text-sm font-semibold capitalize text-white">
-                  {platform === 'web'
-                    ? 'Web'
-                    : platform === 'mobile'
-                      ? 'Mobile'
-                      : 'Desktop'}
+                  {platform === 'web' ? 'Web' : platform === 'mobile' ? 'Mobile' : 'Desktop'}
                 </p>
                 <p className="text-xs leading-relaxed text-zinc-500">
-                  {PLATFORM_DESC[platform] ?? platform}
+                  {t.platform[platform as ProjectPlatform]}
                 </p>
               </div>
             ))}

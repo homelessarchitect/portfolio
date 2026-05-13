@@ -5,12 +5,14 @@ import type { Project } from '@/types/project';
 import { BrowserSimulationMockup } from '@/components/ui/BrowserSimulationMockup';
 import { PhoneSimulationMockup } from '@/components/ui/PhoneSimulationMockup';
 import { SimulationWrapper } from '@/components/simulations/SimulationWrapper';
+import { useLocale } from '@/context/LocaleContext';
 
 interface Props {
   project: Project;
 }
 
 export function AppScreenExplorer({ project }: Props) {
+  const { t } = useLocale();
   const apps = project.apps ?? [];
 
   const [activeAppId, setActiveAppId] = useState(() => apps[0]?.id ?? '');
@@ -127,12 +129,12 @@ export function AppScreenExplorer({ project }: Props) {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] px-3 py-1.5 text-xs text-zinc-400 transition-colors hover:border-white/[0.2] hover:text-white"
               >
-                {activeApp.urlLabel ?? 'Ver en vivo'}
+                {activeApp.urlLabel ?? t.detail.viewLive}
                 <span className="text-[10px]">↗</span>
               </a>
             )}
             <p className="text-center text-[11px] text-zinc-600">
-              Simulación interactiva
+              {t.detail.simulation}
             </p>
           </div>
         </div>

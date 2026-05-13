@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Project } from '@/types/project';
+import { useLocale } from '@/context/LocaleContext';
 
 interface Props {
   project: Project;
@@ -27,11 +28,13 @@ function StarIcon({ filled, color }: { filled: boolean; color: string }) {
 }
 
 export function RatingSection({ project }: Props) {
+  const { t } = useLocale();
   const [hovered, setHovered] = useState(0);
   const [selected, setSelected] = useState(0);
 
   const accentColor = project.primaryColor ?? '#ffffff';
   const activeLevel = hovered || selected;
+  const levels = ['', t.rating.level1, t.rating.level2, t.rating.level3, t.rating.level4, t.rating.level5];
 
   if (selected > 0) {
     return (
@@ -39,7 +42,7 @@ export function RatingSection({ project }: Props) {
         <div className="mx-auto max-w-screen-xl px-6 py-24">
           <div className="mx-auto flex max-w-lg flex-col items-center gap-8 text-center">
             <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
-              Recibido
+              {t.rating.received}
             </p>
 
             <div className="flex gap-3">
@@ -50,12 +53,10 @@ export function RatingSection({ project }: Props) {
 
             <div>
               <h2 className="text-2xl font-black tracking-tight text-white">
-                Gracias por tu valoración.
+                {t.rating.thanks}
               </h2>
               <p className="mt-2 text-sm text-zinc-500">
-                {selected >= 4
-                  ? '¿Querés que construyamos algo juntos?'
-                  : '¿Tenés feedback? Me encantaría escucharlo.'}
+                {selected >= 4 ? t.rating.ctaHigh : t.rating.ctaLow}
               </p>
             </div>
 
@@ -63,7 +64,7 @@ export function RatingSection({ project }: Props) {
               href="mailto:dariensherrera.dev@gmail.com"
               className="rounded-full bg-white px-7 py-3 text-sm font-semibold text-black transition-opacity duration-200 hover:opacity-80"
             >
-              Escribime →
+              {t.rating.cta}
             </a>
           </div>
         </div>
@@ -77,10 +78,10 @@ export function RatingSection({ project }: Props) {
         <div className="mx-auto flex max-w-lg flex-col items-center gap-8 text-center">
           <div>
             <p className="mb-4 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
-              Tu opinión
+              {t.rating.label}
             </p>
             <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
-              ¿Qué te pareció {project.title}?
+              {t.rating.question} {project.title}?
             </h2>
           </div>
 
@@ -88,12 +89,12 @@ export function RatingSection({ project }: Props) {
             className="flex gap-3"
             onMouseLeave={() => setHovered(0)}
             role="group"
-            aria-label="Valoración de 5 estrellas"
+            aria-label={t.rating.ariaGroup}
           >
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
-                aria-label={`${star} estrella${star > 1 ? 's' : ''}`}
+                aria-label={`${star} ${star > 1 ? t.rating.ariaStars : t.rating.ariaStar}`}
                 onMouseEnter={() => setHovered(star)}
                 onClick={() => setSelected(star)}
                 className="transition-transform duration-150 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
@@ -104,9 +105,7 @@ export function RatingSection({ project }: Props) {
           </div>
 
           <p className="text-xs text-zinc-700">
-            {activeLevel > 0
-              ? ['', 'Puede mejorar.', 'Hay potencial.', 'Buen trabajo.', 'Muy bueno.', 'Excelente.'][activeLevel]
-              : 'Hacé click en las estrellas.'}
+            {activeLevel > 0 ? levels[activeLevel] : t.rating.placeholder}
           </p>
         </div>
       </div>

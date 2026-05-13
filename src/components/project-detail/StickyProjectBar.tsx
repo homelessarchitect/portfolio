@@ -1,11 +1,15 @@
+'use client';
+
 import Link from 'next/link';
 import { Project } from '@/types/project';
+import { useLocale } from '@/context/LocaleContext';
 
 interface Props {
   project: Project;
 }
 
 export function StickyProjectBar({ project }: Props) {
+  const { t } = useLocale();
   const liveUrl = project.apps?.find((a) => a.liveUrl)?.liveUrl;
 
   return (
@@ -19,7 +23,7 @@ export function StickyProjectBar({ project }: Props) {
           href="/"
           className="text-xs text-zinc-500 transition-colors hover:text-white"
         >
-          Cambiar proyecto
+          {t.detail.changeProject}
         </Link>
 
         {/* Right: live demo or empty */}
@@ -30,7 +34,7 @@ export function StickyProjectBar({ project }: Props) {
             rel="noopener noreferrer"
             className="text-xs text-zinc-500 transition-colors hover:text-white"
           >
-            Ver demo en vivo ↗
+            {t.detail.liveDemoFull}
           </a>
         ) : (
           <span className="w-[120px]" />

@@ -16,11 +16,6 @@ const STATUS_DOT: Record<string, string> = {
   archived: 'bg-zinc-600',
 };
 
-const STATUS_LABEL: Record<string, string> = {
-  live: 'Live',
-  inDevelopment: 'En desarrollo',
-  archived: 'Archivado',
-};
 
 function SimulationThumbnail({ project }: { project: Project }) {
   const simId = project.thumbnailSimulationId!;
@@ -64,7 +59,7 @@ function Placeholder({ project }: { project: Project }) {
 }
 
 export function ProjectCard({ project }: { project: Project }) {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   return (
     <Link
       href={`/projects/${project.id}`}
@@ -100,13 +95,13 @@ export function ProjectCard({ project }: { project: Project }) {
       {/* ── Info area ───────────────────────────────── */}
       <div className="flex flex-col gap-2 border-t border-white/[0.04] px-5 py-4">
         <p className="text-[9px] font-semibold uppercase tracking-widest text-zinc-600">
-          {project.category}
+          {project.category[locale]}
         </p>
 
         <div>
           <p className="text-sm font-semibold text-white">{project.title}</p>
           <p className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-zinc-500">
-            {project.tagline}
+            {project.tagline[locale]}
           </p>
         </div>
 

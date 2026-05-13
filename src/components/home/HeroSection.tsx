@@ -28,7 +28,7 @@ function PlayIcon() {
 }
 
 export function HeroSection({ project }: Props) {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const [isPaused, setIsPaused] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -86,7 +86,7 @@ export function HeroSection({ project }: Props) {
       {/* Content — bottom left */}
       <div className="absolute bottom-16 left-8 max-w-2xl sm:left-12 lg:left-16">
         <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50">
-          {project.category}
+          {project.category[locale]}
         </p>
         <h1 className="mb-7 text-5xl font-black leading-[0.95] tracking-tight text-white sm:text-6xl lg:text-7xl">
           {project.title}.

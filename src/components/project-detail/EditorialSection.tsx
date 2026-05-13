@@ -1,12 +1,17 @@
+'use client';
+
 import Image from 'next/image';
 import { Project } from '@/types/project';
+import { useLocale } from '@/context/LocaleContext';
 
 interface Props {
   project: Project;
 }
 
 export function EditorialSection({ project }: Props) {
-  const hasStory = Boolean(project.storytelling || project.tagline);
+  const { t, locale } = useLocale();
+
+  const hasStory = Boolean(project.storytelling?.[locale] || project.tagline[locale]);
   const hasImages = Boolean(
     project.conceptImageUrl ||
       project.historyImageUrl ||
@@ -24,11 +29,11 @@ export function EditorialSection({ project }: Props) {
           {/* Left: copy */}
           <div>
             <h2 className="mb-6 text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl">
-              {project.tagline}
+              {project.tagline[locale]}
             </h2>
             {project.storytelling && (
               <p className="text-base leading-relaxed text-zinc-400">
-                {project.storytelling}
+                {project.storytelling[locale]}
               </p>
             )}
           </div>
@@ -70,18 +75,18 @@ export function EditorialSection({ project }: Props) {
         <div className="mx-auto grid max-w-screen-xl grid-cols-1 gap-4 px-6 pb-20 md:grid-cols-2">
           <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8">
             <p className="mb-4 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
-              Problema
+              {t.detail.problem}
             </p>
             <p className="text-sm leading-relaxed text-zinc-300">
-              {project.problem}
+              {project.problem![locale]}
             </p>
           </div>
           <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8">
             <p className="mb-4 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
-              Solución
+              {t.detail.solution}
             </p>
             <p className="text-sm leading-relaxed text-zinc-300">
-              {project.solution}
+              {project.solution![locale]}
             </p>
           </div>
         </div>

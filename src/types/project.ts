@@ -1,3 +1,4 @@
+export type LocalizedString = { es: string; en: string };
 export type ProjectPlatform = 'web' | 'mobile' | 'desktop';
 export type ProjectStatus = 'live' | 'inDevelopment' | 'archived';
 
@@ -23,16 +24,16 @@ export interface ProjectApp {
 
 export interface ProcessStep {
   id: string;
-  phase: string;
-  title: string;
-  description: string;
+  phase: LocalizedString;
+  title: LocalizedString;
+  description: LocalizedString;
 }
 
 export interface Project {
   id: string;
   title: string;
-  tagline: string;
-  category: string;
+  tagline: LocalizedString;
+  category: LocalizedString;
   platforms: ProjectPlatform[];
   services: string[];
   year: string;
@@ -43,11 +44,11 @@ export interface Project {
   backgroundImage?: string;
   backgroundVideo?: string;
 
-  concept?: string;
-  problem?: string;
-  solution?: string;
-  storytelling?: string;
-  styleDescription?: string;
+  concept?: LocalizedString;
+  problem?: LocalizedString;
+  solution?: LocalizedString;
+  storytelling?: LocalizedString;
+  styleDescription?: LocalizedString;
 
   conceptImageUrl?: string;
   historyImageUrl?: string;

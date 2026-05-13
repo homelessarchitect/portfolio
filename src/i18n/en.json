@@ -17,6 +17,56 @@
   "gallery": {
     "viewProject": "View project →"
   },
+  "status": {
+    "live": "Live",
+    "inDevelopment": "In development",
+    "archived": "Archived"
+  },
+  "detail": {
+    "viewSimulation": "View simulation",
+    "liveDemo": "Live demo ↗",
+    "liveDemoFull": "View live demo ↗",
+    "viewLive": "View live",
+    "changeProject": "Change project",
+    "problem": "Problem",
+    "solution": "Solution",
+    "techStack": "Tech stack",
+    "year": "Year",
+    "platforms": "Platforms",
+    "technologies": "Technologies",
+    "apps": "Apps",
+    "services": "Services",
+    "builtToScale": "architecture built to scale.",
+    "process": "Process",
+    "howWeBuilt": "How we built",
+    "simulation": "Interactive simulation",
+    "simulationCta": "Interact with",
+    "simulationCtaSuffix": "directly from here.",
+    "simulationSub": "No screenshots. Functional replicas of the real screens."
+  },
+  "platform": {
+    "web": "Web app — accessible from any browser, no installation required.",
+    "mobile": "Native mobile app — iOS and Android from a single codebase.",
+    "desktop": "Desktop app — direct integration with the operating system."
+  },
+  "rating": {
+    "label": "Your opinion",
+    "question": "What did you think of",
+    "placeholder": "Click the stars.",
+    "level1": "Needs improvement.",
+    "level2": "Has potential.",
+    "level3": "Good work.",
+    "level4": "Very good.",
+    "level5": "Excellent.",
+    "received": "Received",
+    "thanks": "Thanks for your rating.",
+    "ctaHigh": "Want to build something together?",
+    "ctaLow": "Have feedback? I'd love to hear it.",
+    "cta": "Write to me →",
+    "ariaGroup": "5-star rating",
+    "ariaStar": "star",
+    "ariaStars": "stars"
+  },
   "footer": {
     "copyright": "Homeless Architect"
   },

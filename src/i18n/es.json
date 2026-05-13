@@ -17,6 +17,56 @@
   "gallery": {
     "viewProject": "Ver proyecto →"
   },
+  "status": {
+    "live": "Live",
+    "inDevelopment": "En desarrollo",
+    "archived": "Archivado"
+  },
+  "detail": {
+    "viewSimulation": "Ver simulación",
+    "liveDemo": "Demo en vivo ↗",
+    "liveDemoFull": "Ver demo en vivo ↗",
+    "viewLive": "Ver en vivo",
+    "changeProject": "Cambiar proyecto",
+    "problem": "Problema",
+    "solution": "Solución",
+    "techStack": "Stack técnico",
+    "year": "Año",
+    "platforms": "Plataformas",
+    "technologies": "Tecnologías",
+    "apps": "Apps",
+    "services": "Servicios",
+    "builtToScale": "arquitectura construida para escalar.",
+    "process": "Proceso",
+    "howWeBuilt": "Cómo construimos",
+    "simulation": "Simulación interactiva",
+    "simulationCta": "Operá",
+    "simulationCtaSuffix": "directamente desde acá.",
+    "simulationSub": "No screenshots. Réplicas funcionales de las pantallas reales."
+  },
+  "platform": {
+    "web": "Aplicación web — acceso desde cualquier navegador sin instalación.",
+    "mobile": "Aplicación móvil nativa — iOS y Android desde un único codebase.",
+    "desktop": "Aplicación de escritorio — integración directa con el sistema operativo."
+  },
+  "rating": {
+    "label": "Tu opinión",
+    "question": "¿Qué te pareció",
+    "placeholder": "Hacé click en las estrellas.",
+    "level1": "Puede mejorar.",
+    "level2": "Hay potencial.",
+    "level3": "Buen trabajo.",
+    "level4": "Muy bueno.",
+    "level5": "Excelente.",
+    "received": "Recibido",
+    "thanks": "Gracias por tu valoración.",
+    "ctaHigh": "¿Querés que construyamos algo juntos?",
+    "ctaLow": "¿Tenés feedback? Me encantaría escucharlo.",
+    "cta": "Escribime →",
+    "ariaGroup": "Valoración de 5 estrellas",
+    "ariaStar": "estrella",
+    "ariaStars": "estrellas"
+  },
   "footer": {
     "copyright": "Homeless Architect"
   },

@@ -1,10 +1,15 @@
+'use client';
+
 import { Project } from '@/types/project';
+import { useLocale } from '@/context/LocaleContext';
 
 interface Props {
   project: Project;
 }
 
 export function ProcessSection({ project }: Props) {
+  const { t, locale } = useLocale();
+
   if (!project.processSteps?.length) return null;
 
   return (
@@ -13,10 +18,10 @@ export function ProcessSection({ project }: Props) {
         {/* Header */}
         <div className="mb-16 max-w-2xl">
           <p className="mb-4 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
-            Proceso
+            {t.detail.process}
           </p>
           <h2 className="text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl">
-            Cómo construimos {project.title}.
+            {t.detail.howWeBuilt} {project.title}.
           </h2>
         </div>
 
@@ -46,14 +51,14 @@ export function ProcessSection({ project }: Props) {
 
               {/* Phase label */}
               <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
-                {step.phase}
+                {step.phase[locale]}
               </p>
 
               {/* Title */}
-              <p className="mb-3 text-base font-semibold text-white">{step.title}</p>
+              <p className="mb-3 text-base font-semibold text-white">{step.title[locale]}</p>
 
               {/* Description */}
-              <p className="text-sm leading-relaxed text-zinc-500">{step.description}</p>
+              <p className="text-sm leading-relaxed text-zinc-500">{step.description[locale]}</p>
             </div>
           ))}
         </div>
