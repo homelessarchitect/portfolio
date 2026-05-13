@@ -158,6 +158,7 @@ function AppThumb({ app }: { app: ProjectApp }) {
 }
 
 function ProjectList({ onSelect }: { onSelect: (id: string) => void }) {
+  const { locale } = useLocale();
   return (
     <div className="flex h-full flex-col">
       <div className="px-6 pb-4 pt-10">
@@ -207,6 +208,7 @@ function ProjectDetail({
   onBack: () => void;
   onClose: () => void;
 }) {
+  const { t } = useLocale();
   return (
     <div className="flex h-full flex-col">
       <div className="px-6 pt-6">
@@ -303,7 +305,6 @@ function ProjectDetail({
 type MobileStep = 'nav' | 'list' | 'detail';
 
 export function NavigationDrawer({ isOpen, onClose }: Props) {
-  const { t, locale } = useLocale();
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const [mobileStep, setMobileStep] = useState<MobileStep>('nav');
 
